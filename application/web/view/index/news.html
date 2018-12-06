@@ -1,0 +1,235 @@
+{extend name="static/assets/base.html" /} {block name="title"}
+<title>最新资讯</title>{/block} {block name="style"}
+<script type="text/javascript" src="/static/assets/js/TouchSlide.1.1.js"></script>
+<link rel="stylesheet" href="/static/assets/css/swiper.min.css">
+<link href="/static/assets/css/index.df691.css" rel="stylesheet">
+<style>
+	header.bar .weui-back>i,
+	header.bar .tools a>i {
+		position: absolute;
+		top: -5px;
+	}
+
+	header.bar .weui-back {
+		top: 10px;
+		left: 10px;
+	}
+
+	header.bar .tools>a {
+		cursor: pointer;
+		z-index: 10;
+		position: absolute;
+		top: 0.85em;
+		right: 30px;
+		z-index: 20;
+		/* margin-top: 0; */
+		font-weight: 400;
+		margin-right: 5px;
+		color: white;
+	}
+
+	.weui-popup__container .weui-article {
+
+		top: 3em;
+	}
+</style>
+{/block} {block name="body"}
+<div id="root">
+	<div data-reactroot="">
+		<div class="">
+			<div class="container__main-box___35BJO" id="container-main-box" style="top: 50px; bottom: 0px;">
+				<div class="home__home___3iOqm">
+					<div class="home__home-main___A5nUU">
+						<div class="home__header___1J568">
+							<!--<a href="{:url('index/index/index')}"><img src="/static/assets/images/banner.png" alt="banner" width="100%"></a>-->
+
+						</div>
+						<div class="">
+
+						</div>
+						<script src="/static/assets/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+
+
+
+						<style>
+							.news__news-main___2Psqg {
+								margin: 0;
+								border-bottom: 1px solid #f2f2f2;
+								padding: 10px 0 10px 15px;
+							}
+
+							.news__new-title___1SMyc {
+								padding-top: 0;
+							}
+
+							.news__new-info___3yOCB {
+								padding: 0;
+							}
+
+							#news_list .news__new-info___3yOCB>div {
+								width: 100%;
+								text-align: left;
+							}
+						</style>
+						<div style="padding-top: 0;">
+
+							<div id="news_list">
+								<div class="news__news-main___2Psqg">
+									<a href="javascript:;">
+										<div class="news__content___dNU2v">
+											<div>
+												<div class="news__new-title___1SMyc">
+													<span>湘潭电化(002125):定增募资不超5.28亿元投4项目 明起复牌</span>
+												</div>
+												<div class="news__new-info___3yOCB">
+													<div>证券时报网</div>
+													<div>2018-01-18 18:09:05</div>
+												</div>
+											</div>
+											<div>
+												<div class="news__icon___1K-xn"></div>
+											</div>
+										</div>
+									</a>
+								</div>
+								<div class="news__news-main___2Psqg">
+									<a href="javascript:;">
+										<div class="news__content___dNU2v">
+											<div>
+												<div class="news__new-title___1SMyc">
+													<span>中路股份(600818):拟56亿元收购上海悦目 切入护肤品领域</span>
+												</div>
+												<div class="news__new-info___3yOCB">
+													<div></div>
+													<div>2018-01-18 18:03:02</div>
+												</div>
+											</div>
+											<div>
+												<div class="news__icon___1K-xn"></div>
+											</div>
+										</div>
+									</a>
+								</div>
+								<div class="news__news-main___2Psqg">
+									<a href="javascript:;">
+										<div class="news__content___dNU2v">
+											<div>
+												<div class="news__new-title___1SMyc">
+													<span>盘后点评:708只个股成交4.4亿元</span>
+												</div>
+												<div class="news__new-info___3yOCB">
+													<div>证券时报网</div>
+													<div>2018-01-18 17:56:09</div>
+												</div>
+											</div>
+											<div>
+												<div class="news__icon___1K-xn"></div>
+											</div>
+										</div>
+									</a>
+								</div>
+								<div class="news__news-main___2Psqg">
+									<a href="javascript:;">
+										<div class="news__content___dNU2v">
+											<div>
+												<div class="news__new-title___1SMyc">
+													<span>恒指收涨0.43% 再次创出历史新高</span>
+												</div>
+												<div class="news__new-info___3yOCB">
+													<div>证券时报网</div>
+													<div>2018-01-18 17:53:22</div>
+												</div>
+											</div>
+											<div>
+												<div class="news__icon___1K-xn"></div>
+											</div>
+										</div>
+									</a>
+								</div>
+								<div class="news__news-main___2Psqg">
+									<a href="javascript:;">
+										<div class="news__content___dNU2v">
+											<div>
+												<div class="news__new-title___1SMyc">
+													<span>神雾环保和神雾节能均出现逾3000万元大宗交易</span>
+												</div>
+												<div class="news__new-info___3yOCB">
+													<div>证券时报网</div>
+													<div>2018-01-18 17:49:48</div>
+												</div>
+											</div>
+											<div>
+												<div class="news__icon___1K-xn"></div>
+											</div>
+										</div>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+{/block} {block name="tabbar"}{/block} {block name="script"}
+<script type="text/javascript">
+	$(function () {
+		getNews();
+	})
+	function getNews() {
+		$("#news_list").html('');
+		$.ajax({
+			type: 'get',
+			url: "/index/News/totalList?page=1&pagesize=20",
+			success: function (data) {
+				var reg = eval('(' + data + ')');
+				console.log(reg.data);
+				$(reg.data).each(function (index, value) {
+					$("#news_list").append(purchaseNews_html(value));
+				});
+				setTimeout(function () {
+					getNews();
+				}, 30000);
+			},
+			error: function () {
+				alert('请求超时');
+			}
+		});
+	}
+
+	function purchaseNews_html(data) {
+		var html = '<div class="news__news-main___2Psqg">' +
+			'<a href=' + getUrl(data.id) + '>' +
+			'<div class="news__content___dNU2v">' +
+			'<div>' +
+			'<div class="news__new-title___1SMyc"><span>' + data.title + '</span></div>' +
+			'<div class="news__new-info___3yOCB">' +
+			'<div>' + data.source + '</div>' +
+			'<div>' + timestampToTime(data.senddate) + '</div>' +
+			'</div>' +
+			'</div>' +
+			'<div>' +
+			'<div class="news__icon___1K-xn"></div>' +
+			'</div>' +
+			'</div>' +
+			'</a>' +
+			'</div>'
+		//'<div class="news__news-main___2Psqg"><a href='+getUrl(data.id)+'><div class="news__content___dNU2v"><div><div class="news__new-title___1SMyc"><span>'+data.title+'</span></div><div class="news__new-info___3yOCB"><div>'+data.description+'</div></div></div><div><div class="news__icon___1K-xn"></div></div></div></a></div>'
+		return html;
+	}
+	function getUrl(uid) {
+		return "/index/index/newdetails.html?newsId=" + uid;
+	}
+	function timestampToTime(timestamp) {
+		var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+		Y = date.getFullYear() + '-';
+		M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+		D = date.getDate() + ' ';
+		h = date.getHours() + ':';
+		m = date.getMinutes() + ':';
+		s = date.getSeconds();
+		return Y + M + D + h + m + s;
+	}
+</script>{/block}{block name="checkLogin"}{/block}

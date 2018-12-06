@@ -1,0 +1,256 @@
+{extend name="static/assets/base.html" /} {block name="title"}
+<title>余额提现 - {$Think.config.site_title}</title>{/block} {block name="style"}
+<style>
+	.weui-article>.weui-cells>.weui-cell>.weui-cell__bd {
+		text-align: left;
+	}
+
+	.weui_btn_inline {
+		color: #424242;
+		border: 1px solid #ececec;
+		background: #ececec;
+		display: inline-block;
+		width: 40%;
+	}
+
+	#bankfull .weui-article {
+		background: white;
+	}
+
+	#bankfull input.weui-input {
+		height: 30px;
+	}
+
+	.weui-article>.weui-cells>.weui-cell>.weui-cell__bd {
+		text-align: center;
+	}
+</style>
+{/block} {block name="body"}
+<div class="weui-content clearfix">
+	<div class="weui-title_" style="margin-bottom: 10px;">
+		<div class="fl">
+			当前余额
+		</div>
+		<div id="yue" class="red fr">
+			--
+		</div>
+	</div>
+	<div class="weui-cells weui-cells_form">
+		<div class="weui-cell nomagin">
+			<div class="weui-cell__hd">
+				<label for="" class="weui-label">提现金额</label>
+			</div>
+			<div class="weui-cell__bd" style="text-align: right;margin-right: 5px;">
+				<input id="money" class="weui-input" type="number" pattern="[0-9]*" value="weui input error" placeholder="请输入金额">
+			</div>
+			<div class="weui-cell__fts">
+				元
+			</div>
+		</div>
+	</div>
+	<div class="weui-cells__tips">
+		<i class="iconfont icon-weibiaoti-"></i> 单日提款
+		<span class="red">超5万元</span>，分多笔到帐；
+		<span class="red">超10万元</span>，T+1到帐。</div>
+
+	<div class="weui-cells__title">提现银行帐户</div>
+	<div class="bd">
+		<div class="page__bd">
+			<div class="weui-cells">
+				<label id="banklist" class="weui-cell weui-check__label" for="s1" style="margin-bottom: -1px;">
+					<div class="weui-cell__hd">
+						<img src="/static/assets/img/bank.png" style="width: 15px;margin-right: 5px;" />
+					</div>
+					<div id="bank" class="weui-cell__bd" style="text-align: left;">
+
+					</div>
+					<div id="bank_card_id_" class="weui-cell__ft" style="font-size: 15px;">
+						<!--
+						修改银行信息 -->
+					</div>
+				</label>
+				<a id="addbank" href="#" class="weui-cell weui-check__label" style="margin-bottom: -1px;display:none;">
+					<div id="bank_btn" class="weui-cell__bd">
+						<i class="iconfont icon-jia" style="top: 2px;position: relative;margin: 0;"></i> 添加银行卡号
+					</div>
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="weui-cells__tips">
+		<h3>温馨提示</h3>
+		<!-- <p>禁止洗钱、信用卡套现、虚假交易等行为，一经发现并确认，将终止该账户的使用。 </p> -->
+		<p>1、账户余额≤100元，需一次性将账户余额全部提出；</p>
+		<p>2、工作日15点前提款，通常当天能到账；</p>
+		<p>3、工作日15点后提款，通常第2个工作日到账；</p>
+		<p>4、具体到账时间以银行为准。 </p>
+	</div>
+
+	<div class="weui-btn-block" style="position: fixed;bottom: 0;">
+		<a id="btn" class="weui-btn weui-btn_">立即提现</a>
+	</div>
+
+</div>
+<div id="bankfull" class='weui-popup__container'>
+	<div class="weui-popup__modal">
+		<article class="weui-article">
+			<div class="weui-header">
+				银行卡信息
+			</div>
+			<div class="weui-cells weui-cells_form">
+				<div class="weui-cell" style="margin-bottom: 0; border-bottom: 1px solid #e2e2e2;">
+					<div class="weui-cell__hd">
+						<label class="weui-label">开户名:</label>
+					</div>
+					<div id="true_name" class="weui-cell__bd">
+						张林
+					</div>
+					<div class="red weui-cell__fts">
+
+					</div>
+				</div>
+				<div class="weui-cell" style="margin-bottom: 0; border-bottom: 1px solid #e2e2e2;">
+					<div class="weui-cell__hd">
+						<label class="weui-label">帐户类型:</label>
+					</div>
+					<div class="weui-cell__bd">
+						借记卡
+					</div>
+					<div class="red weui-cell__fts">
+						不支持信用卡
+					</div>
+				</div>
+				<div class="weui-cell" style="margin-bottom: 0; border-bottom: 1px solid #e2e2e2;">
+					<div class="weui-cell__hd">
+						<label class="weui-label">银行名称:</label>
+					</div>
+					<div class="weui-cell__bd">
+						<input id="bank_name" class="weui-input" type="text" placeholder="请输入银行名称">
+					</div>
+				</div>
+				<div class="weui-cell" style="margin-bottom: 0; border-bottom: 1px solid #e2e2e2;">
+					<div class="weui-cell__hd">
+						<label class="weui-label">开户城市:</label>
+					</div>
+					<div class="weui-cell__bd">
+						<input id="bank_address" class="weui-input" type="text" placeholder="请输入开户城市">
+					</div>
+				</div>
+				<div class="weui-cell" style="margin-bottom: 0; border-bottom: 1px solid #e2e2e2;">
+					<div class="weui-cell__hd">
+						<label class="weui-label">银行卡号:</label>
+					</div>
+					<div class="weui-cell__bd">
+						<input id="bank_card_id" class="weui-input" type="tel" pattern="[0-9]*" placeholder="请输入银行卡号">
+					</div>
+				</div>
+				<div style="margin-top:15px;text-align: center;">
+					<a id="ok" class="weui-btn weui-btn_" style="display:inline-block;width:40%;">确认</a>
+					<a id="cancel" class="weui-btn weui-btn_ weui_btn_inline">取消</a>
+				</div>
+		</article>
+		</div>
+	</div>
+	{/block}{block name="tabbar"}{/block}{block name="script"}
+	<script>
+		$(function () {
+			var fn = {
+				init: function () {
+					$("#yue").html(formatNumber(localStorage.total_money, 2) + "元");
+					$.post("/index/Api/enchasApply", {
+						userid: localStorage.id,
+						auth: localStorage.auth, type: 2, apply_money: -1
+					}, function (_d) {
+						console.log(_d);
+						if (_d['code'] != 1) {
+							$.alert(_d['msg'], function () { window.location.href = "/index/index/verify.html"; });
+						}
+						$("#yue").html($.formatNumber(_d['money'], 2) + "元");
+						$("#true_name").html(_d['true_name']);
+						$("#bank_card_id_").html($.bank(_d['bank_card_id']) + ' <i class="iconfont icon-icon_edit" style="position: relative;margin: 0;"></i>');
+						$("#bank_name").val(_d['bank_name']);
+						$("#bank_card_id").val(_d['bank_card_id']);
+						$("#bank_address").val(_d['bank_address']);
+						if (_d['bank_name'] != "") {
+							$("#bank").html('' + _d['bank_name']);
+						} else {
+							$("#banklist").remove();
+							$("#addbank").show();
+							$("#bank_btn").html('<i class="iconfont icon-jia" style="top: 2px;position: relative;margin: 0;"></i> 添加银行信息');
+						}
+					}, "JSON");
+				}
+			}
+
+			$("#banklist").on("click", function () {
+				$("#bankfull").popup();
+			});
+			$("#addbank").on("click", function () {
+				$("#bankfull").popup();
+			});
+
+			$("#ok").on("click", function () {
+				if ($("#bank_name").val() == '') {
+					$.alert('请输入银行名称');
+					return;
+				} else if ($("#bank_address").val() == '') {
+					$.alert('请输入开户城市');
+					return;
+				} else if ($("#bank_card_id").val() == '') {
+					$.alert('请输入银行卡号');
+					return;
+				}
+				$.post("/index/Api/changeBankInfo",
+					{
+						auth: localStorage.auth,
+						uid: localStorage.id,
+						bank_name: $("#bank_name").val(),
+						bank_address: $("#bank_address").val(),
+						bank_card_id: $("#bank_card_id").val()
+					}, function (_d) {
+						if (_d['code'] == 1) {
+							$.alert(_d.msg, function () {
+								$.closePopup();
+								fn.init();
+							});
+						} else if (_d['code'] == '-1') {
+							$.alert(_d.msg, function () { window.location.href = '/index/index/login'; });
+						} else if (_d['code'] == 0) {
+							$.alert(_d.msg);
+						}
+					}, "JSON");
+			});
+			$("#cancel").on("click", function () { $.closePopup(); });
+
+			fn.init();
+			$("#btn").click(function () {
+				if ($("#money").val() == '') {
+					$.alert('金额不能为空');
+					return;
+				}
+				$.ajax({
+					type: 'POST',
+					url: "/index/api/enchasApply",
+					dataType: 'json',
+					data: {
+						uid: localStorage.id,
+						auth: localStorage.auth,
+						type: localStorage.type,
+						remark: "",
+						apply_money: $("#money").val()
+					},
+					async: false,
+					success: function (data) {
+						$.alert(data.msg);
+						$("#money").val('');
+						if (data['code'] == 1) {
+							fn.init();
+						}
+					},
+					error: function () {
+						$.toast('请求超时');
+					}
+				});
+			});
+		});
+	</script> {/block}

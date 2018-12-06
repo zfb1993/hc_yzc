@@ -1,0 +1,278 @@
+{extend name="static/assets/base.html" /} {block name="title"}
+
+<title>我的</title>{/block} {block name="style"}
+<style>
+    body,
+    html,
+    .weui-content {
+        bottom: 56px;
+    }
+    header{display:none;}
+</style>
+<style>
+	.opyt{width:100%;display:flex;padding-bottom:10px;}
+	.opyt>div{flex:1;text-align:center;color:#ccc;}
+	.opyt>span{display:inline-block;color:#f2f2f2;background:#f2f2f2;width:1px;height:20px;margin:10px 0;}
+	.opyt>div>.yieid{color:#f54837;}
+	.opyt>div>.decline{color:#009a61;}
+	.opyt>div>#trad{color:#333;}
+	.weui-navbar__item{padding:5px 0 !important;font-size:13px !important;}
+	.lits{display:flex;justify-content:space-between;text-align: center;padding:12px 0;border-bottom:1px solid #F0F0F0;}
+	.lstsa>p:nth-child(1){color:#888;}
+	.lstsa>p:nth-child(2){color:#ccc;font-size:10px;}
+    .lie{list-style:none;width:100%;}
+    .lie>li{width:33%;float:left;padding:5px 0;text-align:center;}
+    .lie>li>p:nth-child(1){color:#333;}
+    .lie>li>p:nth-child(2){color:#ccc;font-size:10px;}
+    .tab1-a{padding:5px 0;}
+    .esdwa{color:#f54837 !important;font-weight:400;}
+    .esdwb{color:#009a61 !important;font-weight:400;}
+</style>
+{/block}{block name="body"}
+<div class="weui-content" style="top:0;">
+    <article class="weui-article" style="background:#fff;">
+        <div class="bd">
+            <div class="page__bd">
+                <div class="weui-cells weui-cells-clear">
+                    <a href="/index/index/user" class="weui-cell weui-cell-clear" style="margin-top: 10px;">
+                        <div class="weui-cell__hd" style="margin-right: 5px;">
+                            <img id="_avatar" style="width: 50px;height:50px;border:none !important;" src="/static/assets/imgs/404.png" onerror="javascript:this.src='/static/assets/imgs/404.png';">
+                        </div>
+                        <div class="weui-cell__bd" style="text-align: left;">
+                            <p id="_username" style="color:#333;font-weight:600;">-</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </article>
+    <div class="opyt">
+    	<div>
+    		<p class="yieid">263.44%</p>	
+    		<p>近30天收益率</p>
+    	</div>
+    	<span></span>
+    	<div>
+    		<p class="decline">-22.66%</p>	
+    		<p>近30天最大跌幅</p>
+    	</div>
+    	<span></span>
+    	<div>
+    		<p id="trad">0.45%</p>	
+    		<p>上一交易日</p>
+    	</div>
+    </div>
+    <div class="weui-tab" style="padding:0 12px;">
+		<div class="weui-navbar">
+		    <a class="weui-navbar__item weui-bar__item--on" href="#tab1">
+		            数据统计
+		    </a>
+		    <a class="weui-navbar__item" href="#tab2">
+		            当天交易
+		    </a>
+		    <a class="weui-navbar__item" href="#tab3">
+		            历史交易
+		    </a>
+		</div>
+		<div class="weui-tab__bd">
+		    <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+		    	<div class="tab1-a">
+		            <h3 style="display:inline-block;">表现</h3>
+		            <span style="float:right;color:#ccc;font-size:12px;line-height:1.5;">数据将于每天北京时间00:00更新</span>
+		        </div>
+		        <div style="width:100%;height:150px;background:#59B573;">月数据统计曲线图</div>
+		        <p style="color:#ccc;padding:5px 0;">*过往表现并不代表未来交易的成功率，您需要理智的做出判断</p>
+		    	<div class="tab1-a">
+		            <h3>数据统计</h3>
+		        </div>
+		        <div style="overflow:auto;">
+			        <ul class="lie">
+			        	<li>
+			        		<p>72.73%</p>
+			        		<p>准确率</p>
+			        	</li>
+			        	<li>
+			        		<p>0.50手</p>
+			        		<p>最大开仓</p>
+			        	</li>
+			        	<li>
+			        		<p>22笔</p>
+			        		<p>总平仓交易</p>
+			        	</li>
+			        	<li>
+			        		<p>16笔</p>
+			        		<p>盈利订单</p>
+			        	</li>
+			        	<li>
+			        		<p>6笔</p>
+			        		<p>亏损订单</p>
+			        	</li>
+			        	<li>
+			        		<p>6天00时18分</p>
+			        		<p>平均持仓时间</p>
+			        	</li>
+			        	<li>
+			        		<p>7笔</p>
+			        		<p>成功做多交易</p>
+			        	</li>
+			        	<li>
+			        		<p>9笔</p>
+			        		<p>成功做空交易</p>
+			        	</li>
+			        	<li>
+			        		<p>0.45%</p>
+			        		<p>上一交易日状况</p>
+			        	</li>
+			        	<li>
+			        		<p>54.10%</p>
+			        		<p>近七日交易状况</p>
+			        	</li>
+			        	<li>
+			        		<p>22笔</p>
+			        		<p>月平均交易笔数</p>
+			        	</li>
+			        	<li>
+			        		<p>26人</p>
+			        		<p>历史复制人数</p>
+			        	</li>
+			        	<li>
+			        		<p>299.12%</p>
+			        		<p>总收益率</p>
+			        	</li>
+			        	<li>
+			        		<p>0.00%</p>
+			        		<p>最大跌幅</p>
+			        	</li>
+			        </ul>	        	
+		        </div>
+                <div class="tab1-a">
+                	月交易品种
+                </div>
+		    </div>
+		    <div id="tab2" class="weui-tab__bd-item">
+		        <div class="lits">
+		        	<div class="lstsa">
+		        		<p>卖出澳元美元</p>
+		        		<p>持仓4天</p>
+		        	</div>
+		        	<div class="lstsa">
+		        		<p>0.75439</p>
+		        		<p>开仓价</p>
+		        	</div>
+		        	<div class="lstsa">
+		        		<p>0.76309</p>
+		        		<p>现价</p>
+		        	</div>
+		        	<div class="lstsa">
+		        		<p class="esdwb">$-444.25</p>
+		        		<p>收益</p>
+		        	</div>
+		        </div>
+		        
+		        <div class="lits">
+		        	<div class="lstsa">
+		        		<p>卖出欧元美元</p>
+		        		<p>持仓4天</p>
+		        	</div>
+		        	<div class="lstsa">
+		        		<p>1.17920</p>
+		        		<p>开仓价</p>
+		        	</div>
+		        	<div class="lstsa">
+		        		<p>1.17034</p>
+		        		<p>现价</p>
+		        	</div>
+		        	<div class="lstsa">
+		        		<p class="esdwa">$446.90</p>
+		        		<p>收益</p>
+		        	</div>
+		        </div>
+		    </div>
+		    <div id="tab3" class="weui-tab__bd-item">
+		        <div class="lits">
+		        	<div class="lstsa">
+		        		<p>卖出欧元英镑</p>
+		        		<p>手动平仓40分钟前</p>
+		        	</div>
+		        	<div class="lstsa">
+		        		<p>0.87711</p>
+		        		<p>开仓价</p>
+		        	</div>
+		        	<div class="lstsa">
+		        		<p>0.87587</p>
+		        		<p>平仓价</p>
+		        	</div>
+		        	<div class="lstsa">
+		        		<p class="esdwa">$84.52</p>
+		        		<p>收益</p>
+		        	</div>
+		        </div>
+		        
+		        <div class="lits">
+		        	<div class="lstsa">
+		        		<p>买入欧元美元</p>
+		        		<p>持仓4天</p>
+		        	</div>
+		        	<div class="lstsa">
+		        		<p>81.800</p>
+		        		<p>开仓价</p>
+		        	</div>
+		        	<div class="lstsa">
+		        		<p>1.17034</p>
+		        		<p>平仓价</p>
+		        	</div>
+		        	<div class="lstsa">
+		        		<p class="esdwa">$186.90</p>
+		        		<p>收益</p>
+		        	</div>
+		        </div>
+		    </div>
+		</div>
+	</div>
+</div>
+
+{/block}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{block name="script"}
+<script>
+    $(function () {
+        $("#quit").on("click", function () {
+            localStorage.clear();
+            window.location.href = '/index/index/login';
+        });
+        $("#kaihu").on("click", function () {
+            if (localStorage.is_open == 0) {
+                window.location.href = '/index/index/kaihu';
+            } else if (localStorage.is_open == 2) {
+                $.alert("已成功提交申请，等待审核");
+            } else if (localStorage.is_open == 1) {
+                window.location.href = '/index/index/dredge';
+            }
+        });
+        if (localStorage.type == 1) {
+            $("#fenxiang").show();
+        }
+        getUserInfo();
+        if (localStorage.type == 0) {
+            $("#fenxiang").hide();
+        }
+    });
+    function qrcode() {
+        window.location.href = '/index/otherapi/qrcode?userid=' + localStorage.id;
+    }
+</script> {/block}

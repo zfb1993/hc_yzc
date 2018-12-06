@@ -1,0 +1,226 @@
+{extend name="static/assets/base.html" /} {block name="title"}
+<title>询价列表</title>{/block} {block name="style"}
+<style>
+    .weui-tab__bd-item {
+        padding-bottom: 105px;
+    }
+
+    .dialog .content {
+        top: 39%;
+    }
+
+    .weui-cells {
+        border-bottom: none;
+        padding: 0;
+    }
+
+    table.weui-table tbody>tr>td,
+    table.weui-table thead>tr>th,
+    .weui-cells_radio .weui-cell__ft {
+        padding: 0px;
+    }
+
+    .weui-cells_radio .weui-cell__ft {
+        margin: 0 auto;
+    }
+
+    .weui-cell {
+        padding: 5px 0;
+    }
+
+    #list {
+        top: 0;
+        padding-bottom: 105px;
+    }
+
+    .lists:after {
+        content: " ";
+        display: inline-block;
+        height: 6px;
+        width: 6px;
+        border-width: 2px 2px 0px 0px;
+        border-color: #c8c8cd;
+        border-style: solid;
+        -webkit-transform: matrix(.71, .71, -.71, .71, 0, 0);
+        transform: matrix(.71, .71, -.71, .71, 0, 0);
+        position: relative;
+        top: -2px;
+        position: absolute;
+        top: 52%;
+        margin-top: -4px;
+        right: 10px;
+    }
+</style>
+{/block} {block name="back"}{/block}{block name="body"}
+<div class="weui-content">
+    <div class="weui-buttons">
+        <a href="/index/index/manual" data-tab="all" class="weui-grid weui-grid-2">
+            <h2 id="total">
+                <i class="iconfont icon-shougongdingdan"></i>
+            </h2>
+            <p class="weui-grid__label">
+                人工询价
+            </p>
+        </a>
+        <a href="/index/index/inquiry_list" data-tab="all" class="weui-grid weui-grid-2  active">
+            <h2>
+                <i class="iconfont icon-xunjia"></i>
+            </h2>
+            <p class="weui-grid__label">
+                询价列表
+            </p>
+        </a>
+    </div>
+    <div id="list">
+
+    </div>
+    <div class="dialog" style="display:none;">
+        <div class="content">
+            <div class="title">
+                询价结果
+                <span class="close">
+                    <i class="iconfont icon-cha"></i>
+                </span>
+            </div>
+            <div class="weui-cells cell-white">
+                <div class="weui-scrollable-horizontal ">
+                    <table class="weui-table">
+                        <thead>
+                            <tr>
+                                <th>看涨周期</th>
+                                <th>管理费</th>
+                                <th>保证金</th>
+                                <th>选择</th>
+                            </tr>
+                        </thead>
+                        <tbody id="trs">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="">
+                <a id="buy" class="weui-btn weui-btn_">立即认购</a>
+            </div>
+        </div>
+    </div>
+    {/block} {block name="script"}
+    <script>
+        $(function () {
+            var datas = {};
+            datas['bz_type_info'] = [];
+            datas['type_info'] = [];
+            $.list = function () {
+                ///index/Combinationapi/enquiryOrderHistory
+                $.get("/index/Combinationapi/enquiryOrderHistory", {
+                    userid: localStorage.id,
+                    auth: localStorage.auth
+                }, function (_d) {
+                    // if (_d['code'] != 0) {
+                    //     $.alert(_d['msg']);
+                    //     return;
+                    // }
+                    var html = '';
+                    console.log(_d);
+                    $(_d).each(function (i, e) {
+                        var btnlabel = '询价中';
+                        var btnlabel2 = '询价中';
+                        var cls = 'red';
+                        if (e['status'] == 1) {
+                            btnlabel = e['qy_rate'] + "%";
+                            btnlabel2 = e['bz_rate'] + "%";
+                            cls = "";
+                        }
+                        datas['bz_type_info'].push(e['bz_type_info']);
+                        datas['type_info'].push(e['type_info']);
+                        html += `
+                        <div data-i="${i}" data-id="${e['id']}" data-status="${e['status']}" class="lists">
+                            <div class="list">
+                                <div class="ll">
+                                    <div class="tl">
+                                        <p>${e['stock']}：</p>
+                                        <p>名义本金：</p>
+                                        <p>看涨：</p>
+                                        
+                                    </div>
+                                    <div class="tr">
+                                        <p>${e['stockID']}</p>
+                                        <p>${$.formatNumber(e['money'])}元</p>
+                                        <p>${e['type']}周</p>
+                                    </div>
+                                </div>
+                                <div class="lr">
+                                    <div class="ll">
+                                        <div class="tl">
+                                            <p>管理费：</p>
+                                            <p>保证金：</p>
+                                            <p>日期：</p>
+                                        </div>
+                                        <div class="tr">
+                                            <p class="${cls}">${btnlabel}</p>
+                                            <p class="${cls}">${btnlabel2}</p>
+                                            <p>${e['logtime'].split(" ")[0]}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    });
+                    $("#list").html(html);
+                    $.events();
+                }, "JSON");
+            }
+
+            $.events = function () {
+                $(".lists").off().on('click', function (e) {
+                    console.log('down');
+                    if ($(e.currentTarget).data("status") == 0) {
+                        $.toast("请等待后台完成询价", 'text');
+                        return;
+                    }
+                    var index = $(e.currentTarget).data("i");
+                    var id = $(e.currentTarget).data("id");
+                    var bz_type_info = JSON.parse(datas['bz_type_info'][index]);
+
+                    var type_info = JSON.parse(datas['type_info'][index]);
+                    var html = "";
+                    type_info.forEach(function (e, i) {
+                        html += `
+                            <tr class="">
+                                <td>${e['type']}周</td>
+                                <td>${e['qy_rate']}%</td>
+                                <td>${bz_type_info[i]['bz_rate']}%</td>
+                                <td>
+                                    <div class="weui-cells weui-cells_radio">
+                                        <label class="weui-cell weui-check__label" for="d${i}" style="margin-bottom: -1px;">
+                                            <div class="weui-cell__ft">
+                                                <input data-i="${i}" data-type="${e['type']}" value="${id}" id="d${i}" type="radio" class="weui-check" name="radio">
+                                                <i class="weui-icon-checked"></i>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    $("#trs").html(html);
+                    $(".dialog").fadeIn();
+                    $("#buy").off().on("click", function (e) {
+                        if (!$(".weui-check").is(":checked")) {
+                            $.alert("请选择一个周期");
+                            return;
+                        }
+                        localStorage.codeid = $(".weui-check:checked").val();
+                        localStorage.type = $(".weui-check:checked").data("type");
+                        localStorage.type_index = $(".weui-check:checked").data("i");
+                        window.location.href = '/index/index/inquiry_operate.html';
+                    });
+                });
+                $(".close").off().on("click", function (e) {
+                    $(".dialog").off().fadeOut();
+                });
+            }
+
+            $.list();
+        });
+    </script> {/block}

@@ -1,0 +1,98 @@
+{include file="common/head"/}
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+  <div class="layui-padded-15">
+    <blockquote class="layui-elem-quote layui-text">
+        <h4>当前位置：{:lang('moneyManage')}<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>{:lang('ioMoney')}</h4>
+    </blockquote>
+    <div class="layui-layout">
+       <div class="layui-form" style="width:50%">
+        <div class="layui-form-item">
+          <label class="layui-form-label">会员账号：</label>
+          <div class="layui-input-block" style="width:30%">
+            <select id="true_name" name="id" lay-verify="" lay-search>
+              <option value="">请选择或输入会员的名称</option>
+              {volist name="list" id="vo" key="k"}
+              <option value="{$vo.id}">{$vo.user_name}-{$vo.true_name}</option>
+              {/volist}
+            </select> 
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">类型：</label>
+          <div class="layui-input-block">
+            <input type="radio" name="type" value="0" title="出金">
+            <input type="radio" name="type" value="1" title="入金">
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">金额：</label>
+          <div class="layui-input-inline">
+            <input type="number" name="money" value="" lay-verify="required" placeholder="请输入金额" class="layui-input" required>
+          </div>
+          <div class="layui-form-mid layui-word-aux">输入正数金额</div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+          <label class="layui-form-label">备注：</label>
+          <div class="layui-input-block">
+            <textarea id="memo" name="memo" placeholder="请输入内容" class="layui-textarea"></textarea>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <div class="layui-input-block">
+            <button class="layui-btn" id="sub">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{include file="common/foot"/}
+<script>
+    var message;
+    layui.config({
+        base: ADMIN+'build/js/',
+        version: '1.0.1'
+    }).use(['app','table','form','laydate','message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            table = layui.table,
+            laydate = layui.laydate,
+            form = layui.form,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+   
+    //监听提交
+	$('#sub').click(function(){
+		var uid=$('#true_name option:selected').val();
+		var type=$('input[name="type"]:checked').val();
+		var money=$('input[name="money"]').val();
+		var memo=$('#memo').val();
+		layer.confirm('你确定要操作吗？', {icon: 3, title:'提示'}, function(index){
+		    $.post("{:url('money/ioMoney')}",{'uid':uid,'type':type,'money':money,'memo':memo},function(res){
+				if(res.code==1){
+				   layer.msg(res.msg,{icon:1,time:1000},function(){
+					   layer.close(index);
+				   });
+				}else{
+				  layer.msg(res.msg,{icon:2,time:1000},function(){
+					   layer.close(index);
+				   });
+				}
+			});
+		});
+	});
+        
+  });
+</script>
+</body>
+</html>

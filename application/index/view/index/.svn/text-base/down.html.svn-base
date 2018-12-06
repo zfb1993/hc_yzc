@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+	<meta name="x5-fullscreen" content="true">
+	<meta name="full-screen" content="yes">
+	<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+	<link rel="stylesheet" href="https://at.alicdn.com/t/font_659316_kic3h2esv5.css">
+	<script src="https://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+	<title>app下载</title>
+</head>
+<style>
+	* {
+		padding: 0;
+		margin: 0;
+	}
+
+	html,
+	body {
+		width: 100%;
+		background: #1D1C1C;
+	}
+
+	.headA {
+		height: 50px;
+		width: 100%;
+		position: fixed;
+		top: 0;
+		box-sizing: border-box;
+		background: #202932;
+		z-index: 10000;
+
+	}
+
+	.headtit {
+		text-align: center;
+		line-height: 50px;
+		color: #D6D6D6;
+	}
+
+	.headA>a {
+		position: absolute;
+		display: inline-block;
+		top: 13px;
+		color: #D6D6D6;
+		left: 10px;
+		width: 30px;
+		text-decoration: none;
+	}
+
+	.tteyf {
+		padding: 8px;
+		margin-bottom: 8px;
+		background: #202932;
+		display: block;
+	}
+
+	.tiema {
+		justify-content: space-between;
+		display: flex;
+
+	}
+
+	.tiema>p {
+		height: 30px;
+	}
+
+	.tiema>p:nth-child(1)>img {
+		width: 30px;
+		height: 30px;
+		float: left;
+		border-radius: 50%;
+	}
+
+	.tiema>p:nth-child(1)>span {
+		display: inline-block;
+		/* float: left; */
+		font-size: 14px;
+		line-height: 30px;
+		padding-left: 15px;
+	}
+
+	#named {
+		color: #EBEBEB;
+	}
+
+	#grades {
+		color: #fb640e;
+	}
+
+	.tiema>a {
+		width: 90px;
+		border-radius: 8px;
+		height: 24px;
+		border: 1px solid #FB640e;
+		color: #FB640e;
+		font-size: 14px;
+		text-align: center;
+		line-height: 24px;
+		display: inline-block;
+		text-decoration: none;
+	}
+
+	.wsews {
+		display: flex;
+		margin-top: 3px;
+	}
+
+	.eefw-a {
+		list-style: none;
+		width: 100%;
+		float: left;
+	}
+
+	.eefw-a>li {
+		width: 33.3%;
+		float: left;
+		text-align: center;
+		color: #D6D6D6;
+		font-size: 13px;
+	}
+
+	.eefw-a>li>p:nth-child(2) {
+		color: #FB640e;
+	}
+
+	#lstes {
+		position: fixed;
+		width: 100%;
+		left: 0;
+		top: 62px;
+		bottom: 0;
+		overflow: auto;
+	}
+</style>
+
+<body></body>
+<script type="text/javascript"> 
+var bForcepc = fGetQuery("dv") == "pc"; 
+function fBrowserRedirect(){ 
+ var sUserAgent = navigator.userAgent.toLowerCase(); 
+ var bIsIpad = sUserAgent.match(/ipad/i) == "ipad"; 
+ var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os"; 
+ var bIsMidp = sUserAgent.match(/midp/i) == "midp"; 
+ var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4"; 
+ var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb"; 
+ var bIsAndroid = sUserAgent.match(/android/i) == "android"; 
+ var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce"; 
+ var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile"; 
+ if(bIsIpad||bIsIphoneOs){ 
+	window.location.href = "	https://fir.im/w2x5"; 
+ }else{
+	window.location.href = "	https://fir.im/71p6"; 
+ }
+ 
+} 
+function fGetQuery(name){
+	//获取参数值 
+ var sUrl = window.location.search.substr(1); 
+ var r = sUrl.match(new RegExp("(^|&)" + name + "=([^&]*)(&|$)")); 
+ return (r == null ? null : unescape(r[2])); 
+} 
+function fShowVerBlock(){ 
+ if(bForcepc){ 
+ document.getElementById("dv_block").style.display = "block"; 
+ }else{ 
+ document.getElementById("ad_block").style.display = "block"; 
+ } 
+}
+$(function(){
+fBrowserRedirect(); 
+})
+
+</script>
+</html>

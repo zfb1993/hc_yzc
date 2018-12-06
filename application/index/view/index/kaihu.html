@@ -1,0 +1,201 @@
+{extend name="static/assets/base.html" /}{block name="title"}
+<title>绑定账号</title>{/block} {block name="style"}
+<style>
+	body {
+		color: #ebebeb;
+		text-align: center;
+	}
+
+	.futures_account {
+		padding: 0 0 0 2rem;
+		margin-top: 10px;
+
+	}
+
+	.rett {
+		margin-bottom: 2rem;
+		display: flex;
+		height: 2.2rem;
+	}
+
+	.rett>img {
+		flex: 1;
+		height: 100%;
+	}
+
+	.rett>p {
+		flex: 9;
+		font-size: 105%;
+		line-height: 2.2rem;
+		padding-left: 5px;
+		color: #303849;
+		text-align: left;
+	}
+
+	.terr {
+		text-align: center;
+		font-size: 130%;
+		color: #303849;
+	}
+
+	h2 {
+		color: #adb3be;
+	}
+
+	.flow_bd {
+		padding: 10px 20px;
+		margin-top: 3rem;
+	}
+
+	.flow .flow_bd {
+		display: -ms-flexbox;
+		display: flex;
+		-ms-flex-pack: justify;
+		justify-content: space-between;
+		-ms-flex-align: center;
+		align-items: center;
+	}
+
+	.flow .flow_bd .flow_li {
+		position: relative;
+		width: 10px;
+		height: 10px;
+		z-index: 1;
+	}
+
+	.flow .flow_bd .flow_li .flow_state {
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 10px;
+		height: 10px;
+		font-size: 10px;
+		line-height: 10px;
+		text-align: center;
+		color: #6e7c9a;
+		border-radius: 10px;
+		box-sizing: border-box;
+		background-color: #f2f2f2;
+		box-shadow: 0 0 0 0.17rem #8890a2;
+	}
+
+	.flow .flow_bd .flow_li.flow_li_done .flow_state {
+		background: #ff8c19;
+		box-shadow: 0 0 0 0.17rem #ff8c19;
+	}
+
+	.flow .flow_bd .flow_li .flow_title-bottom {
+		position: absolute;
+		top: -25px;
+		left: 50%;
+		transform: translate(-50%);
+		font-size: 12px;
+		white-space: nowrap;
+		text-align: center;
+		color: #303849;
+	}
+
+	.flow .flow_bd .flow_li.flow_li_done .flow_title-bottom {
+		color: #ff8c19;
+		font-weight: 600;
+	}
+
+	.flow .flow_bd .flow_line {
+		-ms-flex: 1;
+		flex: 1;
+		background-color: #43434b;
+		height: .04rem;
+		position: relative;
+	}
+
+	.flow .flow_bd .flow_line .flow_process {
+		display: none;
+		background-color: #ff8c19;
+		height: .04rem;
+		position: relative;
+	}
+
+	.flow .flow_bd .flow_line.flow_line_ing .flow_process {
+		display: block;
+		width: 100%;
+	}
+
+	.flow .flow_bd .flow_line {
+		-ms-flex: 1;
+		flex: 1;
+		background-color: #43434b;
+		height: .04rem;
+		position: relative;
+	}
+</style>
+
+{/block} {block name="body"}
+<div class="weui-content">
+	<div class="weui-title_" style="margin-bottom: 10px;text-align:center;">
+        <a href="javascript:history.go(-1);" class="weui-back" style="color:#fff;float:left;">
+            <i class="iconfont icon-fanhui"></i>
+        </a>
+                在线开户
+	</div>
+	<div data-v-c0d2f088="" class="flow" style="padding: 0px 0.826667rem 0.773333rem; margin-top: 1rem;">
+		<div class="flow_bd">
+			<div data-v-c0d2f088="" class="flow_li flow_li_done">
+				<div class="flow_state"></div>
+				<p class="flow_title-bottom">选择类型</p>
+			</div>
+			<div data-v-c0d2f088="" class="flow_line flow_line_ing">
+				<div class="flow_process"></div>
+			</div>
+			<div data-v-c0d2f088="" class="flow_li">
+				<div class="flow_state"></div>
+				<p class="flow_title-bottom">风险评估</p>
+			</div>
+			<div data-v-c0d2f088="" class="flow_line">
+				<div class="flow_process"></div>
+			</div>
+			<div data-v-c0d2f088="" class="flow_li">
+				<div class="flow_state"></div>
+				<p class="flow_title-bottom">申请开户</p>
+			</div>
+			<div data-v-c0d2f088="" class="flow_line">
+				<div class="flow_process"></div>
+			</div>
+			<div data-v-c0d2f088="" class="flow_li">
+				<div class="flow_state"></div>
+				<p class="flow_title-bottom">成功开户</p>
+			</div>
+		</div>
+	</div>
+	<div class="futures_account">
+		<div class="account_body">
+			<div class="detail">
+				<div class="rett">
+					<img src="/static/assets/images/kh_bg2.png" />
+					<p>30秒极速开户，固定账户，全年无休</p>
+				</div>
+				<div class="rett">
+					<img src="/static/assets/images/kh_bg2.png" />
+					<p>高效出入金，秒进秒出秒到账，随时提现</p>
+				</div>
+				<div class="rett">
+					<img src="/static/assets/images/kh_bg3.png" />
+
+					<p>权威软件，合规支付，交易可进可退</p>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+	<h2>一个账户交易四大所品种</h2>
+	<div class="btn_box" style="padding: 3rem 1.2rem 2.5rem;">
+		<a href="/index/index/readkh" class="weui-btn weui-btn_">马上开户</a>
+	</div>
+</div>
+{/block}
+
+
+
+
+{block name="script"}
+<script src="/static/assets/jscode/login.bundle.js"></script> {/block}{block name="checkLogin"}{/block}

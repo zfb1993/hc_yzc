@@ -1,0 +1,87 @@
+{extend name="static/assets/base.html" /}{block name="title"}
+<title>用户登陆</title>{/block} {block name="style"}
+<link rel="stylesheet" href="/static/assets/css/login.css">
+<style>
+</style>
+
+{/block} {block name="body"}
+    <header class="bar bar-nav">
+        <a href="javascript:history.go(-1);" class="weui-back">
+            <i class="iconfont icon-fanhui"></i>
+        </a>
+        <h1 class="title">登陆</h1>
+    </header>
+<div class="weui-content" style="top:48px;">
+    <!--<div class="weui-cells__title" style="text-align: center;">
+        <a href="javascript:history.go(-1);" class="weui-back" style="color:#333;float:left;">
+            <i class="iconfont icon-fanhui"></i>
+        </a>
+          登陆{$Think.config.site_title}
+   </div>-->
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell weui-cell_select">
+            <div class="weui-cell__hd">
+                <label class="weui-label-icon">
+                    <i class="iconfont icon-shouji"></i>
+                </label>
+            </div>
+            <div class="weui-cell__bd">
+                <select id="select" class="weui-select" name="select">
+                    <option selected="" value="0">客户</option>
+                    <option value="1">机构</option>
+                </select>
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-label-icon">
+                    <i class="iconfont icon-shouji"></i>
+                </label>
+            </div>
+            <div class="weui-cell__bd">
+                <input id='account' class="weui-input" type="tel" pattern="[0-9]*" placeholder="请输入手机号码">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-label-icon">
+                    <i class="iconfont icon-mima"></i>
+                </label>
+            </div>
+            <div class="weui-cell__bd">
+                <input id='password' class="weui-input" type="password" value="" placeholder="请输入密码">
+            </div>
+        </div>
+        <!-- <div class="weui-cell" style="margin-bottom:0;">
+            <div class="weui-cell__hd">
+                <label class="weui-label" style="text-align: center;">用户名</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" id="account" type="text" placeholder="请输入用户名" style="width: 39vw;border: none;">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-label" style="text-align: center;">密码</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" id="password" type="password" placeholder="密码" style="width: 39vw;border: none;">
+            </div>
+            <div class="weui-cell__ft">
+                 <a href="/index/index/forget_password"><button class="weui-vcode-btn">忘记密码</button></a>
+            </div>
+        </div> -->
+        <a id="login" class="weui-btn weui-btn_ ">登陆</a>
+        <p style="text-align: center;">
+            <a class="" href="/index/index/reg" style="color:#303849;">点我注册</a>
+            |
+            <a href="/index/index/forget_password" style="color:#303849;">
+                忘记密码
+            </a>
+        </p>
+    </div>
+    {/block}
+    {block name="tabbar"}{/block}
+    {block name="script"}
+    <script src="/static/assets/jscode/login.bundle.js"></script> {/block}
+    {block name="checkLogin"}{/block}

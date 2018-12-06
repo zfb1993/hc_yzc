@@ -1,0 +1,137 @@
+{extend name="static/assets/base.html"/} {block name="title"} 
+<title>我是经纪人</title>{/block} {block name="style"}
+<style>
+    header.bar h1.title {
+        line-height: 3rem;
+        background: #353c4d;
+    }
+
+    .info {
+        position: relative;
+        text-align: center;
+        padding: 38px 0;
+    }
+
+    .info img {
+        width: 50px;
+        height: 50px;
+        background: white;
+        border-radius: 50%;
+    }
+
+    .info .wen {
+        display: inline-block;
+        top: -5px;
+        position: relative;
+        color: white;
+        margin: 0 10px;
+    }
+
+    .info ._btn {
+        display: inline-block;
+        font-size: 12px;
+        border: 1px solid white;
+        padding: 0px 16px;
+        line-height: 20px;
+        top: -13px;
+        left: 10px;
+    }
+
+    .content {
+        background: #ffffff;
+        border-radius: 4px;
+        width: 80%;
+        margin: 0 auto;
+        position: relative;
+        color: #41495d;
+        padding: 10px;
+        margin-top: 100px;
+    }
+
+    .content .header {
+        display: flex;
+        padding: 10px 0;
+    }
+
+    .content .flex {
+        flex: 1;
+        text-align: center;
+    }
+
+    .content .body,
+    .content .footer {
+        padding-top: 20px;
+        /*border-top: 1px solid #dfdfdf;*/
+        text-align: center;
+    }
+
+    .content .body img {
+        width: 40%;
+        border: 4px solid #cacaca;
+        margin: 15px auto;
+        padding: 10px;
+    }
+
+    ._btn2 {
+        margin: 15px auto;
+        width: 50%;
+    }
+</style>
+</head>
+
+{/block}{block name="body"}
+	<header class="bar bar-nav">
+        <a href="javascript:history.go(-1);" class="weui-back">
+            <i class="iconfont icon-fanhui"></i>
+        </a>
+        <h1 class="title">我的邀请</h1>
+    </header>
+<div class="weui-content" style="background:#f2f2f2 !important;height:100%;">
+    
+    <div class='content'>
+        
+        <div class="body">
+            <div class="img" id="qrcode"></div>
+            <p>扫码注册</p>
+            <input type="text" id="link" value="{$url}" style="position: absolute;left:-10000px;">
+            <a data-clipboard-target="#link" id="copy_" class="weui-btn weui-btn_ _btn2">复制推广信息</a>
+        </div>
+        <div class="footer" style="padding: 10px 0;">
+            <span>我的邀请码</span>
+            <span style="font-size:15px;">{$ext_code}</span>
+        </div>
+    </div>
+</div>
+{/block}{block name="tabbar"}{/block}{block name="script"}
+<script src="/qihuo/js/qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://cdn.bootcss.com/clipboard.js/1.7.1/clipboard.min.js"></script>
+<script>
+    $(function () {
+        $.get("/index/otherapi/qrcode?userid=" + localStorage.id, {}, function (_d) {
+            if (_d['code'] != 1) {
+                $.alert(_d['msg']);
+                return;
+            }
+        }, "JSON");
+        //生成二维码
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            width: 200,
+            height: 200,
+
+        });
+        var url = '{$url}';
+        qrcode.makeCode(url);
+        //$("#money_i").html($.formatNumber(localStorage.money));
+        //$("#qrcode").attr("src", );
+
+        var clipboard = new Clipboard('#copy_');
+
+        clipboard.on('success', function (e) {
+            console.info('Action:', e.action);
+            console.info('Text:', e.text);
+            console.info('Trigger:', e.trigger);
+            e.clearSelection();
+            $.toast("复制成功", 'text');
+        });
+    });
+</script> {/block}

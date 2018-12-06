@@ -1,0 +1,224 @@
+{extend name="static/assets/base.html" /}{block name="title"}
+<title>开通实盘账户</title>{/block} {block name="style"}
+<link rel="stylesheet" href="/static/assets/css/login.css">
+<link rel="stylesheet" href="https://at.alicdn.com/t/font_654076_ttlrawxsyxa2lnmi.css">
+<style>
+	* {
+		padding: 0;
+		margin: 0;
+	}
+
+	body {
+		width: 100%;
+		font-family: SimHei;
+		font-size: 12px;
+		box-sizing: border-box;
+		font-family: "微软雅黑";
+		/*background-color: #20212a;*/
+	}
+
+	.rtre {
+		width: 84%;
+		padding: 10% 0;
+		margin: 0 auto;
+	}
+
+	.tupian {
+		width: 5%;
+		color: #00FA00;
+	}
+
+	.hetop {
+		text-align: center;
+		font-size: 0.8rem;
+	}
+
+	.bttit {
+		font-weight: 600;
+		font-size: 1rem;
+	}
+
+	.uyiy {
+		margin-top: 10%;
+		line-height: 1.8rem;
+	}
+
+	.uaiy {
+		line-height: 1.8rem;
+	}
+
+	.trues {
+		display: inline-block;
+		background: #FFC107;
+		padding: 0.2rem;
+		color: #F0F0F0;
+		text-decoration: none;
+		margin-top: 0.7rem;
+		font-size: 1rem;
+	}
+
+	.weui-btn_ {
+		color: #ffffff;
+		border: 1px solid #ff8c19;
+		background: #ff8c19;
+		margin-top: 3rem;
+	}
+
+	.flow_bd {
+		padding: 10px 20px;
+		margin-top: 3rem;
+	}
+
+	.flow .flow_bd {
+		display: -ms-flexbox;
+		display: flex;
+		-ms-flex-pack: justify;
+		justify-content: space-between;
+		-ms-flex-align: center;
+		align-items: center;
+	}
+
+	.flow .flow_bd .flow_li {
+		position: relative;
+		width: 10px;
+		height: 10px;
+		z-index: 1;
+	}
+
+	.flow .flow_bd .flow_li .flow_state {
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 10px;
+		height: 10px;
+		font-size: 10px;
+		line-height: 10px;
+		text-align: center;
+		color: #303849;
+		border-radius: 10px;
+		box-sizing: border-box;
+		background-color: #f2f2f2;
+		box-shadow: 0 0 0 0.17rem #303849;
+	}
+
+	.flow .flow_bd .flow_li.flow_li_done .flow_state {
+		background: #ff8c19;
+		box-shadow: 0 0 0 0.17rem #ff8c19;
+	}
+
+	.flow .flow_bd .flow_li .flow_title-bottom {
+		position: absolute;
+		top: -25px;
+		left: 50%;
+		transform: translate(-50%);
+		font-size: 12px;
+		white-space: nowrap;
+		text-align: center;
+		color: #303849;
+	}
+
+	.flow .flow_bd .flow_li.flow_li_done .flow_title-bottom {
+		color: #ff8c19;
+		font-weight: 600;
+	}
+
+	.flow .flow_bd .flow_line {
+		-ms-flex: 1;
+		flex: 1;
+		background-color: #43434b;
+		height: .04rem;
+		position: relative;
+	}
+
+	.flow .flow_bd .flow_line .flow_process {
+		display: none;
+		background-color: #ff8c19;
+		height: .04rem;
+		position: relative;
+	}
+
+	.flow .flow_bd .flow_line.flow_line_ing .flow_process {
+		display: block;
+		width: 100%;
+	}
+
+	.flow .flow_bd .flow_line {
+		-ms-flex: 1;
+		flex: 1;
+		background-color: #43434b;
+		height: .04rem;
+		position: relative;
+	}
+</style>
+
+{/block} {block name="body"}
+<div class="weui-content">
+	<div class="weui-title_" style="margin-bottom: 10px;text-align:center;">
+        <a href="javascript:history.go(-1);" class="weui-back" style="color:#fff;float:left;">
+            <i class="iconfont icon-fanhui"></i>
+        </a>
+                开户
+	</div>
+	<div data-v-c0d2f088="" class="flow" style="padding: 0px 0.826667rem 0.773333rem; margin-top: 1rem;">
+		<div class="flow_bd">
+			<div data-v-c0d2f088="" class="flow_li flow_li_done">
+				<div class="flow_state"></div>
+				<p class="flow_title-bottom">选择类型</p>
+			</div>
+			<div data-v-c0d2f088="" class="flow_line flow_line_ing">
+				<div class="flow_process"></div>
+			</div>
+			<div data-v-c0d2f088="" class="flow_li flow_li_done">
+				<div class="flow_state"></div>
+				<p class="flow_title-bottom">风险评估</p>
+			</div>
+			<div data-v-c0d2f088="" class="flow_line flow_line_ing">
+				<div class="flow_process"></div>
+			</div>
+			<div data-v-c0d2f088="" class="flow_li flow_li_done">
+				<div class="flow_state"></div>
+				<p class="flow_title-bottom">申请开户</p>
+			</div>
+			<div data-v-c0d2f088="" class="flow_line flow_line_ing">
+				<div class="flow_process"></div>
+			</div>
+			<div data-v-c0d2f088="" class="flow_li flow_li_done">
+				<div class="flow_state"></div>
+				<p class="flow_title-bottom">成功开户</p>
+			</div>
+		</div>
+	</div>
+	<div class="rtre">
+		<div class="hetop">
+			<i class="tupian iconfont icon-gouxuan"></i>
+			<span class="bttit">开通实盘账户成功</span>
+			<p class="uyiy">尊敬的
+				<span id="name" style="color:#EF4F4F"></span> 您已成功开通实盘账户。</p>
+			<p class="uaiy">实盘账户：
+				<span id="id" style="user-select: text;">861916350</span>
+			</p>
+			<p class="uaiy">实盘密码：
+				<span id="pwd" style="user-select: text;"></span>
+			</p>
+			<!-- <p class="uaiy">实盘服务器：
+			<span>Financemanagers-Demo</span>
+		</p> -->
+			<a class="weui-btn weui-btn_" href="#">点击下载软件开始操盘</a>
+		</div>
+	</div>
+</div>
+{/block} {block name="script"}
+<script>
+	$(function () {
+		$("#name").html(localStorage.mobile);
+		$.post("/index/otherapi/getopenAccountStatus", {
+			userid: localStorage.id,
+			auth: localStorage.auth
+		}, function (_d) {
+			if (_d['code'] == 1) {
+				$("#id").html(_d['zid']);
+				$("#pwd").html(_d['pwd']);
+			}
+		});
+	});
+</script> {/block}{block name="checkLogin"}{/block}

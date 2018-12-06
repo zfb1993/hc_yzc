@@ -1,0 +1,111 @@
+{include file="common/top"/}
+<div class="content_wrap">
+	<p style="padding:10px 30px 0;color:#aaa;">提示：勾选代理后先点保存，再点右上角关闭按钮返回</p>
+	<ul id="treeDemo" class="ztree"></ul>
+	<div style="position: relative;left:0;bottom: 20px;width: 100%; padding-top: 15%;margin:0 auto;text-align: center;">
+		<button id="btn" class="layui-btn layui-btn-danger" onclick="selectData()" style="text-align: center;">保存</button>
+	</div>
+</div>
+{include file="common/foot"/}
+<script type="text/javascript" src="__STATIC__/plugins/zTree_v3/js/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="__STATIC__/js/layer/layer.js"></script>
+<script type="text/javascript" src="__STATIC__/plugins/zTree_v3/js/jquery.ztree.core.js"></script>
+<script type="text/javascript" src="__STATIC__/plugins/zTree_v3/js/jquery.ztree.excheck.js"></script>
+<SCRIPT type="text/javascript">
+	var setting = {
+		check: {
+			enable: true
+		},
+		data: {
+			simpleData: {
+				enable: true
+			}
+		}
+	};
+
+	function selectData()
+	{
+		var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+		var checkedNodes=treeObj.getCheckedNodes();
+		var new_nodes=[];
+		for(var i=0;i<checkedNodes.length;i++){
+			new_nodes.push(checkedNodes[i].name);
+		}
+		//localStorage.setItem('nodes',new_nodes);
+		sessionStorage.setItem('nodes',new_nodes);
+
+
+
+		//var hiddenValue = document.getElementById("ins_name").value;
+		//alert(hiddenValue);
+		//window.parent.$("#ins_name").val(inputValue);
+		// window.parent.$("#choosedOrgId").value = hiddenValue;
+		//window.parent.document.getElementById("ins_name").value = hiddenValue;
+
+		//右上角关闭回调
+		var nodes=sessionStorage.getItem('nodes');
+		if(sessionStorage.getItem('nodes')==''||sessionStorage.getItem('nodes')==null){
+			$('#ins_name').val('');
+			layer.close(index);
+		}else{
+			var new_nodes=nodes.split(',');
+			var new_str=[];
+			for(var i=0;i<new_nodes.length;i++){
+				if(new_nodes[i].indexOf('-')>0){
+					var arr=new_nodes[i].split('-');
+					new_str.push(arr[1]);
+				}
+			}
+
+
+			//window.parent.$("#ins_name").val(new_str);
+			window.parent.document.getElementById("ins_name").value = new_str;
+			//$('#ins_name').val(new_str);
+			layer.close(index);
+		}
+
+
+		var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+		parent.layer.close(index);
+
+
+	}
+	var zNodes,code;
+
+	function setCheck() {
+		var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+		//py = $("#py").attr("checked")? "p":"",
+		//sy = $("#sy").attr("checked")? "s":"",
+		//pn = $("#pn").attr("checked")? "p":"",
+		//sn = $("#sn").attr("checked")? "s":"",
+		py = "";
+		sy = "s";
+		pn = "";
+		sn = "s";
+		type = { "Y":py + sy, "N":pn + sn};
+		zTree.setting.check.chkboxType = type;
+		showCode('setting.check.chkboxType = { "Y" : "' + type.Y + '", "N" : "' + type.N + '" };');
+		//showCode('setting.check.chkboxType = { "Y" : "ps", "N" : "" }');
+	}
+	function showCode(str) {
+		if (!code) code = $("#code");
+		code.empty();
+		code.append("<li>"+str+"</li>");
+	}
+	
+	$(document).ready(function(){
+		$.post("{:url('agent/agentInfo')}",{},function(res){
+			zNodes=res;
+			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+			setCheck();
+			$("#py").bind("change", setCheck);
+			$("#sy").bind("change", setCheck);
+			$("#pn").bind("change", setCheck);
+			$("#sn").bind("change", setCheck);
+		});
+		
+	});
+	
+</SCRIPT>
+</body>
+</html>

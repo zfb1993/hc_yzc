@@ -1,0 +1,42 @@
+{include file="common/head"/}
+<div class="admin-main layui-anim layui-anim-upbit">
+    <div class="table-responsive">
+        <table class="layui-table" lay-even lay-skin="line">
+            <colgroup>
+                <col width="40%">
+                <col>
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="text-center" colspan="2">{:lang('systemInfo')}</th>
+                </tr>
+            </thead>
+            <!--<tbody>
+                <tr>
+                    <td>网站域名</td>
+                    <td>{$config.url}</td>
+                </tr>
+                <tr>
+                    <td>网站目录</td>
+                    <td>{$config.document_root}</td>
+                </tr>
+                <tr>
+                    <td>服务器操作系统</td>
+                    <td>{$config.server_os}</td>
+                </tr>
+                <tr>
+                    <td>服务器端口</td>
+                    <td>{$config.server_port}</td>
+                </tr>
+            </tbody>-->
+        </table>
+    </div>
+</div>
+{include file="common/foot"/}
+<script>
+    layui.use('table', function() {
+        var table = layui.table;
+    });
+</script>
+</body>
+</html>

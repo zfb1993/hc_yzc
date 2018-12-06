@@ -1,0 +1,204 @@
+{include file="common/head"/}
+<style>
+  .layui-table td, .layui-table th{text-align: center;}
+  .layui-layout-idcImg{display:inline-block;width:50%;margin:20px;}
+  .layui-layout-headImg{width:60px;height:60px;border-radius: 50%;}
+</style>
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+  <div class="layui-padded-15">
+    <blockquote class="layui-elem-quote layui-text">
+      <h4 class="layui-pull-left">当前位置：{:lang('vipManage')}<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>{:lang('agentInfo')}</h4>
+      <button id="layui-back" onclick="javascript:history.back()" class="layui-btn layui-btn-danger layui-pull-right">返回上一级</button>
+    </blockquote>
+    <div class="layui-form">
+      <div class="layui-tab layui-tab-card" lay-filter="test">
+        <ul class="layui-tab-title">
+          <li class="layui-this">基本信息</li>
+          <li>下属代理</li>
+          <li>下属客户</li>
+          <li>返佣记录</li>
+        </ul>
+        <div class="layui-tab-content" style="height: auto;">
+          <div class="layui-tab-item layui-show" style="width: 50%">
+              <table class="layui-table">
+                <colgroup>
+                  <col width="100">
+                  <col width="300">
+                  <col>
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th colspan="2">基本信息</th>
+                  </tr> 
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>头像</td>
+                    <td><img class="layui-layout-headImg" onerror="this.src='__STATIC__/admin/images/error-img.png'" src="{$list.user_logo}" /></td>
+                  </tr>
+                  <tr>
+                    <td>昵称</td>
+                    <td>{$list.nick_name}</td>
+                  </tr>
+                  <tr>
+                    <td>真实姓名</td>
+                    <td>{$list.true_name}</td>
+                  </tr>
+                  <tr>
+                    <td>手机号码</td>
+                    <td>{$list.mobile}</td>
+                  </tr>
+                  <tr>
+                    <td>身份证号</td>
+                    <td>{$list.id_card}</td>
+                  </tr>
+                  <tr>
+                    <td>开户银行</td>
+                    <td>{$list.bank_name}</td>
+                  </tr>
+                  <tr>
+                    <td>银行卡号</td>
+                    <td>{$list.bank_card}</td>
+                  </tr>
+                  <tr>
+                    <td>总代理</td>
+                    <td>{$list.ins_name}</td>
+                  </tr>
+                  <tr>
+                    <td>上级代码</td>
+                    <td>{$list.p_name}</td>
+                  </tr>
+                  <tr>
+                    <td>实名认证</td>
+                    <td>
+                      <div id="layer-photos-idcard" class="layer-photos-demo">
+                        <img class="layui-layout-idcImg" onerror="this.src='__STATIC__/admin/images/error-img.png'" src="{$list.card_id_img_top}" />
+                        <img class="layui-layout-idcImg" onerror="this.src='__STATIC__/admin/images/error-img.png'" src="{$list.card_id_img_bot}" />
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+          <div class="layui-tab-item">
+             <table class="layui-table" id="list1" lay-filter="list1"></table> 
+          </div>
+          <div class="layui-tab-item">
+             <table class="layui-table" id="list2" lay-filter="list2"></table>
+          </div>
+          <div class="layui-tab-item">
+            <table class="layui-table" id="list" lay-filter="list"></table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+{include file="common/foot"/}
+<script>
+  var message;
+  layui.config({
+      base: ADMIN+'build/js/',
+      version: '1.0.1'
+  }).use(['app','table','element','form','laydate','message'], function() {
+      var app = layui.app,
+          $ = layui.jquery,
+          table = layui.table,
+          form = layui.form,
+		  element = layui.element,
+          laydate = layui.laydate,
+          layer = layui.layer;
+      //将message设置为全局以便子页面调用
+      message = layui.message;
+      //主入口
+      app.set({
+          type: 'iframe'
+      }).init();
+    var id={:input('id')};
+	element.on('tab(test)', function(data){
+	  console.log(this); //当前Tab标题所在的原始DOM元素
+	  console.log(data.index); //得到当前Tab的所在下标
+	  console.log(data.elem); //得到当前的Tab大容器
+	  if(data.index==3){
+		//列表数据
+		var tableIn = table.render({
+			elem: '#list',
+			url: '{:url("agent/myInsFlow")}',
+			method: 'post',
+			where:{id:id},
+			page: true,
+			cols: [[
+				{type:'numbers',title:'序号',width:60,fixed: true},
+				{field:'user_name',align:'center',title:'账号', width:120, sort: true},
+				{field:'true_name',align:'center',title:'姓名', width:120, sort: true},
+				{field:'p_name',align:'center',title:'上级代理',width:150},
+				{field:'type', align:'center',title:'类型',width:100},
+				{field:'money',align:'center',title:'金额', width:160, sort: true},
+				{field:'total_money',align:'center', title:'账户余额',width:160, sort: true},
+				{field:'add_time',align:'center',title:'申请时间', width:200, sort: true},
+				{field:'check_time',align:'center',title:'处理时间', width:200, sort: true},
+				{field:'memo', align:'center', title:'备注',width:120},
+			]],
+			limit: 10,
+			height: 550 //固定值
+		});
+	  }else if(data.index==2){
+		//下属客户数据
+		var tableIn2 = table.render({
+			elem: '#list2',
+			url: '{:url("agent/subCustomerList")}',
+			method: 'post',
+			where:{id:id},
+			page: true,
+			cols: [[
+				{type:'numbers',title:'序号',width:60,fixed: true},
+				{field:'true_name',align:'center',title:'姓名', width:120, sort: true},
+				{field:'mobile',align:'center',title:'手机号',width:150},
+				{field:'code', align:'center',title:'邀请码',width:100},
+				{field:'ins_name',align:'center',title:'所属机构', width:160, sort: true},
+				{field:'p_name',align:'center', title:'上级代理',width:160,sort: true},
+				{field:'total_money',align:'center', title:'账户余额',width:160, sort: true},
+				{field:'add_time',align:'center',title:'注册时间', width:200, sort: true},
+				{field:'status', align:'center', title:'状态',width:120},
+			]],
+			limit: 10,
+			height: 550 //固定值
+		});
+	  }else if(data.index==1){
+		//下属代理数据
+		var tableIn1 = table.render({
+			elem: '#list1',
+			url: '{:url("agent/subAgentorList")}',
+			method: 'post',
+			where:{id:id},
+			page: true,
+			cols: [[
+				{type:'numbers',title:'序号',width:60,fixed: true},
+				{field:'true_name',align:'center',title:'姓名', width:120, sort: true},
+				{field:'mobile',align:'center',title:'手机号',width:150},
+				{field:'code', align:'center',title:'邀请码',width:100},
+				{field:'ins_name',align:'center',title:'所属机构', width:160, sort: true},
+				{field:'p_name',align:'center', title:'上级代理',width:160,sort: true},
+				{field:'total_money',align:'center', title:'账户余额',width:160, sort: true},
+				{field:'add_time',align:'center',title:'注册时间', width:200, sort: true},
+				{field:'status', align:'center', title:'状态',width:120},
+			]],
+			limit: 10,
+			height: 550 //固定值
+		});
+	  }
+	});
+       //图片查看
+	  layer.photos({
+		photos: '#layer-photos-idcard'
+		,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+	  }); 
+  });
+</script>
+</body>
+</html>

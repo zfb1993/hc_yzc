@@ -1,0 +1,481 @@
+{extend name="qihuo/base.html" /} {block name="title"}
+<title>余额充值 - {$Think.config.site_title}</title>{/block} {block name="style"}
+<style>
+	.weui-article>.weui-cells>.weui-cell>.weui-cell__bd {
+		text-align: left;
+	}
+
+	.weui_btn_inline {
+		color: #424242;
+		border: 1px solid #ececec;
+		background: #ececec;
+		display: inline-block;
+		width: 40%;
+	}
+  
+	[class*=" weui-icon-"]:before,
+	[class^="weui-icon-"]:before {
+		display: none;
+	}
+
+	.wechat {
+		border: 1px solid #04be02;
+		background: #04be02;
+	}
+
+	.alipay {
+		border: 1px solid #1b5999;
+		background: #1b5999;
+	}
+
+	.cancel {
+		border: 1px solid #667392;
+		background: #303849;
+	}
+
+	select {
+		color: white;
+	}
+
+	select>option {
+		background: #353c4d;
+		color: white;
+		border: none;
+	}
+
+	#dengji .weui-article {
+		background: white;
+	}
+
+	#dengji input.weui-input {
+		height: 30px;
+	}
+</style>
+{/block} {block name="body"}
+<div class="weui-content clearfix">
+	<div class="weui-title_" style="margin-bottom: 10px;">
+		<div class="fl">
+			当前余额
+		</div>
+		<div id="yue" class="red fr">
+			--
+		</div>
+	</div>
+	<div class="weui-cells weui-cells_form">
+		<div class="weui-cell nomagin">
+			<div class="weui-cell__hd">
+				<label for="" class="">充值金额</label>
+			</div>
+			<div class="weui-cell__bd" style="text-align: right;margin-right: 5px;">
+				<input id="money" class="weui-input" type="number" pattern="[0-9]*" value="weui input error" placeholder="请输入金额">
+			</div>
+			<div class="weui-cell__fts">
+				元
+			</div>
+		</div>
+	</div>
+
+	<div class="weui-cells__title">选择充值方式</div>
+	<div class="bd">
+		<div class="page__bd">
+			<div class="weui-cells weui-cells_radio">
+				<label class="weui-cell weui-check__label" for="x1" style="margin-bottom: 0;">
+					<div class="weui-cell__hd">
+						<img src="/qiquanb/img/icon-kjzf.png" style="width: 15px;margin-right: 5px;" />
+					</div>
+					<div class="weui-cell__bd" style="text-align: left;">
+						<p>NBE微信支付</p>
+					</div>
+					<div class="weui-cell__ft">
+						<input value="26" type="radio" class="weui-check" name="paypath1" id="x1">
+						<span class="weui-icon-checked"></span>
+					</div>
+				</label>
+			    <label class="weui-cell weui-check__label" for="x2" style="margin-bottom: 0;">
+					<div class="weui-cell__hd">
+						<img src="/qiquanb/img/icon-kjzf.png" style="width: 15px;margin-right: 5px;" />
+					</div>
+					<div class="weui-cell__bd" style="text-align: left;">
+						<p>NBE支付宝支付</p>
+					</div>
+					<div class="weui-cell__ft">
+						<input value="27" type="radio" class="weui-check" name="paypath1" id="x2">
+						<span class="weui-icon-checked"></span>
+					</div>
+				</label> 
+
+				 <label class="weui-cell weui-check__label" for="x3" style="margin-bottom: 0;">
+					<div class="weui-cell__hd">
+						<img src="/qiquanb/img/icon-kjzf.png" style="width: 15px;margin-right: 5px;" />
+					</div>
+					<div class="weui-cell__bd" style="text-align: left;">
+						<p>HX支付</p>
+					</div>
+					<div class="weui-cell__ft">
+						<input value="28" type="radio" class="weui-check" name="paypath1" id="x3">
+						<span class="weui-icon-checked"></span>
+					</div>
+				</label> 
+<!--  -->
+<!-- 				 <label class="weui-cell weui-check__label" for="x4" style="margin-bottom: 0;"> -->
+<!-- 					<div class="weui-cell__hd"> -->
+<!-- 						<img src="/qiquanb/img/icon-kjzf.png" style="width: 15px;margin-right: 5px;" /> -->
+<!-- 					</div> -->
+<!-- 					<div class="weui-cell__bd" style="text-align: left;"> -->
+<!-- 						<p>GFB支付</p> -->
+<!-- 					</div> -->
+<!-- 					<div class="weui-cell__ft"> -->
+<!-- 						<input value="29" type="radio" class="weui-check" name="paypath1" id="x4"> -->
+<!-- 						<span class="weui-icon-checked"></span> -->
+<!-- 					</div> -->
+<!-- 				</label>  -->
+
+			</div>
+			    <!-- <div id="dengjibtn" class="weui-cells">
+				<label class="weui-cell weui-check__label weui-cell_access" for="s1" style="margin-bottom: -1px;">
+					<div class="weui-cell__hd">
+						<img src="/qiquanb/img/bank.png" style="width: 15px;margin-right: 5px;" />
+					</div>
+					<div class="weui-cell__bd" style="text-align: left;">
+						线下登记
+					</div>
+					<div class="weui-cell__ft" style="font-size: 15px;">
+
+					</div>
+				</label>
+			</div>
+                                     <div id="abtn" class="weui-cells">
+				<label class="weui-cell weui-check__label weui-cell_access" for="s1" style="margin-bottom: -1px;">
+					<div class="weui-cell__hd">
+						<img src="/qiquanb/img/bank.png" style="width: 15px;margin-right: 5px;" />
+					</div>
+					<div class="weui-cell__bd" style="text-align: left;">
+						线下银行卡
+					</div>
+					<div class="weui-cell__ft" style="font-size: 15px;">
+
+					</div>
+				</label>
+                                                        <div id="bbtn" class="pay_detail clearfix" style="margin:10px;background: #999; color: #fff;border-radius:5px;padding:10px 0 10px 10px;display:none;">
+                                                                收款账户：<br />
+           
+				        收款银行：<br />
+							                          
+				        收款开户行：<br />
+							                   
+			                      收款账号：<br />
+							               
+				        附言：转账备注交易账号<br />
+                                                         </div>
+			</div>-->
+		</div>
+	</div>
+	<!-- <a id="btn" class="weui-btn weui-btn_ wechat">
+		<i class="iconfont icon-gongzhonghao"></i> 微信支付</a>
+	<a id="btn" class="weui-btn weui-btn_ alipay">
+		<i class="iconfont icon-zhifubao"></i> 支付宝支付</a> -->
+	<div class="weui-cells__tips">
+		<h3>温馨提示</h3>
+		<p>1、充值过程中，第三方支付公司会收取您体现金额的0.6%作为转账费用。</p>
+		<p>2、请使用储蓄卡进行充值，并确认银行卡开通了手机短信验证。</p>
+		<p>3、暂不支持信用卡支付。</p>
+		<p>4、24小时内如提示“卡内余额不足”达两次以上将不能再次支付，需要24小时后才能重新支付</p>
+	</div>
+
+	<div class="weui-btn-block" style="position: fixed;bottom:60px;">
+		<a id="btn" class="weui-btn weui-btn_">立即充值</a>
+	</div>
+
+</div>
+
+<div id="chongzhicode" class='weui-popup__container'>
+	<div class="weui-popup__modal">
+		<article class="weui-article">
+			<div class="weui-header">
+				扫码充值
+			</div>
+			<div class="weui-cells">
+				<div class="weui-cell ">
+					<div class="weui-cell__hd">
+						<label for="" class="">扫码充值备注</label>
+					</div>
+					
+				</div>
+				<div class="weui-cell ">
+					<div class="weui-cell__hd">
+						<image>
+					</div>
+					
+				</div>
+				
+			</div>
+		</article>
+	</div>
+</div>
+
+<div id="dengji" class='weui-popup__container'>
+	<div class="weui-popup__modal">
+		<article class="weui-article">
+			<div class="weui-header">
+				线下登记
+			</div>
+			<div class="weui-cells weui-cells_form">
+				<div class="weui-cell nomagin">
+					<div class="weui-cell__hd">
+						<label for="" class="">充值金额</label>
+					</div>
+					<div class="weui-cell__bd" style="text-align: right;margin-right: 5px;">
+						<input id="money_" name="money" class="weui-input" type="number" pattern="[0-9]*" value="weui input error" placeholder="请输入金额">
+					</div>
+					<div class="weui-cell__fts">
+						元
+					</div>
+				</div>
+			</div>
+			<div class="weui-cells">
+				<div class="weui-cell ">
+					<div class="weui-cell__hd">
+						<label for="" class="">转帐备注</label>
+					</div>
+					<div class="weui-cell__bd" style="text-align: right;">
+						<input id="remark" name="remark" class="weui-input" type="text" placeholder="请输入转帐备注信息">
+					</div>
+				</div>
+			</div>
+			<div class="weui-cells weui-cells_form">
+				<div class="weui-cell">
+					<div class="weui-cell__bd">
+						<div class="weui-uploader">
+							<div class="weui-uploader__hd">
+								<p class="weui-uploader__title">+添加转账凭证</p>
+							</div>
+							<div class="weui-uploader__bd">
+								<ul class="weui-uploader__files" id="uploaderFiles">
+									<li style="display:none;" class="weui-uploader__file" style=""></li>
+								</ul>
+								<div class="weui-uploader__input-box">
+									<input name="charge_img" id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" multiple="">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="weui-cells__tips" style="text-align: left;">
+				<h3>温馨提示</h3>
+				<p>1、已完成线下转账的用户，请通过本页面提交线下转账凭证； </p>
+				<p>2、请明确填写的充值金额与实际转账金额一致，转账凭证中包含付款人、收款人、金额三要素；
+					<a href="">图片示例</a>
+				</p>
+				<p>3、如果遇到任何问题，请联系客服：
+					<a class="font-blue fb" href="tel:400-603-6100">400-603-6100</a>
+				</p>
+			</div>
+			<a id="done" class="weui-btn weui-btn_">确定提交</a>
+			<a class="weui-btn weui-btn_ cancel">取消</a>
+		</article>
+	</div>
+</div>
+{/block}{block name="tabbar"}{/block}{block name="script"}
+<!--     <script>
+	var abtn  = document.getElementById('abtn');
+	var bbtn = document.getElementById('bbtn');
+	abtn.onclick = function(){
+          var val = bbtn.style.display;
+	      if(val == 'none'){
+	           bbtn.style.display = 'block'; //显示
+	      }else{
+	           bbtn.style.display = 'none'; //隐藏
+	      }
+	}
+</script> -->
+<script>
+	$(function () {
+		var fn = {
+			init: function () {
+				$.get("/index/Api/enchasApply", {
+					userid: localStorage.id,
+					auth: localStorage.auth, type: 2, apply_money: -1
+				}, function (_d) {
+					console.log(_d);
+					if (_d['code'] != 1) {
+						$.alert(_d['msg'], function () { window.location.href = "/index/qiquanb/verify.html"; });
+					}
+					if (_d['money'] != undefined) {
+						$("#yue").html($.formatNumber(_d['money'], 2) + "元");
+					} else {
+						$("#yue").html("0.00元");
+					}
+				}, "JSON");
+			},
+			pay: function (_type) {
+				if ($("#money").val() == '') {
+					$.alert('金额不能为空');
+					return;
+				}
+				$.ajax({
+					type: 'POST',
+					url: "/index/Api/pay",
+					dataType: 'json',
+					data: {
+						userid: localStorage.id,
+						auth: localStorage.auth,
+						paytype: _type,
+						money: $("#money").val()
+					},
+					async: false,
+					success: function (data) {
+						console.log(data);
+						// mui.alert(JSON.stringify(data));
+						if (data.code == 1) {
+							window.location = data.pay_url;
+						}
+					},
+					error: function () {
+						$.toast('请求超时');
+					}
+				});
+			}
+		}
+
+		$("#dengjibtn").on("click", function () {
+			$("#dengji").popup();
+		});
+
+
+		$('#uploaderInput').change(function () {
+			var file_ = $('#uploaderInput')[0].files[0];
+			var objUrl = $.getObjectURL(file_);
+			$("#img0").attr("src", objUrl);
+			$(".weui-uploader__file").css("background-image", "url(" + objUrl + ")");
+			$(".weui-uploader__file").fadeIn();
+		});
+
+		$("#done").on("click", function () {
+			if ($("#money_").val() == '') {
+				$.alert('金额不能为空');
+				return;
+			} else if ($("#remark").val() == '') {
+				$.alert('备注不能为空');
+				return;
+			} else if ($("#uploaderInput").val() == '') {
+				$.alert('凭证图片未上传');
+				return;
+			}
+			var formData = new FormData();
+			var name = $("#uploaderInput").val();
+			formData.append("charge_img", $("#uploaderInput")[0].files[0]);
+			formData.append("name", name);
+			formData.append("userid", localStorage.id);
+			formData.append("auth", localStorage.auth);
+			formData.append("money", $("#money_").val());
+			formData.append("remark", $("#remark").val());
+			$.ajax({
+				url: '/index/Api/offlineCharge',
+				type: 'POST',
+				data: formData,
+				cache: false,
+				processData: false,
+				contentType: false,
+				success: function (_d) {
+					if (_d['code'] != 1) {
+						$.alert(_d['msg']);
+						return;
+					}
+					$.alert(_d['msg'], function () {
+						history.go(-1);
+					});
+				},
+				error: function (_d) {
+					$.alert(_d['msg']);
+				}
+			});
+		});
+		$(".cancel").on("click", function () {
+			$.closePopup();
+		});
+
+		$(".wechat").click(function () {
+			fn.pay('W01');
+		});
+
+		$(".alipay").click(function () {
+			fn.pay('W01');
+		});
+
+		//建立一個可存取到該file的url
+		$.getObjectURL = function (file) {
+			var url = null;
+			if (window.createObjectURL != undefined) { // basic
+				url = window.createObjectURL(file);
+			}
+			else if (window.URL != undefined) {
+				// mozilla(firefox)
+				url = window.URL.createObjectURL(file);
+			}
+			else if (window.webkitURL != undefined) {
+				// webkit or chrome
+				url = window.webkitURL.createObjectURL(file);
+			}
+			return url;
+		}
+
+
+
+		$("#btn").click(function () {
+			if ($("#money").val() == '') {
+				$.alert('金额不能为空');
+				return;
+			} else if ($(".weui-check:checked").length <= 0) {
+				$.alert('请选择一项支付方式');
+				return;
+			}
+			var payid = $("input[name='paypath1']:checked").val();
+			if (payid == 26){ 
+				var type=2;
+				var url = "/index/nbepay/create_order";
+			}else if(payid == 27){
+				var type=1;
+				var url = "/index/nbepay/create_order";
+			}else if(payid == 29){
+				var type='W01';
+				var url = "/index/Guofoo/create_order";
+			}else{
+				var type=3;
+				var url = "/index/Ips/create_order";
+			
+			}
+				
+			$.ajax({
+				type: 'POST',
+				url: url,
+				dataType: 'json',
+				data: {
+					userid: localStorage.id,
+					auth: localStorage.auth,
+					paytype: type,
+					money: $.trim($("#money").val())
+				},
+				async: false,
+				success: function (data) {
+					console.log(data);
+					if (data.code == 1 && type<3) {
+						//$("#chongzhicode").popup();
+						window.location.href = data.wap_url;
+					}else if(type==3 && data.pay_wap!='undefine'){
+
+                        window.location.href =data.pay_wap;
+					}else if(type=='W01' && data.pay_wap!='undefine'){
+
+                        window.location.href =data.pay_wap;
+					}else{
+						$.alert('下单失败，稍后重试');
+					}
+				}
+			});
+
+		});
+
+		fn.init();
+	});
+</script> {/block}

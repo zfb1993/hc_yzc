@@ -1,0 +1,439 @@
+{include file="common/head"/}
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+  <div class="layui-padded-15">
+    <blockquote class="layui-elem-quote layui-text">
+        <h4>当前位置：{:lang('tradeManage')}<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>{:lang('positionOrder')}</h4>
+    </blockquote>
+    <div class="layui-form"  lay-filter="boardFilter">
+      <div class="layui-form-item">   
+
+          <label class="layui-form-label" style="width: 50px;">母账号</label>
+          <div class="layui-input-inline" style="width: 200px;">
+              <select name="mother_acc" id="mother_acc" lay-filter="mother_acc">
+
+              </select>
+          </div>
+
+          <label class="layui-form-label" style="width: 50px;">子账号</label>
+          <div class="layui-input-inline" style="width: 200px;">
+              <select name="child_acc" id="child_acc">
+
+              </select>
+          </div>
+          <label class="layui-form-label" style="padding:9px 0;">关键词：</label>
+          <div class="layui-input-inline" style="margin-right:30px;width: 200px;">
+              <input type="text" id="keywords" name="keywords" required  placeholder="关键词：账号"  class="layui-input">
+          </div>
+          <label class="layui-form-label" style="width: 50px;">类别</label>
+          <div class="layui-input-inline" style="width: 200px;">
+              <select name="type" id="type">
+                <option value="1">持仓信息</option>
+                  <option value="2">成交记录</option>
+                  <option value="3">委托记录</option>
+                  <option value="4">账号信息</option>
+              </select>
+          </div>
+             <!-- <label class="layui-form-label">子账号</label>
+              <div class="layui-input-inline">
+                  <select id="child_acc" name="modules" lay-verify="required" lay-search="">
+                      <option value="0">待审核</option>
+                      <option value="3">全部</option>
+                      <option value="1">已审核</option>
+                      <option value="2">已拒绝</option>
+
+                  </select>
+              </div>-->
+
+          <button class="layui-btn" id="bb"  style="width:100px;"><i class="layui-icon">&#xe615;</i> 搜索 </button>
+        </div>
+      </div>
+    </div>
+    <div class="layui-form">
+      <table class="layui-table" id="list" lay-filter="list"></table>
+    </div>
+    <div class="layui-form">
+        <table class="layui-table" id="list2" lay-filter="list2"></table>
+    </div>
+  </div>
+</div>
+{include file="common/foot"/}
+<script type="text/html" id="action">
+  <!--<a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="edit">设置</a>-->
+<!-- <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">平仓</a>-->
+</script>
+<script>
+    var message;
+    layui.config({
+        base: ADMIN+'build/js/',
+        version: '1.0.1'
+    }).use(['app','form','table','laydate','message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            table = layui.table,
+            laydate = layui.laydate,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+
+        $("select[name=mother_acc]").empty();
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: '{:url("trade/getMotherAccount")}',
+            dataType: "json",
+            data: {},
+            success: function (res) {
+
+                //  var opt = "<option value='' selected = \'selected\'>全部</option>";
+                //  $("select[name=mother_acc]").append(opt);
+                for(var i=0; i<res.data.length; i++){
+                    var option="<option value=\""+res.data[i].id+"\"";
+                    option += ">"+res.data[i].InvestorID+"</option>"; //动态添加数据
+                    $("select[name=mother_acc]").append(option);
+                }
+                layui.form.render('select','boardFilter');
+            }
+        });
+
+        //
+        var motherid= $("select[name=mother_acc]").val();
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: '{:url("trade/getChildAccount")}',
+            dataType: "json",
+            data: {motherid:motherid},
+            success: function (res) {
+
+                var opt = "<option value='0' selected = \'selected\'>全部</option>";
+                 $("select[name=child_acc]").append(opt);
+
+                for(var i=0; i<res.data.length; i++){
+                    var option="<option value=\""+res.data[i].id+"\"";
+                    option += ">"+res.data[i].account+'-'+res.data[i].name+"</option>"; //动态添加数据
+                    $("select[name=child_acc]").append(option);
+                }
+                layui.form.render('select','boardFilter');
+            }
+        });
+
+    //列表数据
+        var mother_acc=$("#mother_acc").val();
+        searchTable1("/agent/trade/getPosition.html?mother_acc="+mother_acc);
+        searchTable6("/agent/trade/getPosition1.html?mother_acc="+mother_acc);
+    //监听工具条
+    table.on('tool(list)', function(obj){
+      var data = obj.data;
+      if(obj.event === 'detail'){
+        layer.msg('ID：'+ data.id + ' 的查看操作');
+      } else if(obj.event === 'del'){
+        layer.confirm('真的确认平仓该订单么', function(index){
+            if(data.Direction==48){
+                data.Direction=0;
+            }
+            if(data.Direction==49){
+                data.Direction=1;
+            }
+            ///qihuo/api/insertOrder?userid=14&instrument=rb1810&price=3555&direction=0&of=0&volume=2&auth=xxx
+            $.post("/agent/trade/insertOrder",{'zid':data.Account,'instrument':data.InstrumentID,'of':1,'volume':data.Volume,
+                'direction':data.Direction,'auth':'lxd123456'},function(res){
+                if(res.code==1){
+                    layer.msg(res.msg,{icon:1,time:500},function(){
+                        tableIn.reload();
+                        layer.close(index);
+                    });
+                }else if(res.code==-1){
+                    layer.msg(res.msg,{icon:2,time:500},function(){
+                        layer.close(index);
+                    });
+                }else{
+                    layer.msg(res.msg,{icon:2,time:500},function(){
+                        layer.close(index);
+                    });
+                }
+            });
+
+        });
+      } else if(obj.event === 'edit'){
+        layer.alert('编辑行：<br>'+ JSON.stringify(data))
+      }
+    });
+
+
+        var form = layui.form;
+        form.on('select(mother_acc)', function(data){
+            $("select[name=child_acc]").empty();
+            var motherid= $("select[name=mother_acc]").val();
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: '{:url("trade/getChildAccount")}',
+                dataType: "json",
+                data: {motherid:motherid},
+                success: function (res) {
+
+                    var opt = "<option value='0' selected = \'selected\'>全部</option>";
+                    $("select[name=child_acc]").append(opt);
+                    for(var i=0; i<res.data.length; i++){
+                        var option="<option value=\""+res.data[i].id+"\"";
+                        option += ">"+res.data[i].account+'-'+res.data[i].name+"</option>"; //动态添加数据
+                        $("select[name=child_acc]").append(option);
+                    }
+                    layui.form.render('select','boardFilter');
+                }
+            });
+        });
+
+
+        $("#bb").click(function(){
+            var childid=$("#child_acc").val();
+            var motherid= $("select[name=mother_acc]").val();
+			var investid= $("select[name=mother_acc]").find("option:selected").text();
+			console.log(investid);
+            var type=$("#type").val();
+            var keywords=$("#keywords").val();
+            if(type==1){
+                if(childid!=0){
+                    searchTable1("/agent/trade/getPosition.html?childid="+childid+'&type='+type+'&keyword='+keywords);
+                    searchTable6("/agent/trade/getPosition1.html?childid="+childid+'&type='+type+'&keyword='+keywords);
+                }else{
+                    searchTable1("/agent/trade/getPosition.html?mother_acc="+motherid+'&type='+type+'&keyword='+keywords+'&investid='+investid);
+                    searchTable6("/agent/trade/getPosition1.html?mother_acc="+motherid+'&type='+type+'&keyword='+keywords+'&investid='+investid);
+                }
+
+            }else if(type==2){
+                if(childid!=0){
+                    searchTable2("/agent/trade/getPosition.html?childid="+childid+'&type='+type+'&keyword='+keywords);
+                    searchTable5("/agent/trade/getPosition1.html?childid="+childid+'&type='+type+'&keyword='+keywords);
+                }else{
+                    searchTable2("/agent/trade/getPosition.html?mother_acc="+motherid+'&type='+type+'&keyword='+keywords+'&investid='+investid);
+                    searchTable5("/agent/trade/getPosition1.html?mother_acc="+motherid+'&type='+type+'&keyword='+keywords+'&investid='+investid);
+                }
+            }else if(type==3){
+                if(childid!=0){
+                    searchTable3("/agent/trade/getPosition.html?childid="+childid+'&type='+type+'&keyword='+keywords);
+                    searchTable7("/agent/trade/getPosition1.html?childid="+childid+'&type='+type+'&keyword='+keywords);
+                }else{
+                    searchTable3("/agent/trade/getPosition.html?mother_acc="+motherid+'&type='+type+'&keyword='+keywords+'&investid='+investid);
+                    searchTable7("/agent/trade/getPosition1.html?mother_acc="+motherid+'&type='+type+'&keyword='+keywords+'&investid='+investid);
+                }
+            }else if(type==4){
+                searchTable4("/agent/trade/getPosition.html?childid="+childid+'&type='+type+'&keyword='+keywords);
+//                searchTable7("/agent/trade/getPosition1.html?childid="+childid+'&type='+type+'&keyword='+keywords);
+            }
+
+        });
+
+/*        //导出
+        $('#layui-export-btn').click(function(){
+            var phone1=$("#phone").val();
+            var update_time_start1=$("#update_time_start").val();
+            var update_time_end1=$("#update_time_end").val();
+            var status1=$("#status").val();
+            window.location.href="/admin/customer/checkopenuser.html?export=1&phone="+phone1+"&update_time_start="+update_time_start1+"&update_time_end="+update_time_end1+"&status="+status1;
+        });*/
+
+        function searchTable1(weburl){
+            tableIn= table.render({
+                elem: '#list',
+                url: weburl,
+                method: 'post',
+                page: true,
+                cols: [[
+                    {type:'numbers',title:'序号',width:60,fixed: true},
+                    {field:'Account',title:'账号',width:120,fixed: true},
+                    {field:'true_name',title:'姓名',width:120,fixed: true},
+                    {field:'InstrumentID',align:'center', title:'合约',width:100,sort: true},
+                    {field:'Instrumentname',align:'center', title:'合约名称',width:100,sort: true},
+                    {field:'OrderRef',align:'center', title:'报单号',width:150,sort: true},
+                    {field:'CombOffsetFlag',align:'center',title:'开平', width:80, sort: true,templet:'<div>{{ formatStatus(d.CombOffsetFlag)}}</div>'},
+                    {field:'Direction',align:'center',title:'方向',width:60,templet:'<div>{{ formatDirection(d.Direction)}}</div>'},
+                    {field:'InsertDate',align:'center',title:'交易日期', width:100, sort: true},
+                    {field:'InsertTime',align:'center', title:'交易时间',width:100,sort: true},
+                    {field:'LimitPrice',align:'center',title:'委托价', width:100, sort: true},
+                    {field:'OpenPrice',align:'center', title:'成交价',width:100,sort: true},
+
+                    {field:'Volume',align:'center',title:'总持仓', width:100, sort: true},
+                    {field:'Profit',align:'center',title:'持仓盈亏', width:160, sort: true,templet:'<div>{{ formatProfit(d.Profit)}}</div>'},
+                    {field:'remainderDays',align:'center',title:'备注(剩余天数)', width:100, sort: true},
+                   // {field:'status', align:'center', title:'状态',width:120,templet:'<div>{{ formatStatus(d.status)}}</div>'},
+                    {width: 100, align: 'center', toolbar: '#action',title:'操作'}
+                ]],
+                limit: 10,
+                height: 600 //固定值
+            });
+        };
+        function searchTable2(weburl){
+            tableIn= table.render({
+                elem: '#list',
+                url: weburl,
+                method: 'post',
+                page: true,
+                cols: [[
+                    {type:'numbers',title:'序号',width:60,fixed: true},
+                    {field:'Account',title:'账号',width:120,fixed: true},
+                    {field:'InstrumentID',align:'center', title:'合约',width:100,sort: true},
+                    {field:'OrderRef',align:'center', title:'报单号',width:120,sort: true},
+                    {field:'CombOffsetFlag',align:'center',title:'开平', width:80, sort: true,templet:'<div>{{ formatStatus(d.CombOffsetFlag)}}</div>'},
+                    {field:'Direction',align:'center',title:'方向',width:60,templet:'<div>{{ formatDirection(d.Direction)}}</div>'},
+                    {field:'InsertDate',align:'center',title:'交易日期', width:120, sort: true},
+                    {field:'InsertTime',align:'center', title:'交易时间',width:120,sort: true},
+                    {field:'LimitPrice',align:'center',title:'委托价', width:140, sort: true},
+                    {field:'OpenPrice',align:'center', title:'开仓价',width:140,sort: true},
+                    {field:'ClosePrice',align:'center', title:'平仓价',width:140,sort: true},
+                    {field:'Volume',align:'center',title:'成交手数', width:100, sort: true},
+                    {field:'VolumeTotalOriginal',align:'center',title:'委托手数', width:140, sort: true},
+                    {field:'Profit',align:'center',title:'盈亏', width:160, sort: true,templet:'<div>{{ formatProfit(d.Profit)}}</div>'},
+                    {field:'StatusMsg',align:'center',title:'备注', width:200, sort: true}
+                ]],
+                limit: 10,
+                height: 600 //固定值
+            });
+        };
+        function searchTable3(weburl){
+            tableIn= table.render({
+                elem: '#list',
+                url: weburl,
+                method: 'post',
+                page: true,
+                cols: [[
+                    {type:'numbers',title:'序号',width:60,fixed: true},
+                    {field:'Account',title:'账号',width:120,fixed: true},
+                    {field:'InstrumentID',align:'center', title:'合约',width:100,sort: true},
+                    {field:'OrderRef',align:'center', title:'报单号',width:120,sort: true},
+                    {field:'CombOffsetFlag',align:'center',title:'开平', width:80, sort: true,templet:'<div>{{ formatStatus(d.CombOffsetFlag)}}</div>'},
+                    {field:'Direction',align:'center',title:'方向',width:60,templet:'<div>{{ formatDirection(d.Direction)}}</div>'},
+                    {field:'InsertDate',align:'center',title:'交易日期', width:120, sort: true},
+                    {field:'InsertTime',align:'center', title:'交易时间',width:120,sort: true},
+                    {field:'LimitPrice',align:'center',title:'委托价', width:140, sort: true},
+                    {field:'OpenPrice',align:'center', title:'开仓价',width:140,sort: true},
+                    {field:'ClosePrice',align:'center', title:'平仓价',width:140,sort: true},
+                    {field:'Volume',align:'center',title:'成交手数', width:100, sort: true},
+                    {field:'VolumeTotalOriginal',align:'center',title:'报单手数', width:140, sort: true},
+                    {field:'Profit',align:'center',title:'盈亏', width:160, sort: true,templet:'<div>{{ formatProfit(d.Profit)}}</div>'},
+                    {field:'StatusMsg',align:'center',title:'备注', width:200, sort: true},
+                ]],
+                limit: 10,
+                height: 600 //固定值
+            });
+        };
+        function searchTable4(weburl){
+			console.log(4);
+            tableIn= table.render({
+                elem: '#list',
+                url: weburl,
+                method: 'post',
+                page: true,
+                cols: [[
+                    {type:'numbers',title:'序号',width:60,fixed: true},
+                    {field:'account',title:'账号',width:120,fixed: true},
+                    {field:'true_name',title:'姓名',width:120,fixed: true},
+                    {field:'InitCash',align:'center', title:'静态权益',width:180,sort: true},
+                    {field:'CloseProfit',align:'center',title:'平仓盈亏', width:160, sort: true,templet:'<div>{{ formatProfit(d.CloseProfit)}}</div>'},
+                    {field:'PositionProfit',align:'center',title:'持仓盈亏',width:160,templet:'<div>{{ formatProfit(d.PositionProfit)}}</div>'},
+                    {field:'DynamicCash',align:'center',title:'动态权益', width:180, sort: true},
+                    {field:'CurrMargin',align:'center', title:'占用保证金',width:120,sort: true},
+                    {field:'FrozenMargin',align:'center',title:'冻结保证金',width:120},
+                    {field:'FrozenCommission',align:'center',title:'冻结手续费', width:140, sort: true},
+                    {field:'Available',align:'center', title:'可用资金',width:180,sort: true},
+                    {field:'Commission',align:'center',title:'手续费', width:120, sort: true},
+                    {field:'OutCash',align:'center',title:'出金', width:180, sort: true},
+                    {field:'InCash',align:'center',title:'入金', width:180, sort: true},
+                ]],
+                limit: 10,
+                height: 600 //固定值
+            });
+			console.log(6);
+        };
+        function searchTable5(weburl){
+            tableIn= table.render({
+                elem: '#list2',
+                url: weburl,
+                method: 'post',
+                page: true,
+                cols: [[
+                    {type:'numbers',title:'序号',width:60,fixed: true},
+                    {field:'1',align:'center', title:'合约',width:150,sort: true},
+                    {field:'0',align:'center',title:'平仓手数', width:150, sort: true}
+                ]],
+                limit: 10,
+                height: 400 //固定值
+            });
+        };
+        function searchTable6(weburl){
+            tableIn= table.render({
+                elem: '#list2',
+                url: weburl,
+                method: 'post',
+                page: true,
+                cols: [[
+                    {type:'numbers',title:'序号',width:60,fixed: true},
+                    {field:'1',align:'center', title:'合约',width:150,sort: true},
+                    {field:'buy',align:'center',title:'买手数', width:150, sort: true},
+                    {field:'buyProfit',align:'center',title:'买总持仓盈亏', width:150, sort: true,templet:'<div>{{ formatProfit(d.buyProfit)}}</div>'},
+                    {field:'sell',align:'center',title:'卖手数', width:150, sort: true},
+                    {field:'sellProfit',align:'center',title:'卖总持仓盈亏', width:150, sort: true,templet:'<div>{{ formatProfit(d.sellProfit)}}</div>'}
+                ]],
+                limit: 10,
+                height: 400 //固定值
+            });
+        };
+
+        function searchTable7(weburl){
+            tableIn= table.render({
+                elem: '#list2',
+                url: weburl,
+                method: 'post',
+                page: true,
+                cols: [[
+
+                ]],
+                limit: 10,
+                height: 400 //固定值
+            });
+        };
+  });
+    //状态
+    function formatStatus(value){
+        if(value==0){
+            return '开仓';
+        }else if(value==1){
+            return '平仓';
+        }else if(value==2){
+            return '强平';
+        }else if(value==3){
+            return '平今';
+        }else if(value==4){
+            return '平昨';
+        }else{
+            return '未知';
+        }
+    }
+    //方向
+    function formatDirection(value){
+        if(value==48){
+            return '买';
+        }else if(value==49){
+            return '卖';
+        }else{
+            return '未知';
+        }
+    }
+    //盈亏
+    function formatProfit(value){
+        if(value<=0){
+            return '<span style="color: green">'+value+'</span>';
+        }else{
+            return '<span style="color: red">'+value+'</span>'
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{include file="common/head"/}
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div class="layui-padded-15">
+      <blockquote class="layui-elem-quote layui-text">
+        <h4>当前位置：{:lang('investorManage')}<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>{:lang('investorList')}</h4>
+      </blockquote>
+      <div class="layui-form">
+          
+      </div>
+    </div>
+</div>
+{include file="common/foot"/}
+<script>
+    var message;
+    layui.config({
+        base: ADMIN+'build/js/',
+        version: '1.0.1'
+    }).use(['app', 'message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+    
+        
+  });
+</script>
+</body>
+</html>

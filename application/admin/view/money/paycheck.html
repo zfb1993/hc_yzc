@@ -1,0 +1,714 @@
+{include file="common/head"/}
+<style>
+    .layui-center {
+        text-align: center;
+    }
+    
+    .layui-img {
+        width: 50%;
+        height: auto;
+        display: inline-block;
+        text-align: center;
+        margin: 20px auto;
+    }
+</style>
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div class="layui-padded-15">
+        <blockquote class="layui-elem-quote layui-text">
+            <h4>当前位置：{:lang('moneyManage')}<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>{:lang('payCheck')}</h4>
+        </blockquote>
+        <div class="layui-form">
+            <div class="layui-form-item" style="margin-bottom: 5px;">
+                <div class="layui-inline">
+                    <label class="layui-form-label" style="padding:9px 0;">提交时间：</label>
+                    <div class="layui-input-inline" style="margin-right:0;width: 150px;">
+                        <input type="text" class="layui-input" id="reg_start_time" placeholder="yyyy-MM-dd">
+                    </div>
+                    <label class="layui-form-label" style="width:auto;display:inline-block;padding:9px 5px;color:#ccc;">-</label>
+                    <div class="layui-input-inline" style="margin-right:20px;width: 150px;">
+                        <input type="text" class="layui-input" id="reg_end_time" placeholder="yyyy-MM-dd">
+                    </div>
+                    <label class="layui-form-label" style="padding:9px 0;">所属机构：</label>
+                    <div class="layui-input-inline" style="margin-right:20px;width: 150px;">
+                        <input type="text" name="ins_name" id="ins_name" placeholder="请输入所属机构" class="layui-input">
+                    </div>
+                    <label class="layui-form-label" style="padding:9px 0;">处理结果：</label>
+                    <div class="layui-input-inline" style="margin-right:0;width: 120px;">
+                        <select id="type" name="type">
+				<option value="-1" selected>请选择结果</option>
+				<option value="0">未处理</option>
+				<option value="1">已处理</option>
+			  </select>
+                    </div>
+                    <label class="layui-form-label" style="padding:9px 0;">关键词：</label>
+                    <div class="layui-input-inline" style="margin-right:30px;width: 200px;">
+                        <input type="text" id="keywords" name="keywords" required placeholder="关键词：姓名或手机号" class="layui-input">
+                    </div>
+                    <button class="layui-btn" id="layui-search-btn" data-type="reload" style="width:100px;"><i class="layui-icon">&#xe615;</i> 搜索 </button>
+                    <button class="layui-btn layui-btn-warm" id="layui-reset-btn" style="width:100px;"> 重置 </button>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form">
+            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                <ul class="layui-tab-title">
+                    <li class="" >线下充值审核</li>
+                     <li class="layui-this">提现审核</li>
+                </ul>
+                <div class="layui-tab-content" style="padding:0;margin:0;">
+             <div class="layui-tab-item " style="display: none">
+                        <table class="layui-table" id="list1" lay-filter="list1"></table>
+                    </div>
+                    <div class="layui-tab-item layui-show">
+                        <table class="layui-table" id="list2" lay-filter="list2"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{include file="common/foot"/}
+<script type="text/html" id="action1">
+    <a class="layui-btn layui-btn-sm" lay-event="view1">查看</a>
+    <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="checked">审核</a>
+    <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="refused">拒绝</a>
+</script>
+<script type="text/html" id="action2">
+    <a class="layui-btn layui-btn-sm" lay-event="view2">查看</a>
+    {{#  if(d.status == 0){ }}
+    <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="agree">同意</a>
+    <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="refuse">拒绝</a>
+    {{#  } }}
+
+</script>
+<script>
+    var message;
+    layui.config({
+        base: ADMIN + 'build/js/',
+        version: '1.0.1'
+    }).use(['app', 'table', 'element', 'form', 'laydate', 'message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            table = layui.table,
+            form = layui.form,
+            element = layui.element,
+            laydate = layui.laydate,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+        //时间控件渲染
+        laydate.render({
+            elem: '#reg_start_time'
+        });
+        laydate.render({
+            elem: '#reg_end_time'
+        });
+
+        //线下充值审核数据
+        var tableIn1 = table.render({
+            elem: '#list1',
+            url: '{:url("money/chongZhi")}',
+            method: 'post',
+            page: true,
+            cols: [
+                [{
+                    type: 'numbers',
+                    title: '序号',
+                    width: 60,
+                    fixed: true
+                }, {
+                    field: 'user_name',
+                    align: 'center',
+                    title: '账号',
+                    width: 120
+                }, {
+                    field: 'true_name',
+                    align: 'center',
+                    title: '姓名',
+                    width: 120
+                }, {
+                    field: 'add_time',
+                    align: 'center',
+                    title: '充值时间',
+                    width: 170
+                }, {
+                    field: 'check_time',
+                    align: 'center',
+                    title: '审核时间',
+                    width: 170
+                }, {
+                    field: 'money',
+                    align: 'center',
+                    title: '付款单金额',
+                    width: 160
+                }, {
+                    field: 'remark',
+                    align: 'center',
+                    title: '付款单备注'
+                }, {
+                    width: 200,
+                    align: 'center',
+                    toolbar: '#action1',
+                    title: '操作'
+                }]
+            ],
+            id: 'chongzhi',
+            limit: 10,
+            height: 500 //固定值
+        });
+        //监听工具条
+        table.on('tool(list1)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+            if (layEvent === 'view1') {
+                $.post("{:url('money/viewImg')}", {
+                    'id': data.id
+                }, function(res) {
+                    //alert(JSON.stringify(res));
+                    var str = '';
+                    str += '<div class="layui-user">';
+                    str += '<h4 class="layui-center">身份证正面图</h4>';
+                    str += '<div id="layer-photos-demo" class="layui-center"><img class="layui-img" src="' + res.charge_img + '" /></div>';
+                    str += '</div>';
+                    layer.open({
+                        type: 1,
+                        skin: 'layui-user-reg',
+                        title: '编辑资料',
+                        area: ['850px', '600px'],
+                        content: str //注意，如果str是object，那么需要字符拼接。
+                    });
+                    layer.photos({
+                        photos: '#layer-photos-demo',
+                        anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                    });
+                });
+            } else if (layEvent === 'checked') { //删除
+                layer.confirm('确定要审核通过么', function(index) {
+                    //obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                    $.post("{:url('money/checked')}", {
+                        'id': data.id
+                    }, function(res) {
+                        if (res.code == 1) {
+                            layer.msg(res.msg, {
+                                icon: 1,
+                                time: 1500
+                            }, function() {
+                                layer.close(index);
+                                tableIn1.reload();
+                            });
+                        } else if (res.code == 0) {
+                            layer.msg(res.msg, {
+                                icon: 2,
+                                time: 1500
+                            }, function() {
+                                layer.close(index);
+                                tableIn1.reload();
+                            });
+                        } else {
+                            layer.msg(res.msg, {
+                                icon: 2,
+                                time: 1500
+                            }, function() {
+                                layer.close(index);
+                                tableIn1.reload();
+                            });
+                        }
+                    });
+                });
+            } else if (layEvent === 'refused') { //编辑
+                layer.prompt({
+                    formType: 2,
+                    value: '请输入拒绝通过的原因',
+                    title: '备注',
+                    area: ['300px', '80px'] //自定义文本域宽高
+                }, function(value, index, elem) {
+                    $.post("{:url('money/refused')}", {
+                        'id': data.id,
+                        'memo': value
+                    }, function(res) {
+                        if (res.code == 1) {
+                            layer.msg(res.msg, {
+                                icon: 1,
+                                time: 1500
+                            }, function() {
+                                layer.close(index);
+                                tableIn1.reload();
+                            });
+                        } else if (res.code == 0) {
+                            layer.msg(res.msg, {
+                                icon: 2,
+                                time: 1500
+                            }, function() {
+                                layer.close(index);
+                                tableIn1.reload();
+                            });
+                        } else {
+                            layer.msg(res.msg, {
+                                icon: 2,
+                                time: 1500
+                            }, function() {
+                                layer.close(index);
+                                tableIn1.reload();
+                            });
+                        }
+                    });
+                });
+            }
+        });
+        //提现审核数据
+        var tableIn2 = table.render({
+            elem: '#list2',
+            url: '{:url("money/tiXian")}',
+            method: 'post',
+            page: true,
+            cols: [
+                [{
+                    type: 'numbers',
+                    title: '序号',
+                    width: 60,
+                    fixed: true
+                }, {
+                    field: 'user_name',
+                    align: 'center',
+                    title: '账号',
+                    width: 120
+                }, {
+                    field: 'true_name',
+                    align: 'center',
+                    title: '姓名',
+                    width: 120
+                }, {
+                    field: 'p_name',
+                    align: 'center',
+                    title: '上级代理',
+                    width: 100
+                }, {
+                    field: 'money',
+                    align: 'center',
+                    title: '提现金额',
+                    width: 100
+                }, {
+                    field: 'bank_name',
+                    align: 'center',
+                    title: '开户银行',
+                    width: 160
+                }, {
+                    field: 'bank_card',
+                    align: 'center',
+                    title: '银行账号',
+                    width: 160
+                }, {
+                    field: 'bank_addr',
+                    align: 'center',
+                    title: '开户支行',
+                    width: 160
+                }, {
+                        field: 'id_card',
+                        align: 'center',
+                        title: '身份证',
+                        width: 160
+                    }, {
+                    field: 'sxf',
+                    align: 'center',
+                    title: '手续费',
+                    width: 80
+                }, {
+                    field: 'add_time',
+                    align: 'center',
+                    title: '申请时间',
+                    width: 170,
+                    sort: true
+                }, {
+                    field: 'check_time',
+                    align: 'center',
+                    title: '审核时间',
+                    width: 170,
+                    sort: true
+                }, {
+                    field: 'remark',
+                    align: 'center',
+                    title: '状态'
+                }, {
+                    width: 200,
+                    align: 'center',
+                    toolbar: '#action2',
+                    title: '操作'
+                }]
+            ],
+            id: 'tixian',
+            limit: 10,
+            height: 500 //固定值
+        });
+        //监听工具条
+        table.on('tool(list2)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+			var bool = false;//默认未锁定
+            if (layEvent === 'view2') { //查看
+                var id = data.uid;
+                var url = "{:url('customer/userInfo',['id'=>'userId'])}";
+                url = url.replace(/userId/, id);
+                window.location.href = url;
+            } else if (layEvent === 'agree') { //
+                layer.confirm('确定要同意申请么', function(index) {
+                    //obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                    if(!bool) {
+						bool = true; // 锁定
+                    $.post("{:url('money/agreeApply')}", {
+                        'id': data.id
+                    }, function(res) {
+                        if (res.code == 1) {
+                            layer.msg(res.msg, {
+                                icon: 1,
+                                time: 1500
+                            }, function() {
+                                layer.close(index);
+                                tableIn2.reload();
+                            });
+                        } else if (res.code == 0) {
+                            layer.msg(res.msg, {
+                                icon: 2,
+                                time: 1500
+                            }, function() {
+                                layer.close(index);
+                                tableIn2.reload();
+                            });
+                        } else {
+                            layer.msg(res.msg, {
+                                icon: 2,
+                                time: 1500
+                            }, function() {
+                                layer.close(index);
+                                tableIn2.reload();
+                            });
+                        }
+                    });
+                    }
+                });
+            } else if (layEvent === 'refuse') { //编辑
+                layer.prompt({
+                    formType: 2,
+                    value: '请输入拒绝申请的原因',
+                    title: '备注',
+                    area: ['300px', '80px'] //自定义文本域宽高
+                }, function(value, index, elem) {
+                    $.post("{:url('money/refuseApply')}", {
+                        'id': data.id,
+                        'memo': value
+                    }, function(res) {
+                        layer.msg(res.msg);
+                        if (res.code == 1) {
+                            layer.msg(res.msg, {
+                                icon: 1,
+                                time: 1500
+                            }, function() {
+                                layer.close(index);
+                                tableIn2.reload();
+                            });
+                        } else if (res.code == 0) {
+                            layer.msg(res.msg, {
+                                icon: 2,
+                                time: 1500
+                            }, function() {
+                                layer.close(index);
+                                tableIn2.reload();
+                            });
+                        } else {
+                            layer.msg(res.msg, {
+                                icon: 2,
+                                time: 1500
+                            }, function() {
+                                layer.close(index);
+                                tableIn2.reload();
+                            });
+                        }
+                    });
+                });
+            }
+        });
+
+        //机构弹窗
+        $('#ins_name').click(function(){
+            $('#ins_name').val('');
+            sessionStorage.removeItem('nodes');
+            layer.open({
+                type: 2,
+                title:'选择代理',
+                area: ['650px', '500px'],
+                content: "{:url('agent/agentInfo')}"
+                ,closeBtn:2
+                ,btnAlign: 'c'
+                ,cancel: function(index, layero){
+                    //右上角关闭回调
+                    var nodes=sessionStorage.getItem('nodes');
+                    if(sessionStorage.getItem('nodes')==''||sessionStorage.getItem('nodes')==null){
+                        $('#ins_name').val('');
+                        layer.close(index);
+                    }else{
+                        var new_nodes=nodes.split(',');
+                        var new_str=[];
+                        for(var i=0;i<new_nodes.length;i++){
+                            if(new_nodes[i].indexOf('-')>0){
+                                var arr=new_nodes[i].split('-');
+                                new_str.push(arr[1]);
+                            }
+                        }
+                        $('#ins_name').val(new_str);
+                        layer.close(index);
+                    }
+                }
+            });
+        });
+
+        $("#layui-search-btn").click(function(){
+            var start_time = $('#reg_start_time').val();
+            var end_time = $('#reg_end_time').val();
+            var keywords = $('#keywords').val();
+            var ins_name = $('#ins_name').val();
+            var type = $('#type option:selected').val();
+            searchTable("/admin/money/search_tixian.html?start_time="+start_time+"&end_time="+end_time+"&keywords="+keywords+"&ins_name="+ins_name+"&type="+type);
+        });
+        function searchTable(weburl){
+            tableIn= table.render({
+                elem: '#list2',
+                url: weburl,
+                method: 'post',
+                page: true,
+                cols: [
+                    [{
+                        type: 'numbers',
+                        title: '序号',
+                        width: 60,
+                        fixed: true
+                    }, {
+                        field: 'user_name',
+                        align: 'center',
+                        title: '账号',
+                        width: 120
+                    }, {
+                        field: 'true_name',
+                        align: 'center',
+                        title: '姓名',
+                        width: 120
+                    }, {
+                        field: 'p_name',
+                        align: 'center',
+                        title: '上级代理',
+                        width: 100
+                    }, {
+                        field: 'money',
+                        align: 'center',
+                        title: '提现金额',
+                        width: 100
+                    }, {
+                        field: 'bank_name',
+                        align: 'center',
+                        title: '开户银行',
+                        width: 160
+                    }, {
+                        field: 'bank_card',
+                        align: 'center',
+                        title: '银行账号',
+                        width: 160
+                    }, {
+                        field: 'bank_addr',
+                        align: 'center',
+                        title: '开户支行',
+                        width: 160
+                    }, {
+                        field: 'id_card',
+                        align: 'center',
+                        title: '身份证',
+                        width: 160
+                    }, {
+                        field: 'sxf',
+                        align: 'center',
+                        title: '手续费',
+                        width: 80
+                    }, {
+                        field: 'add_time',
+                        align: 'center',
+                        title: '申请时间',
+                        width: 170,
+                        sort: true
+                    }, {
+                        field: 'check_time',
+                        align: 'center',
+                        title: '审核时间',
+                        width: 170,
+                        sort: true
+                    }, {
+                        field: 'remark',
+                        align: 'center',
+                        title: '状态'
+                    }, {
+                        width: 200,
+                        align: 'center',
+                        toolbar: '#action2',
+                        title: '操作'
+                    }]
+                ],
+                id: 'tixian',
+                limit: 10,
+                height: 500 //固定值
+            });
+        };
+     /*   //搜索
+        element.on('tab(docDemoTabBrief)', function(data) {
+            //console.log(data.index); //得到当前Tab的所在下标
+            //layer.msg(data.index);
+            if (data.index == 1) {
+                //提现审核
+                var $ = layui.$,
+                    active = {
+                        reload: function() {
+                            var start_time = $('#reg_start_time');
+                            var end_time = $('#reg_end_time');
+                            var keywords = $('#keywords');
+                            var ins_name = $('#ins_name');
+                            var type = $('#type option:selected');
+                            //执行重载
+                            table.reload('tixian', {
+                                page: {
+                                    curr: 1 //重新从第 1 页开始
+                                },
+                                url: "{:url('money/search_tixian')}",
+                                where: {
+                                    keywords: keywords.val(),
+                                    start_time: start_time.val(),
+                                    end_time: end_time.val(),
+                                    ins_name: ins_name.val(),
+                                    type: type.val()
+                                }
+                            });
+                        }
+                    };
+                //提交
+                $('#layui-search-btn').on('click', function() {
+                    var type = $(this).data('type');
+                    active[type] ? active[type].call(this) : '';
+                    $('#ins_name').val('');
+                });
+                //重置
+                $('#layui-reset-btn').click(function() {
+                    $('input[type="text"]').val('');
+                    tableIn2.reload();
+                });
+                //机构弹窗
+                $('#ins_name').click(function() {
+                    $('#ins_name').val('');
+                    sessionStorage.removeItem('nodes');
+                    layer.open({
+                        type: 2,
+                        title: '选择代理',
+                        area: ['650px', '500px'],
+                        content: "{:url('agent/agentInfo')}",
+                        closeBtn: 2,
+                        btnAlign: 'c',
+                        cancel: function(index, layero) {
+                            //右上角关闭回调
+                            var nodes = sessionStorage.getItem('nodes');
+                            if (sessionStorage.getItem('nodes') == '' || sessionStorage.getItem('nodes') == null) {
+                                $('#ins_name').val('');
+                                layer.close(index);
+                            } else {
+                                var new_nodes = nodes.split(',');
+                                var new_str = [];
+                                for (var i = 0; i < new_nodes.length; i++) {
+                                    if (new_nodes[i].indexOf('-') > 0) {
+                                        var arr = new_nodes[i].split('-');
+                                        new_str.push(arr[1]);
+                                    }
+                                }
+                                $('#ins_name').val(new_str);
+                                layer.close(index);
+                            }
+                        }
+                    });
+                });
+            } else {
+                //充值审核
+                var $ = layui.$,
+                    active = {
+                        reload: function() {
+                            var start_time = $('#reg_start_time');
+                            var end_time = $('#reg_end_time');
+                            var keywords = $('#keywords');
+                            var ins_name = $('#ins_name');
+                            var type = $('#type option:selected');
+                            //执行重载
+                            table.reload('chongzhi', {
+                                page: {
+                                    curr: 1 //重新从第 1 页开始
+                                },
+                                url: "{:url('money/search_chongzhi')}",
+                                where: {
+                                    keywords: keywords.val(),
+                                    start_time: start_time.val(),
+                                    end_time: end_time.val(),
+                                    ins_name: ins_name.val(),
+                                    type: type.val()
+                                }
+                            });
+                        }
+                    };
+                //提交
+                $('#layui-search-btn').on('click', function() {
+                    var type = $(this).data('type');
+                    active[type] ? active[type].call(this) : '';
+                    $('#ins_name').val('');
+                });
+                //重置
+                $('#layui-reset-btn').click(function() {
+                    $('input[type="text"]').val('');
+                    tableIn1.reload();
+                });
+                //机构弹窗
+                $('#ins_name').click(function() {
+                    $('#ins_name').val('');
+                    sessionStorage.removeItem('nodes');
+                    layer.open({
+                        type: 2,
+                        title: '选择代理',
+                        area: ['650px', '500px'],
+                        content: "{:url('agent/agentInfo')}",
+                        closeBtn: 2,
+                        btnAlign: 'c',
+                        cancel: function(index, layero) {
+                            //右上角关闭回调
+                            var nodes = sessionStorage.getItem('nodes');
+                            if (sessionStorage.getItem('nodes') == '' || sessionStorage.getItem('nodes') == null) {
+                                $('#ins_name').val('');
+                                layer.close(index);
+                            } else {
+                                var new_nodes = nodes.split(',');
+                                var new_str = [];
+                                for (var i = 0; i < new_nodes.length; i++) {
+                                    if (new_nodes[i].indexOf('-') > 0) {
+                                        var arr = new_nodes[i].split('-');
+                                        new_str.push(arr[1]);
+                                    }
+                                }
+                                $('#ins_name').val(new_str);
+                                layer.close(index);
+                            }
+                        }
+                    });
+                });
+            }
+        });*/
+
+    });
+</script>
+</body>
+
+</html>

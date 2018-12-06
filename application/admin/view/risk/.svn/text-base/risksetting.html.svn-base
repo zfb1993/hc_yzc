@@ -1,0 +1,140 @@
+{include file="common/head"/}
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+  <div class="layui-padded-15">
+    <blockquote class="layui-elem-quote layui-text">
+        <h4>当前位置：{:lang('riskManage')}<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>{:lang('riskSetting')}</h4>
+    </blockquote>
+    <form class="layui-form" action="" method="post">
+      <fieldset class="layui-elem-field">
+        <legend>保证金设置</legend>
+        <div class="layui-field-box">
+          <div class="layui-form-item">
+            <label class="layui-form-label" style="width:182px;">保证金最大亏损比例（%）：</label>
+            <div class="layui-input-inline">
+              <input type="number" name="bzj_max_rate" placeholder="请输入保证金亏损比例" value="{$list.bzj_max_rate}" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux"><font color="red">*</font> 保证金亏损比例超过系统设置值后，自动强平</div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label" style="width:182px;">保证金亏损预警比例（%）：</label>
+            <div class="layui-input-inline">
+              <input type="number" name="bzj_warn_rate" placeholder="请输入保证金亏损预警比例" value="{$list.bzj_warn_rate}" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux"><font color="red">*</font> 保证金亏损达到该比例后，系统发送消息提示用户补充保证金；该数值小于保证金最大亏损比例</div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label" style="width:182px;">维持保证金担保比例（%）：</label>
+            <div class="layui-input-inline">
+              <input type="number" name="bzj_db_rate" placeholder="请输入维持保证金担保比例" value="{$list.bzj_db_rate}" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux"><font color="red">*</font> 当持仓单亏损触发保证金亏损预警后，需补充保证金金额到该比例；该数值大于保证金亏损预警比例</div>
+          </div>
+        </div>
+      </fieldset>
+      <fieldset class="layui-elem-field">
+        <legend>止盈止损</legend>
+        <div class="layui-field-box">
+          <div class="layui-form-item">
+            <label class="layui-form-label" style="width:180px;">默认止盈比例（%）：</label>
+            <div class="layui-input-inline">
+              <input type="number" name="default_zy_rate" placeholder="请输入默认止盈比例" value="{$list.default_zy_rate}" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux"><font color="red">*</font> 该数值为保证金盈利比例，不小于0</div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label" style="width:180px;">最大止盈比例（%）：</label>
+            <div class="layui-input-inline">
+              <input type="number" name="max_zy_rate" placeholder="请输入最大止盈比例" value="{$list.max_zy_rate}" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux"><font color="red">*</font> 该数值不小于默认止盈比例</div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label" style="width:180px;">默认止损比例（%）：</label>
+            <div class="layui-input-inline">
+              <input type="number" name="default_zs_rate" placeholder="请输入默认止损比例" value="{$list.default_zs_rate}" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux"><font color="red">*</font> 该数值为保证金亏损比例，不小于0，不应大于保证金最大亏损比例</div>
+          </div>
+        </div>
+      </fieldset>
+      <fieldset class="layui-elem-field">
+        <legend>买入限制</legend>
+        <div class="layui-field-box">
+          <div class="layui-form-item">
+            <label class="layui-form-label" style="width:180px;">允许最大涨幅（%）：</label>
+            <div class="layui-input-inline">
+              <input type="number" name="allow_max_zf" placeholder="请输入允许最大涨幅" value="{$list.allow_max_zf}" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux"><font color="red">*</font> 品种涨幅达到该比例后禁止开仓</div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label" style="width:180px;">允许最大跌幅（%）：</label>
+            <div class="layui-input-inline">
+              <input type="number" name="allow_max_df" placeholder="请输入允许最大跌幅" value="{$list.allow_max_df}" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux"><font color="red">*</font> 品种跌幅达到该比例后禁止开仓</div>
+          </div>
+        </div>
+      </fieldset>
+        <div class="layui-form-item">
+          <div class="layui-input-block" style="margin-left:10px;margin-top: 20px;">
+            <button class="layui-btn" lay-submit lay-filter="submit">保存设置</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+          </div>
+        </div>
+    </form>
+    <!-- <fieldset class="layui-elem-field layui-field-title">
+      <legend>委托单提醒</legend>
+      <div class="layui-field-box">
+      </div>
+    </fieldset> -->
+    <h4><font color="red">注：以上设置修改后，下个交易日生效</font></h4>
+  </div>
+</div>
+{include file="common/foot"/}
+<script>
+  var message;
+  layui.config({
+      base: ADMIN+'build/js/',
+      version: '1.0.1'
+  }).use(['app','table','form','laydate','message'], function() {
+    var app = layui.app,
+        $ = layui.jquery,
+        table = layui.table,
+        form = layui.form,
+        laydate = layui.laydate,
+        layer = layui.layer;
+    //将message设置为全局以便子页面调用
+    message = layui.message;
+    //主入口
+    app.set({
+        type: 'iframe'
+    }).init();
+
+    //监听提交
+    form.on('submit(submit)', function(data){
+      //layer.msg(JSON.stringify(data.field));
+      $.post("{:url('risk/riskSetting')}",{'fields':data.field},function(res){
+        if(res.code==1){
+          layer.msg(res.msg,{icon:1,time:1000},function(){
+            location.href=res.url;
+          });
+        }else{
+          layer.msg(res.msg,{icon:2,time:1000});
+        }
+      });
+      return false;
+    });
+
+    //时间控件渲染
+    laydate.render({
+      elem: '#dom'
+    });
+        
+  });
+</script>
+</body>
+</html>

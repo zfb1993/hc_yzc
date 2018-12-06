@@ -1,0 +1,59 @@
+{extend name="static/assets/base.html" /} {block name="title"}
+<title>公司简介</title>{/block} {block name="style"}
+<style>
+    .weui-content {
+        position: relative;
+        height: auto;
+    }
+
+    .weui-cells__title {
+        font-size: 16px;
+        background: no-repeat;
+    }
+
+    .block {
+        color: #303849;
+        background: #ffffff;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .block .title {
+        padding: 10px 20px;
+        width: fit-content;
+        line-height: 10px;
+        border-bottom: 1px solid #e64340;
+    }
+
+    .content {
+        line-height: 20px;
+        margin: 0 15px 0px 15px;
+        padding: 10px 0;
+        font-size: 12px;
+        position: relative;
+        text-indent: 26px;
+        text-align: justify;
+    }
+</style>
+{/block}{block name="body"}
+<div class="weui-content">
+    <div class="weui-cells__title">公司简介</div>
+    <div class="block">
+        <div class="title">
+            <span>关于我的</span>
+        </div>
+        <div class="content">
+            牛壹佰委托第三方支付机构为平台提供资金托管服务，对用户的资金流转进行严格把控，并确保用户的资金与牛壹佰的自有资金严格分离。
+        </div>
+    </div>
+    <div class="block">
+        <div class="title">
+            <span>我们的优势</span>
+        </div>
+        <div class="content">
+            牛壹佰委托第三方支付机构为平台提供资金托管服务，对用户的资金流转进行严格把控，并确保用户的资金与牛壹佰的自有资金严格分离。
+        </div>
+    </div>
+</div>
+
+{/block}{block name="tabbar"}{/block}{block name="checkLogin"}{/block}

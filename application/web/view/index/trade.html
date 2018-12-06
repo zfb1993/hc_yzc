@@ -1,0 +1,157 @@
+{extend name="static/assets/base.html" /} {block name="title"}
+<title>帮助中心</title>{/block} {block name="style"}
+<style>
+    .weui-content {
+        position: relative;
+        height: auto;
+    }
+
+    .question {
+        height: 30px;
+        width: 100%;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .answer {
+        line-height: 20px;
+        margin: 0 15px 0px 36px;
+        padding: 10px 0;
+        font-size: 12px;
+        border-top: 1px solid #e7e7e7;
+        position: relative;
+        text-indent: 26px;
+        text-align: justify;
+    }
+
+    .questions {
+        padding: 10px;
+        background: #ffffff;
+        color: #353c4d;
+        margin-top: 10px;
+    }
+
+    .icon-wenda {
+        position: absolute;
+        left: -67px;
+        top: 13px;
+        font-size: 40px;
+    }
+
+    .weui-cells__title {
+        font-size: 16px;
+        background: no-repeat;
+    }
+</style>
+{/block}{block name="body"}
+<div class="weui-content">
+    <div class="weui-cells__title">投顾指南</div>
+    <div class="questions">
+        <div class="question">
+            <span>什么是场外个股期权</span>
+        </div>
+        <div class="answer">
+            <i class="iconfont icon-wenda"></i>
+            <span>
+                是一种关于“权利”买卖的交易,本质上是一种合约;场外个股期权是以股票作为标的物的一种期权形式,指在支付一定权利金后,在合约期内享有以约定价格买入(但非必须买入)股票的一种权利。
+            </span>
+        </div>
+    </div>
+    <div class="questions">
+        <div class="question">
+            <span>场外个股期权包含的要素</span>
+        </div>
+        <div class="answer">
+            <i class="iconfont icon-wenda"></i>
+            <span>
+                1、标的资产:沪深证券交易所个股股票； 2、行权价格:买方有权在合约有效期限内买入标的股 票事先约定的价格； 3、期权权限:2周--3个月不等(到期自动行权, 也可提前行权)； 4、期权类型:看涨期权； 5、到期日:期权合约约定的最后有效期； 6、行权方式:现金差价交割； 7、权利金:券商根据股票价格浮动计算给岀； 8、盈亏公式:(期未卖出价-期初买入价)/期初买入 价×名义本金-权利金(期权费)； 9、名义本金:期权合约总额。
+            </span>
+        </div>
+    </div>
+	
+	<div class="questions">
+        <div class="question">
+            <span>你们这边是什么股票都能买的吗</span>
+        </div>
+        <div class="answer">
+            <i class="iconfont icon-wenda"></i>
+            <span>
+               1、不得投资于S、ST、*ST、S*ST及SST类股票； 2、不得投资于公司亏损类股票；
+
+3、不得投资于次新股股票(上市时间小于6个月)； 4、不得投资于连续2个涨停板股票； 5、不得投资于其他类高风险股票。 沪深两市3500多个股票,咱们平台2800多只股票可以进行期权投资,这也是咱们平台的一大优势。
+            </span>
+        </div>
+    </div>
+	<div class="questions">
+        <div class="question">
+            <span>平台的期权交易是否可以看跌</span>
+        </div>
+        <div class="answer">
+            <i class="iconfont icon-wenda"></i>
+            <span>
+               目前国内股票期权市场只能做看涨期权
+            </span>
+        </div>
+    </div>
+	<div class="questions">
+        <div class="question">
+            <span>期权询价、认购需要多长时间</span>
+        </div>
+        <div class="answer">
+            <i class="iconfont icon-wenda"></i>
+            <span>
+                咱们平台一分钟以内可以询价成功;认购的时间是根据券商建仓时间确定的,一般1小时以内可以完成认购的过程;14:30以后的认购不一定在当天能成交。
+            </span>
+        </div>
+    </div>
+	<div class="questions">
+        <div class="question">
+            <span>权利金如何结算</span>
+        </div>
+        <div class="answer">
+            <i class="iconfont icon-wenda"></i>
+            <span>
+               a)权利金是券商根据个股波动率定的； b)权利金已经包含了券商收取的权利金,平台服务费,税收等； c)行权周期越短权利金越低,行权周期越长权利金越高
+            </span>
+        </div>
+    </div>
+	<div class="questions">
+        <div class="question">
+            <span>行权时间</span>
+        </div>
+        <div class="answer">
+            <i class="iconfont icon-wenda"></i>
+            <span>
+               a)您可以选择到期行权；
+
+b)可以在合约期内提前行权；
+
+行权需要2-3个小时的平仓交易时间。
+            </span>
+        </div>
+    </div>
+	<div class="questions">
+        <div class="question">
+            <span>如果不想进行交易能不能撤单</span>
+        </div>
+        <div class="answer">
+            <i class="iconfont icon-wenda"></i>
+            <span>
+               如果交易是等待申报中，可进行撤单操作,如果认购成功,券商已经建仓完毕则不能撤单。
+            </span>
+        </div>
+    </div>
+	<div class="questions">
+        <div class="question">
+            <span>如何保证资金安全</span>
+        </div>
+        <div class="answer">
+            <i class="iconfont icon-wenda"></i>
+            <span>
+           您的资金直接充值至第三方支付机构予以冻结,在交易完成前平台无法使用和支配该资金。
+            </span>
+        </div>
+    </div>
+</div>
+
+{/block}{block name="tabbar"}{/block}{block name="checkLogin"}{/block}

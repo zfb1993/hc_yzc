@@ -1,0 +1,294 @@
+{include file="common/head"/}
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div class="layui-padded-15">
+        <blockquote class="layui-elem-quote layui-text">
+            <h4 class="layui-pull-left">当前位置：{:lang('activityManage')}<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>{:lang('activityType')}</h4>
+            <button id="add_type" class="layui-btn layui-btn-normal layui-pull-right">添加文章类型</button>
+
+        </blockquote>
+        <!-- <div class="layui-form">
+      <div class="layui-form-item" style="margin-bottom: 5px;">
+        <div class="layui-inline">
+          <label class="layui-form-label" style="padding:9px 0;">注册时间：</label>
+          <div class="layui-input-inline" style="margin-right:0;width: 150px;">
+            <input type="text" class="layui-input" id="reg_start_time" placeholder="yyyy-MM-dd">
+          </div>
+          <label class="layui-form-label" style="width:auto;display:inline-block;padding:9px 5px;color:#ccc;">-</label>
+          <div class="layui-input-inline" style="margin-right:20px;width: 150px;">
+            <input type="text" class="layui-input" id="reg_end_time" placeholder="yyyy-MM-dd">
+          </div>
+          <label class="layui-form-label" style="padding:9px 0;">所属机构：</label>
+          <div class="layui-input-inline" style="margin-right:0;width: 150px;">
+            <input type="text" name="title" required  lay-verify="required" placeholder="请输入所属机构" autocomplete="off" class="layui-input">
+          </div>
+          <label class="layui-form-label" style="padding:9px 0;">经纪人：</label>
+          <div class="layui-input-inline" style="margin-right:0;width: 150px;">
+            <input type="text" name="title" required  lay-verify="required" placeholder="请输入所属经纪人" autocomplete="off" class="layui-input">
+          </div>
+          <label class="layui-form-label" style="padding:9px 0;">关键词：</label>
+          <div class="layui-input-inline" style="margin-right:30px;width: 200px;">
+            <input type="text" name="title" required  lay-verify="required" placeholder="关键词：姓名或手机号" autocomplete="off" class="layui-input">
+          </div>
+          <button class="layui-btn" style="width:100px;"><i class="layui-icon">&#xe615;</i> 搜索 </button>
+          <button class="layui-btn layui-btn-warm" style="width:100px;"> 重置 </button>
+        </div>
+      </div>
+
+    </div> -->
+        <div class="layui-form">
+            <table class="layui-table" id="list" lay-filter="list" style="margin-top:0;"></table>
+        </div>
+
+    </div>
+</div>
+{include file="common/foot"/}
+<script type="text/html" id="action">
+    <!-- <a class="layui-btn layui-btn-sm" lay-event="detail">查看</a>
+  <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">加入黑名单</a> -->
+    <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="edit">编辑</a>
+
+    <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+</script>
+<script>
+    var message;
+    layui.config({
+        base: ADMIN + 'build/js/',
+        version: '1.0.1'
+    }).use(['app', 'form', 'table', 'layer', 'laydate', 'message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            table = layui.table,
+            laydate = layui.laydate,
+            form = layui.form,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+        //列表数据
+        var tableIn = table.render({
+            elem: '#list',
+            url: '{:url("activity/acType")}',
+            method: 'post',
+            page: true,
+            cols: [
+                [{
+                    type: 'numbers',
+                    title: '序号',
+                    width: 60,
+                    fixed: true
+                }, {
+                    field: 'type_name',
+                    align: 'center',
+                    title: '类型名称',
+                    width: 220,
+                    sort: true
+                }, {
+                    field: 'id',
+                    align: 'center',
+                    title: '类型编号',
+                    width: 120,
+                    sort: true
+                }, {
+                    width: 230,
+                    align: 'center',
+                    toolbar: '#action',
+                    title: '操作'
+                }]
+            ],
+            limit: 10,
+            height: 600 //固定值
+        });
+
+
+        //时间控件渲染
+        laydate.render({
+            elem: '#reg_start_time'
+        });
+        laydate.render({
+            elem: '#reg_end_time'
+        });
+
+        //监听工具条
+        table.on('tool(list)', function(obj) {
+            var data = obj.data;
+            if (obj.event === 'detail') {
+                var id = data.id;
+                var url = "{:url('customer/userInfo',['id'=>'userId'])}";
+                url = url.replace(/userId/, id);
+                window.location.href = url;
+                //layer.msg('ID：'+ data.id + ' 的查看操作');
+            } else if (obj.event === 'del') {
+                layer.confirm('真的要删除该条文章类型吗？', function(index) {
+                    $.post("{:url('activity/acTypeDel')}", {
+                        'id': data.id
+                    }, function(res) {
+                        if (res.code == 1) {
+                            layer.msg(res.msg, {
+                                icon: 1,
+                                time: 1000
+                            }, function() {
+                                obj.del();
+                                layer.close(index);
+                            });
+                        } else {
+                            layer.msg(res.msg, {
+                                icon: 2,
+                                time: 1000
+                            }, function() {
+                                layer.close(index);
+                            });
+                        }
+                    });
+                });
+            } else if (obj.event === 'edit') {
+                var data = obj.data;
+                var id = data.id;
+
+                $.post("{:url('activity/getType')}", {}, function(res) {
+                    var str = '';
+                    str += '<div class="layui-user">';
+                    str += '<form class="layui-form">';
+                    str += '<div class="layui-form-item">';
+                    str += '<label class="layui-form-label">文章类型</label>';
+                    str += '<div class="layui-input-block">';
+                    str += '<input type="text" name="type_name" placeholder="文章类型" autocomplete="off" value="' + data.type_name + '"  class="layui-input">';
+                    str += '</div>';
+                    str += '</div>';
+
+                    str += '</form>';
+                    str += '</div>';
+                    layer.open({
+                        type: 1,
+                        skin: 'layui-user-reg',
+                        title: '编辑文章类型',
+                        area: ['650px', '500px'],
+                        content: str,
+                        btn: ['提交', '放弃'],
+                        btnAlign: 'c',
+                        yes: function(index, layero) {
+                            var type_name = $('input[name="type_name"]').val();
+
+                            $.post("{:url('activity/updateType')}", {
+                                'id': data.id,
+                                'type_name': type_name,
+
+                            }, function(res) {
+                                if (res.code == 1) {
+                                    layer.msg(res.msg, {
+                                        icon: 1,
+                                        time: 1500
+                                    }, function() {
+                                        location.reload();
+                                        //layer.close(index);
+                                    });
+                                } else if (res.code == 0) {
+                                    layer.msg(res.msg, {
+                                        icon: 2,
+                                        time: 1500
+                                    }, function() {
+                                        layer.close(index);
+                                    });
+                                } else {
+                                    layer.msg(res.msg, {
+                                        icon: 2,
+                                        time: 1500
+                                    }, function() {
+                                        layer.close(index);
+                                    });
+                                }
+                            });
+                        },
+                        btn2: function(index, layero) {
+                            layer.close(index);
+                            //return false 开启该代码可禁止点击该按钮关闭
+                        },
+                        cancel: function(index) {
+                            layer.close(index);
+                            //return false 开启该代码可禁止点击该按钮关闭
+                        }
+                    });
+                    form.render();
+                });
+            }
+        });
+
+        //添加活动
+        $('#add_activity').click(function() {
+            window.location = "{:url('activity/activityAdd')}";
+        })
+
+
+
+        $('#add_type').click(function() {
+            $.post("{:url('activity/acTypeAdd')}", {}, function(data) {
+                //alert(JSON.stringify(data));
+                var str = '';
+                str += '<div class="layui-user">';
+                str += '<form class="layui-form">';
+                str += '<div class="layui-form-item">';
+                str += '<label class="layui-form-label">类型名称</label>';
+                str += '<div class="layui-input-block">';
+                str += '<input type="text" name="type_name" placeholder="请输入类型名称" autocomplete="off" class="layui-input">';
+                str += '</div>';
+                str += '</div>';
+
+                str += '</form>';
+                str += '</div>';
+                layer.open({
+                    type: 1,
+                    skin: 'layui-user',
+                    title: '添加文章类型',
+                    area: ['300px', '300px'],
+                    content: str,
+                    btn: ['提交', '放弃'],
+                    btnAlign: 'c',
+                    yes: function(index, layero) {
+                        var type_name = $('input[name="type_name"]').val();
+
+                        $.post("{:url('activity/acTypeAdd')}", {
+                            'type_name': type_name,
+
+                        }, function(res) {
+                            if (res.code == 1) {
+                                layer.msg(res.msg, {
+                                    icon: 1,
+                                    time: 1000
+                                }, function() {
+                                    layer.close(index);
+                                    tableIn.reload();
+                                });
+                            } else {
+                                layer.msg(res.msg, {
+                                    icon: 2,
+                                    time: 1000
+                                });
+                            }
+                        });
+                    },
+                    btn2: function(index, layero) {
+                        layer.close(index);
+                        //return false 开启该代码可禁止点击该按钮关闭
+                    },
+                    cancel: function(index) {
+                        layer.close(index);
+                        //return false; 
+                        //return false 开启该代码可禁止点击该按钮关闭
+                    }
+                });
+                form.render();
+            });
+
+        });
+
+    });
+</script>
+</body>
+
+</html>

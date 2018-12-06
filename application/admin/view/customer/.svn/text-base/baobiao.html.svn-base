@@ -1,0 +1,296 @@
+{include file="common/head"/}
+<style>
+    .layui-table td,
+    .layui-table th {
+        text-align: center;
+    }
+    
+    .layui-layout-idcImg {
+        display: inline-block;
+        width: 50%;
+        margin: 20px;
+    }
+    
+    .layui-table,
+    .layui-table-view {
+        margin-top: 0;
+    }
+</style>
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div class="layui-padded-15">
+        <blockquote class="layui-elem-quote layui-text">
+            <h4 class="layui-pull-left">当前位置：{:lang('customerManage')}<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>交易报表</h4>
+            <button id="layui-back" onclick="javascript:history.back()" class="layui-btn layui-btn-danger layui-pull-right">返回上一级</button>
+        </blockquote>
+
+        <div class="layui-form">
+            <div class="layui-form-item" style="margin-top: 15px;">
+                <div class="layui-inline">
+                    <label class="layui-form-label" style="padding:9px 0;width: 200px;">查看时间（默认当天）：</label>
+                    <div class="layui-input-inline" style="margin-right:0;width: 150px;">
+                        <input type="text" class="layui-input" id="reg_start_time" placeholder="yyyy-MM-dd">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form">
+            <div class="layui-tab layui-tab-card">
+                <ul class="layui-tab-title">
+                    <li class="layui-this" id="jiben">基本信息</li>
+                    <li id="chiming">持仓明细</li>
+                    <li id="chihui">持仓汇总</li>
+                    <li id="chengming">成交明细</li>
+                    <li id="pingming">平仓明细</li>
+                </ul>
+                <div class="layui-tab-content" style="height: auto;">
+                    <div class="layui-tab-item layui-show" style="width: 50%">
+                        <table class="layui-table">
+                            <colgroup>
+                                <col width="100">
+                                <col width="300">
+                                <col>
+                            </colgroup>
+
+                            <tbody>
+                            <tr>
+                                <td>账号：</td>
+                                <td id="zaccount">{$list.zaccount}</td>
+                            </tr>
+                            <tr>
+                                <td>交易日期：</td>
+                                <td id="day">{$list.day}</td>
+                            </tr>
+                                <tr>
+                                    <td>上次结算金：</td>
+                                    <td id="prebalance">{$list.prebalance}</td>
+                                </tr>
+                                <tr>
+                                    <td>动态权益：</td>
+                                    <td id="balance">{$list.balance}</td>
+                                </tr>
+                                <tr>
+                                    <td>可用资金：</td>
+                                    <td id="available">{$list.available}</td>
+                                </tr>
+                                <tr>
+                                    <td>持仓盈亏：</td>
+                                    <td id="positionprofit">{$list.positionprofit}</td>
+                                </tr>
+                                <tr>
+                                    <td>平仓盈亏：</td>
+                                    <td id="closeprofit">{$list.closeprofit}</td>
+                                </tr>
+                                <tr>
+                                    <td>手续费：</td>
+                                    <td id="commission">{$list.commission}</td>
+                                </tr>
+                                <tr>
+                                    <td>占用保证金：</td>
+                                    <td id="currmargin">{$list.currmargin}</td>
+                                </tr>
+                                <tr>
+                                    <td>冻结保证金：</td>
+                                    <td id="frozenmargin">{$list.frozenmargin}</td>
+                                </tr>
+                                <tr>
+                                    <td>入金：</td>
+                                    <td id="deposit">{$list.deposit}</td>
+                                </tr>
+                                <tr>
+                                    <td>出金：</td>
+                                    <td id="withdraw">{$list.withdraw}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="layui-tab-item">
+                        <table class="layui-table" id="list1" lay-filter="list1"></table>
+                    </div>
+                    <div class="layui-tab-item">
+                        <table class="layui-table" id="list2" lay-filter="list2"></table>
+                    </div>
+                    <div class="layui-tab-item">
+                        <table class="layui-table" id="list3" lay-filter="list3"></table>
+                    </div>
+                    <div class="layui-tab-item">
+                        <table class="layui-table" id="list4" lay-filter="list4"></table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{include file="common/foot"/}
+<script>
+    var message;
+    layui.config({
+        base: ADMIN + 'build/js/',
+        version: '1.0.1'
+    }).use(['app', 'table', 'element', 'laydate', 'message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            table = layui.table,
+            element = layui.element,
+            laydate = layui.laydate,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+        //列表数据
+        var id = "{:input('id')}";
+
+        //时间控件渲染
+        laydate.render({
+            elem: '#reg_start_time',
+            format:'yyyyMMdd',
+            done:function(value){
+                console.log(value);
+                $("#jiben").click();
+            }
+        });
+
+        $("#jiben").click(function(){
+            dat = $("#reg_start_time").val();
+            $.post("{:url('customer/jiben')}",
+                {id:id,day:dat},
+                function(data){
+                   console.log(data);
+                    $("#prebalance").text(data.prebalance);
+                    $("#balance").text(data.balance);
+                    $("#available").text(data.available);
+                    $("#positionprofit").text(data.positionprofit);
+                    $("#closeprofit").text(data.closeprofit);
+                    $("#commission").text(data.commission);
+                    $("#currmargin").text(data.currmargin);
+                    $("#frozenmargin").text(data.frozenmargin);
+                    $("#deposit").text(data.deposit);
+                    $("#withdraw").text(data.withdraw);
+                    $("#day").text(data.day);
+                });
+        });
+
+        $("#chiming").click(function(){
+            dat = $("#reg_start_time").val();
+            weburl = "{:url('customer/chiming')}";
+            table.render({
+                elem: '#list1',
+                url: weburl,
+                method: 'post',
+                where: {
+                    'id': id,
+                    'day': dat
+                },
+                cols: [[
+                    {type:'numbers',title:'序号',width:60},
+                    {field:'id',title:'ID',width:120},
+                    {field:'instrumentid',align:'center', title:'合约',width:100,sort: true},
+                    {field:'offset',align:'center',title:'开/平',width:80},
+                    {field:'direction',align:'center', title:'买/卖',width:140,sort: true},
+                    {field:'profit',align:'center',title:'平仓盈亏', width:100, sort: true},
+                    {field:'bzj',align:'center',title:'保证金', width:160, sort: true},
+                    {field:'tradevolume',align:'center',title:'成交量', width:120, sort: true},
+                    {field:'price',align:'center', title:'收盘价',width:120,sort: true},
+                    {field:'tradeprice',align:'center',title:'开仓价', width:80, sort: true},
+                    {field:'tradedate',align:'center',title:'交易日', width:120, sort: true}
+                ]],
+                height: 600 //固定值
+            });
+        });
+
+        $("#chihui").click(function(){
+            dat = $("#reg_start_time").val();
+            weburl = "{:url('customer/chihui')}";
+            table.render({
+                elem: '#list2',
+                url: weburl,
+                method: 'post',
+                where: {
+                    'id': id,
+                    'day': dat
+                },
+                cols: [[
+                    {type:'numbers',title:'序号',width:60},
+                    {field:'id',title:'ID',width:120},
+                    {field:'instrumentid',align:'center', title:'合约',width:100,sort: true},
+                    {field:'direction',align:'center',title:'买/卖',width:80},
+                    {field:'offset',align:'center', title:'开/平',width:140,sort: true},
+                    {field:'bzj',align:'center',title:'保证金', width:100, sort: true},
+                    {field:'tradevolume',align:'center',title:'成交量', width:160, sort: true},
+                    {field:'profit',align:'center',title:'平仓盈亏', width:120, sort: true},
+                    {field:'tradeprice',align:'center', title:'开仓均价',width:120,sort: true},
+                    {field:'price',align:'center',title:'收盘价', width:80, sort: true},
+                    {field:'tradedate',align:'center',title:'成交日期', width:120, sort: true}
+                ]],
+                height: 600 //固定值
+            });
+        });
+
+        $("#chengming").click(function(){
+            dat = $("#reg_start_time").val();
+            weburl = "{:url('customer/chengming')}";
+            table.render({
+                elem: '#list3',
+                url: weburl,
+                method: 'post',
+                where: {
+                    'id': id,
+                    'day': dat
+                },
+                cols: [[
+                    {type:'numbers',title:'序号',width:60},
+                    {field:'id',title:'ID',width:120},
+                    {field:'instrumentid',align:'center', title:'合约',width:100,sort: true},
+                    {field:'offset',align:'center',title:'开/平',width:80},
+                    {field:'direction',align:'center', title:'买/卖',width:140,sort: true},
+                    {field:'tradeprice',align:'center',title:'成交价', width:100, sort: true},
+                    {field:'tradevolume',align:'center',title:'成交量', width:160, sort: true},
+                    {field:'commission',align:'center',title:'手续费', width:120, sort: true},
+                    {field:'tradetime',align:'center', title:'成交时间',width:120,sort: true},
+                    {field:'tradedate',align:'center',title:'交易日', width:120, sort: true},
+                    {field:'tradeid',align:'center',title:'交易编号', width:150, sort: true}
+                ]],
+                height: 600 //固定值
+            });
+        });
+
+        $("#pingming").click(function(){
+            dat = $("#reg_start_time").val();
+            weburl = "{:url('customer/pingming')}";
+            table.render({
+                elem: '#list4',
+                url: weburl,
+                method: 'post',
+                where: {
+                    'id': id,
+                    'day': dat
+                },
+                cols: [[
+                    {type:'numbers',title:'序号',width:60},
+                    {field:'id',title:'ID',width:120},
+                    {field:'instrumentid',align:'center', title:'合约',width:100,sort: true},
+                    {field:'offset',align:'center',title:'开/平',width:80},
+                    {field:'direction',align:'center', title:'买/卖',width:140,sort: true},
+                    {field:'closeprofit',align:'center',title:'平仓盈亏', width:100, sort: true},
+                    {field:'tradevolume',align:'center',title:'成交量', width:160, sort: true},
+                    {field:'tradeprice',align:'center',title:'平仓价', width:120, sort: true},
+                    {field:'tradetime',align:'center', title:'成交时间',width:120,sort: true},
+                    {field:'tradedate',align:'center',title:'交易日', width:120, sort: true},
+                    {field:'tradeid',align:'center',title:'交易编号', width:150, sort: true}
+                ]],
+                height: 600 //固定值
+            });
+        });
+    });
+</script>
+</body>
+
+</html>

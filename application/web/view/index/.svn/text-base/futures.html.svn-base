@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="generator" content="">
+    <title>国内期货</title>
+
+    <link href="/web/style.css" rel="stylesheet" type="text/css">
+    <link href="/web/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="/web/css.css" rel="stylesheet" type="text/css">
+    <link href="/web/index.css" rel="stylesheet" type="text/css">
+    <link href="/web/lrtk.css" rel="stylesheet" type="text/css">
+
+    <script type="text/javascript" src="/web/jquery.min.js"></script>
+    <script type="text/javascript" src="/web/global.js"></script>
+    <script type="text/javascript" src="/web/slide_show.js"></script>
+    <script src="/web/lrtk.js" type="text/javascript"></script>
+    <script src="/web/js.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="top">
+            <div class="wrap">
+                <ul class="userTop">
+                    <!--a>客服热线：$site.tel}</a-->
+                </ul>
+                <ul class="topNav">
+                    <li>
+                        <a href="login">登录</a>
+                        <a href="register">注册</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="header">
+            <div class="wrap">
+                <ul class="logo">
+                    <a href="index.html">
+                        <img style="width:270px; margin-top:10px; margin-bottom:10px;margin-left:30px;" src="/web/logo.png">
+                    </a>
+                </ul>
+                <div class="nav-bar"></div>
+                <ul style="margin-top:5px;" class="p_nav">
+                    <li class="cur">
+                        <a href="index.html" class="first">首页</a>
+                    </li>
+                    <li>
+                        <a href="futures.html">国内期货</a>
+                    </li>
+                    <li>
+                        <a href="rules.html">交易规则</a>
+                    </li>
+                    <li>
+                        <a href="about.html">关于我们</a>
+                    </li>
+                    <li>
+                        <a href="download.html">软件下载</a>
+                    </li>
+                    <li>
+                        <a href="service.html">客戶服务</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div align="center" style="font-size:18px">提示：富期通是一家可提供给操盘手优质服务的平台，并非属于任何一家期货公司的子公司，请各操盘手在进行操盘之前仔细阅读本平台的风险揭示书及交易规则，任何操盘以本平台信息为准！</div>
+        <img style="width:100%;" src="/web/guonei.jpg">
+
+        <div class="ly_top">
+
+            <div class="ly_top_m wth-1200">
+                <a title="外盘介绍" id="pagenav_9"></a>
+                <a title="外盘优势" id="pagenav_10"> </a>
+            </div>
+        </div>
+        <a title="外盘优势" id="pagenav_10">
+            <script type="text/javascript">$("#pagenav_" + 9).addClass("s");
+                $(".pagenav a:last").addClass("last");</script>
+        </a>
+
+        <div class="ly_jj">
+            <a title="外盘优势" id="pagenav_10">
+            </a>
+
+            <div class="wth-1200">
+                <a title="外盘优势" id="pagenav_10">
+                </a>
+
+                <div style="" class="left">
+                    <a title="外盘优势" id="pagenav_10"></a>
+                    <a id="wpjs"></a>
+                    <img style="margin-left:20px;" src="/web/guonei_a.png">
+
+                    <h2>中国金融期货交易所</h2>
+
+                    <p>
+                        中国金融期货交易所是经国务院同意，中国证监会批准，由上海期货交易所、郑州商品交易所、大连商品交易所、上海证券交易所和深圳证券交易所共同发起设立的交易所，于2006年9月8日在上海成立。中国金融期货交易所的成立，对于深化资本市场改革，完善资本市场体系，发挥资本市场功能，具有重要的战略意义。目前，中国金融期货交易所正积极筹划推出股票指数期货、期权，并深入研究开发国债、外汇期货及期权等金融衍生产品。
+                    </p>
+                    <img style="margin-left:20px;" src="/web/guonei_c.png">
+
+                    <h2>郑州商品交易所</h2>
+
+                    <p>
+                        郑州商品交易所（以下简称郑商所）成立于1990年10月12日，是经国务院批准成立的国内首家期货市场试点单位，在现货交易成功运行两年以后，于1993年5月28日正式推出期货交易。1998年8月，郑商所被国务院确定为全国三家期货交易所之一，隶属于中国证券监督管理委员会垂直管理。郑商所曾先后推出小麦、玉米、大豆、绿豆、芝麻、棉纱、花生仁、建材和国债等期货交易品种，目前经中国证监会批准交易的品种有小麦、棉花、白糖、绿豆等期货品种，其中小麦包括优质强筋小麦和硬冬（新国标普通）小麦。截止2005年底，郑商所共成交期货合约44,081万手，成交金额138,261亿元。1997年至1999年，郑商所期货交易量连续三年位居全国第一，市场份额约占50%左右。。
+                    </p>
+                </div>
+                <div style="width:100%; background-color:#ccc; height:200px;">
+                    <img style="width:100%; height:100%;" src="/web/sad.jpg">
+                </div>
+                <div style="" class="left">
+                    <a id="wpjs"></a>
+                    <img style="margin-left:20px;" src="/web/guonei_b.png">
+
+                    <h2>大连商品交易所</h2>
+
+                    <p>
+                        大连商品交易所成立于1993年2月28日，是经国务院批准的三家期货交易所之一，是实行自律性管理的法人。成立以来，大商所始终坚持规范管理、依法治市，保持了持续稳健的发展，成为中国最大的农产品期货交易所。经中国证监会批准，大商所目前的交易品种有玉米、黄大豆1号、黄大豆2号、豆粕、豆油、啤酒大麦，正式挂牌交易的品种是玉米、黄大豆1号、黄大豆2号、豆粕和豆油。开业至2005年底，大商所累计成交期货合约7.9亿张，累计成交额22.6万亿元。大商所目前已发展成世界第二大大豆期货市场。
+                    </p>
+                    <img style="margin-left:-30px;" src="/web/guonei_d.png">
+
+                    <h2>上海期货交易所</h2>
+
+                    <p>上海期货交易所是依照有关法规设立的，履行有关法规规定的职能，按照其章程实行自律性管理的法人，并受中国证监会集中统一监督管理。交易所目前上市交易的有铜、铝、天然橡胶、燃料油等四个品种的标准合约。
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="ly_btn">
+            <a id="wpgn"></a>
+
+            <div class="wth-1200" style="position:relative;">
+                <div class="top_t1">
+                    <div class="fr">
+                        <h5>高可靠</h5>
+                        <ul>
+                            <li>高速跑道，光纤直连期货交易所</li>
+                            <li>专业风控团队,24小时在线值班</li>
+                            <li>第三方交易软件专业、安全，客户可直接在期货公司网站上下载</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="top_t2">
+                    <div class="fr">
+                        <h5>高收益</h5>
+                        <ul>
+                            <li>主杠杆比例助您盈利更上一层楼
+                            </li>
+                            <li>无点差无滑点操作，大幅度提高胜率</li>
+                            <li>可高频操作，日内交易无限制</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="top_t3">
+                    <div class="fr">
+                        <h5>低费用</h5>
+                        <ul>
+                            <li>低廉的成本，让您操作无后顾之忧</li>
+                            <li>无点差交易，让您获得更大赢利空间</li>
+                            <li>手续费佣金低，让您操作更灵活</li>
+                            <li>全球统一盘面，无需购买其它行情分析软件更加减省成本</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="top_t4">
+                    <div class="fr">
+                        <h5>低风险</h5>
+                        <ul>
+                            <li>风控方式：电脑全自动监控结合人工</li>
+                            <li>高速的软件，分秒之间决胜千里</li>
+                            <li>签署正规合作协议级风险控制保障协议</li>
+                            <li>账户盈利100%属于投资者，严格的风控
+                                <br> 体系保证客户的亏损预算
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 首页 bottom start -->
+    <div class="bottom">
+        <div class="bottom_a">
+            <div class="bottom_a_left">
+                <ul>
+                    <li>
+                        <p class="bottom_a_left_font">
+                            <a>期貨交易</a>
+                        </p>
+                        <a href="tencent://message/?uid=2066604037&amp;Site=&amp;Menu=yes" target="_blank" class="down-load">线上咨询</a>
+                        <br>
+                        <a href="download">软件下載</a>
+                        <br>
+                        <a href="futures">期货品种</a>
+
+                    </li>
+                    <li>
+                        <p class="bottom_a_left_font">
+                            <a>了解我们</a>
+                        </p>
+                        <a href="about">关于我们</a>
+                        <br>
+                        <a href="service">联系我们</a>
+                        <br>
+                        <a href="news">最新公告</a>
+
+                    </li>
+                    <li>
+                        <p class="bottom_a_left_font">
+                            <a>条款声明</a>
+                        </p>
+                        <a href="important">特别声明</a>
+                        <br>
+                        <a href="kehu.html">服务条款</a>
+                        <br>
+                        <a href="disclaimer">免则声明</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="bottom_a_xian"></div>
+            <div class="bottom_a_nav">
+                <img style="margin-top:-20px;" src="/web/erweima.png">
+            </div>
+
+            <div class="bottom_a_right">
+                <div class="bottom_btn">
+                    <a href="http://wpa.qq.com/msgrd?v=3&uin=2066604037&site=qq&menu=yes" target="_blank" class="down-load">线上咨询服务</a>
+                </div>
+                <div class="bottom_a_right_font">交易日（周一至周五）08:30-23:30</div>
+                <div <div class="bottom_a_right_font">我们提醒您：期货有风险，投资需谨慎！市场风险莫测，务请谨慎行事！</div>
+            </div>
+        </div>
+
+        <style>
+            .youqing_bg {
+                width: 100%;
+                margin: 0 auto;
+                background-color: #333333;
+                padding: 20px 0;
+            }
+
+            .youqing_bg .youqing {
+                width: 1000px;
+                margin: 0 auto;
+            }
+
+            .youqing_bg .youqing li {
+                color: #ccc;
+                float: left;
+                margin-left: 3%;
+                ;
+                font-size: 14px;
+                line-height: 25px;
+            }
+
+            .youqing_bg .youqing a {
+                color: #ccc;
+                font-size: 14px;
+                line-height: 25px;
+            }
+
+            .youqing_bg .youqing a:hover {
+                color: white;
+            }
+        </style>
+        <div class="youqing_bg">
+            <ul class="youqing">
+                <li style="margin-left:0">友情链接：</li>
+                <li style="margin-left:0">
+                    <a href="http://www.ine.com.cn/" target="_blank">上海国际能源交易中心</a>
+                </li>
+                <li>
+                    <a href="http://www.shfe.com.cn/" target="_blank">上海期货交易所</a>
+                </li>
+                <li>
+                    <a href="http://www.czce.com.cn/portal/index.htm" target="_blank">郑州商品交易所</a>
+                </li>
+                <li>
+                    <a href="http://www.dce.com.cn/" target="_blank">大连商品交易所</a>
+                </li>
+                <li>
+                    <a href="http://www.cffex.com.cn/" target="_blank">中国金融期货交易所</a>
+                </li>
+                <li>
+                    <a href="http://www.hkex.com.hk/?sc_lang=en" target="_blank">香港交易所</a>
+                </li>
+                <li>
+                    <a href="http://www.sse.com.cn/" target="_blank">上海证券交易所</a>
+                </li>
+                <li style="margin-left:0">
+                    <a href="http://www.szse.cn/" target="_blank">期货日报</a>
+                </li>
+                <li>
+                    <a href="http://www.10jqka.com.cn/" target="_blank">同花顺</a>
+                </li>
+                <li>
+                    <a href="http://www.cfachina.org/" target="_blank">中国期货业协会</a>
+                </li>
+                <li>
+                    <a href="http://www.xfn.com/en/home/index.htm" target="_blank">新华财经</a>
+                </li>
+                <li>
+                    <a href="http://www.amm.com/" target="_blank">美国金属市场</a>
+                </li>
+                <li>
+                    <a href="https://www.smm.cn/" target="_blank">上海有色网</a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="footer ">
+            <div class="footer_a">
+                <span>　　　　　　　　　　　　　　　　　　　　湖南正奇万合资产管理有限公司 -- Copyright &copy; 2018 All Rights Reserved </span>
+            </div>
+        </div>
+        <script src="/web/app.js?v=1.1"></script>
+</body>
+
+</html>

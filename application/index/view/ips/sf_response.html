@@ -1,0 +1,45 @@
+{extend name="static/assets/base.html" /}{block name="title"}
+<title>{$memo}</title>{/block} {block name="style"}
+<style>
+    .weui-icon-success {
+        color: #e64340;
+    }
+
+    .weui-msg__title {
+        color: white;
+    }
+
+    .weui-msg__text-area {
+        color: #d4d4d4;
+    }
+
+    .weui-btn-area {
+        margin: 6.176471em 15px .3em;
+    }
+
+    .weui-btn {
+        font-size: 15px;
+    }
+</style>
+{/block}{block name="back"}{/block} {block name="body"}
+<div class="weui-content">
+    <div class="weui-msg">
+        <div class="weui-msg__text-area">
+            <h2 style="color:#666">{$memo}</h2>
+             <span>前往个人中心
+                  <a href="/index/index/log" ><span class="red">资金明细</span> </a>查看</span>
+        </div>
+        <div class="weui-msg__opr-area">
+            <p class="weui-btn-area">
+                <a href="/index/index/mine.html" class="weui-btn weui-btn_primary" style="margin-bottom: 15px;">个人中心</a>
+                <a href="/index/index/index.html" class="weui-btn weui-btn_default">前往首页</a>
+
+            </p>
+        </div>
+        <div class="weui-msg__extra-area">
+            <div class="weui-footer">
+                <p class="weui-footer__text">{$Think.config.site_title}</p>
+            </div>
+        </div>
+    </div>
+</div> {/block} {block name="tabbar"}{/block} {block name="script"} {/block}{block name="checkLogin"}{/block}

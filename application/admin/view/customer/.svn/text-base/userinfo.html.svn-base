@@ -1,0 +1,560 @@
+{include file="common/head"/}
+<style>
+    .layui-table td,
+    .layui-table th {
+        text-align: center;
+    }
+    
+    .layui-layout-idcImg {
+        display: inline-block;
+        width: 50%;
+        margin: 20px;
+    }
+    
+    .layui-table,
+    .layui-table-view {
+        margin-top: 0;
+    }
+</style>
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div class="layui-padded-15">
+        <blockquote class="layui-elem-quote layui-text">
+            <h4 class="layui-pull-left">当前位置：{:lang('customerManage')}<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>{:lang('customerInfo')}</h4>
+            <button id="layui-back" onclick="javascript:history.back()" class="layui-btn layui-btn-danger layui-pull-right">返回上一级</button>
+        </blockquote>
+        <div class="layui-form">
+            <div class="layui-tab layui-tab-card">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">基本信息</li>
+                    <!-- <li>期货交易</li> -->
+                    <!-- <li>股票交易</li> -->
+                    <!-- <li>独立账户</li> -->
+                    <li>资金记录</li>
+                </ul>
+                <div class="layui-tab-content" style="height: auto;">
+                    <div class="layui-tab-item layui-show" style="width: 50%">
+                        <table class="layui-table">
+                            <colgroup>
+                                <col width="100">
+                                <col width="300">
+                                <col>
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th colspan="2">基本信息</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>头像</td>
+                                    <td><img class="layui-layout-headImg" onerror="this.src='__STATIC__/admin/images/error-img.png'" src="{$list.user_logo}" /></td>
+                                </tr>
+                                <tr>
+                                    <td>昵称</td>
+                                    <td>{$list.nick_name}</td>
+                                </tr>
+                                <tr>
+                                    <td>真实姓名</td>
+                                    <td>{$list.true_name}</td>
+                                </tr>
+                                <tr>
+                                    <td>手机号码</td>
+                                    <td>{$list.mobile}</td>
+                                </tr>
+                                <tr>
+                                    <td>身份证号</td>
+                                    <td>{$list.id_card}</td>
+                                </tr>
+                                <tr>
+                                    <td>开户银行</td>
+                                    <td>{$list.bank_name}</td>
+                                </tr>
+     <tr>
+                                    <td>开户支行</td>
+                                    <td>{$list.bank_addr}</td>
+                                </tr>
+                                <tr>
+                                    <td>银行卡号</td>
+                                    <td>{$list.bank_card}</td>
+                                </tr>
+                                <tr>
+                                    <td>总代理</td>
+                                    <td>{$list.ins_name}</td>
+                                </tr>
+                                <tr>
+                                    <td>上级代码</td>
+                                    <td>{$list.p_name}</td>
+                                </tr>
+                                <tr>
+                                    <td>实名认证</td>
+                                    <td>
+                                        <div id="layer-photos-idcard" class="layer-photos-demo">
+                                            <img class="layui-layout-idcImg" onerror="this.src='__STATIC__/admin/images/error-img.png'" src="{$list.card_id_img_top}" />
+                                            <img class="layui-layout-idcImg" onerror="this.src='__STATIC__/admin/images/error-img.png'" src="{$list.bank_card_img_top}" />
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="layui-tab-item">
+                        <div class="layui-form">
+                            <div class="layui-form-item" style="margin-top: 15px;">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" style="padding:9px 0;">注册时间：</label>
+                                    <div class="layui-input-inline" style="margin-right:0;width: 150px;">
+                                        <input type="text" class="layui-input" id="reg_start_time" placeholder="yyyy-MM-dd">
+                                    </div>
+                                    <label class="layui-form-label" style="width:auto;display:inline-block;padding:9px 5px;color:#ccc;">-</label>
+                                    <div class="layui-input-inline" style="margin-right:20px;width: 150px;">
+                                        <input type="text" class="layui-input" id="reg_end_time" placeholder="yyyy-MM-dd">
+                                    </div>
+                                    <button class="layui-btn" id="layui-search-btn" data-type="reload" style="width:100px;"><i class="layui-icon">&#xe615;</i> 搜索 </button>
+                                    <button class="layui-btn layui-btn-warm" id="layui-reset-btn" style="width:100px;"> 重置 </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-tab layui-tab-brief" lay-filter="tabBrief1">
+                            <ul class="layui-tab-title">
+                                <li class="layui-this">资金查询</li>
+                                <li>成交查询</li>
+                            </ul>
+                            <div class="layui-tab-content">
+                                <div class="layui-tab-item layui-show">
+                                    <table class="layui-table" id="list1" lay-filter="list1"></table>
+                                </div>
+                                <div class="layui-tab-item">
+                                    <table class="layui-table" id="list2" lay-filter="list2"></table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="layui-tab-item">
+                        <div class="layui-tab layui-tab-brief" lay-filter="tabBrief2">
+                            <ul class="layui-tab-title">
+                                <li class="layui-this">当前持仓</li>
+                                <li>历史交易</li>
+                            </ul>
+                            <div class="layui-tab-content">
+                                <div class="layui-tab-item layui-show">
+                                    <table class="layui-table" id="list3" lay-filter="list3"></table>
+                                </div>
+                                <div class="layui-tab-item">
+                                    <table class="layui-table" id="list4" lay-filter="list4"></table>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="layui-tab-item">
+                        <table class="layui-table">
+                            <colgroup>
+                                <col width="80">
+                                <col width="100">
+                                <col width="150">
+                                <col width="200">
+                                <col width="200">
+                                <col width="200">
+                                <col width="200">
+                                <col width="200">
+                                <col width="200">
+                                <col>
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>姓名</th>
+                                    <th>账号</th>
+                                    <th>密码</th>
+                                    <th>资管名称</th>
+                                    <th>母账号</th>
+                                    <th>风控编号</th>
+                                    <th>手续费编号</th>
+                                    <th>所属机构</th>
+                                    <th>上级代理</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{$list.user_name}</td>
+                                    <td>{$list.zid}</td>
+                                    <td>{$list.zpwd}</td>
+                                    <td>{$list.zname}</td>
+                                    <td>{$list.mzh}</td>
+                                    <td>{$list.fkbh}</td>
+                                    <td>{$list.sxfbh}</td>
+                                    <td>{$list.ins_name}</td>
+                                    <td>{$list.p_name}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="layui-tab-item">
+                        <table class="layui-table" id="list" lay-filter="list"></table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{include file="common/foot"/}
+<script>
+    var message;
+    layui.config({
+        base: ADMIN + 'build/js/',
+        version: '1.0.1'
+    }).use(['app', 'table', 'element', 'laydate', 'message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            table = layui.table,
+            element = layui.element,
+            laydate = layui.laydate,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+        //列表数据
+        var id = "{: input('id')}";
+        var tableIn = table.render({
+            elem: '#list',
+            url: '{:url("customer/cusFlow")}',
+            where: {
+                id: id
+            },
+            method: 'post',
+            page: true,
+            cols: [
+                [{
+                    type: 'numbers',
+                    title: '序号',
+                    width: 60,
+                    fixed: true
+                }, {
+                    field: 'user_name',
+                    align: 'center',
+                    title: '账号',
+                    width: 120,
+                    sort: true
+                }, {
+                    field: 'true_name',
+                    align: 'center',
+                    title: '姓名',
+                    width: 120,
+                    sort: true
+                }, {
+                    field: 'p_name',
+                    align: 'center',
+                    title: '上级代理',
+                    width: 150
+                }, {
+                    field: 'type',
+                    align: 'center',
+                    title: '类型',
+                    width: 100
+                }, {
+                    field: 'money',
+                    align: 'center',
+                    title: '金额',
+                    width: 160,
+                    sort: true
+                }, {
+                    field: 'total_money',
+                    align: 'center',
+                    title: '账户余额',
+                    width: 160,
+                    sort: true
+                }, {
+                    field: 'add_time',
+                    align: 'center',
+                    title: '申请时间',
+                    width: 200,
+                    sort: true
+                }, {
+                    field: 'check_time',
+                    align: 'center',
+                    title: '处理时间',
+                    width: 200,
+                    sort: true
+                }, {
+                    field: 'memo',
+                    align: 'center',
+                    title: '备注',
+                    width: 120
+                }, ]
+            ],
+            limit: 10,
+            height: 600 //固定值
+        });
+        //时间控件渲染
+        laydate.render({
+            elem: '#reg_start_time'
+        });
+        laydate.render({
+            elem: '#reg_end_time'
+        });
+        //期货交易-资金查询列表数据
+        var tableIn1 = table.render({
+            elem: '#list1',
+            url: '{:url("customer/myMoneySearch")}',
+            where: {
+                id: id
+            },
+            method: 'post',
+            page: true,
+            cols: [
+                [{
+                    type: 'numbers',
+                    title: '序号',
+                    fixed: true
+                }, {
+                    field: 'create_time',
+                    align: 'center',
+                    title: '时间',
+                    width: 170,
+                    sort: true
+                }, {
+                    field: 'zid',
+                    align: 'center',
+                    title: '账号',
+                    width: 130
+                }, {
+                    field: 'true_name',
+                    align: 'center',
+                    title: '姓名',
+                    width: 100
+                }, {
+                    field: 'mobile',
+                    align: 'center',
+                    title: '手机号',
+                    width: 120
+                }, {
+                    field: 'p_name',
+                    align: 'center',
+                    title: '上级代理',
+                    width: 100
+                }, {
+                    field: 'prebalance',
+                    align: 'center',
+                    title: '上日结存',
+                    width: 100
+                }, {
+                    field: 'available',
+                    align: 'center',
+                    title: '可用资金',
+                    width: 100
+                }, {
+                    field: 'crj',
+                    align: 'center',
+                    title: '出入金',
+                    width: 80
+                }, {
+                    field: 'balance',
+                    align: 'center',
+                    title: '客户权益',
+                    width: 100
+                }, {
+                    field: 'fxd',
+                    align: 'center',
+                    title: '风险度',
+                    width: 80
+                }, {
+                    field: 'commission',
+                    align: 'center',
+                    title: '手续费',
+                    width: 80
+                }, {
+                    field: 'currmargin',
+                    align: 'center',
+                    title: '保证金',
+                    width: 80
+                }, {
+                    field: 'closeprofit',
+                    align: 'center',
+                    title: '平仓盈亏',
+                    width: 100
+                }, {
+                    field: 'positionprofit',
+                    align: 'center',
+                    title: '持仓盈亏',
+                    width: 100
+                }, {
+                    field: 'total_profit',
+                    align: 'center',
+                    title: '总盈亏',
+                    width: 100
+                }, ]
+            ],
+            limit: 10,
+            id: 'list1',
+            height: 500 //固定值
+        });
+        //期货交易-成交查询列表数据
+        var tableIn2 = table.render({
+            elem: '#list2',
+            url: '{:url("customer/myMoneyFlow")}',
+            where: {
+                id: id
+            },
+            method: 'post',
+            page: true,
+            cols: [
+                [{
+                    type: 'numbers',
+                    title: '序号',
+                    fixed: true
+                }, {
+                    field: 'tradedate',
+                    align: 'center',
+                    title: '日期',
+                    width: 130,
+                    sort: true
+                }, {
+                    field: 'zid',
+                    align: 'center',
+                    title: '账号',
+                    width: 130
+                }, {
+                    field: 'true_name',
+                    align: 'center',
+                    title: '姓名',
+                    width: 100
+                }, {
+                    field: 'p_name',
+                    align: 'center',
+                    title: '上级代理',
+                    width: 100
+                }, {
+                    field: 'instrumentid',
+                    align: 'center',
+                    title: '合约',
+                    width: 80
+                }, {
+                    field: 'direction',
+                    align: 'center',
+                    title: '方向',
+                    width: 100
+                }, {
+                    field: 'tradeprice',
+                    align: 'center',
+                    title: '价格',
+                    width: 80
+                }, {
+                    field: 'tradevolume',
+                    align: 'center',
+                    title: '数量',
+                    width: 80
+                }, {
+                    field: 'commission',
+                    align: 'center',
+                    title: '手续费',
+                    width: 80
+                }, {
+                    field: 'tradetime',
+                    align: 'center',
+                    title: '时间',
+                    width: 130,
+                    sort: true
+                }, {
+                    field: 'tradeid',
+                    align: 'center',
+                    title: '成交编号',
+                    width: 100
+                }, {
+                    field: 'ip',
+                    align: 'center',
+                    title: '报单IP',
+                    width: 150
+                }, ]
+            ],
+            limit: 10,
+            id: 'list2',
+            height: 500 //固定值
+        });
+
+        element.on('tab(tabBrief1)', function(data) {
+            if (data.index == 0) {
+                //搜索
+                var $ = layui.$,
+                    active = {
+                        reload: function() {
+                            var start_time = $('#reg_start_time');
+                            var end_time = $('#reg_end_time');
+                            var id = "{: input('id')}";
+                            //执行重载
+                            table.reload('list1', {
+                                page: {
+                                    curr: 1 //重新从第 1 页开始
+                                },
+                                url: "{:url('customer/mySearchMoney')}",
+                                where: {
+                                    id: id,
+                                    start_time: start_time.val(),
+                                    end_time: end_time.val()
+                                }
+                            });
+                        }
+                    };
+                //提交
+                $('#layui-search-btn').on('click', function() {
+                    var type = $(this).data('type');
+                    active[type] ? active[type].call(this) : '';
+                });
+                //重置
+                $('#layui-reset-btn').click(function() {
+                    $('input[type="text"]').val('');
+                    tableIn1.reload();
+                });
+            } else if (data.index == 1) {
+                //搜索
+                var $ = layui.$,
+                    active = {
+                        reload: function() {
+                            var start_time = $('#reg_start_time');
+                            var end_time = $('#reg_end_time');
+                            var id = "{: input('id')}";
+                            //执行重载
+                            table.reload('list2', {
+                                page: {
+                                    curr: 1 //重新从第 1 页开始
+                                },
+                                url: "{:url('customer/mySearchMoneyFlow')}",
+                                where: {
+                                    id: id,
+                                    start_time: start_time.val(),
+                                    end_time: end_time.val()
+                                }
+                            });
+                        }
+                    };
+                //提交
+                $('#layui-search-btn').on('click', function() {
+                    var type = $(this).data('type');
+                    active[type] ? active[type].call(this) : '';
+                });
+                //重置
+                $('#layui-reset-btn').click(function() {
+                    $('input[type="text"]').val('');
+                    tableIn2.reload();
+                });
+            }
+        });
+
+
+
+
+        //图片查看
+        layer.photos({
+            photos: '#layer-photos-idcard',
+            anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+        });
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="generator" content="">
+    <title>会员登录，会员中心</title>
+
+    <link href="/web/style.css" rel="stylesheet" type="text/css">
+    <link href="/web/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="/web/css.css" rel="stylesheet" type="text/css">
+    <link href="/web/index.css" rel="stylesheet" type="text/css">
+    <link href="/web/lrtk.css" rel="stylesheet" type="text/css">
+    <link href="/web/user.css" rel="stylesheet" type="text/css">
+    <link href="/web/jtw.css" rel="stylesheet" type="text/css">
+    <link href="/web/grid.css" rel="stylesheet" type="text/css">
+
+    <script type="text/javascript" src="/web/jquery.min.js"></script>
+    <style>
+        p.red {
+            color: Red;
+        }
+    </style>
+    <style>
+        .preview1 {
+            width: 130px;
+            height: 40px;
+            display: block;
+            overflow: hidden;
+            background: #eee;
+            border: solid 1px #ccc;
+            text-align: center;
+            float: left;
+        }
+
+        .preview1 img {
+            max-width: 130px;
+            max-height: 40px;
+        }
+
+        .cs1 {
+            width: 330px;
+            height: 32px;
+            border: 0px solid;
+        }
+
+        .cs2 {
+            width: 130px;
+            height: 32px;
+            float: left;
+            border: 0px solid;
+            background: #f90;
+            line-height: 32px;
+            text-align: center;
+        }
+
+        .cs3 {
+            width: 130px;
+            height: 30px;
+            float: left;
+            border: 0px solid;
+        }
+    </style>
+    <script type="text/javascript">
+        var InterValObj; //timer变量，控制时间
+        var count = 120; //间隔函数，1秒执行
+        var curCount;//当前剩余秒数
+        var code = ""; //验证码
+        var codeLength = 6;//验证码长度
+
+        $(function () {
+            $('#phone').val('').focus();
+
+            $("#phone").blur(function () {
+                if ($(this).val() == "") {
+                    $("#note1").text("手机号码不得为空，请重新输入。");
+                    $(this).focus();
+                }
+            });
+
+            if (curCount > 0 || curCount < 120) {
+                $("#code").blur(function () {
+                    if ($(this).val() == "") {
+                        $("#note2").text("验证码不得为空");
+                        //$(this).focus();
+                    } else {
+                        $("#note2").text("");
+                    }
+                })
+            }
+
+            $("#name").blur(function () {
+                if ($(this).val() == "") {
+                    $("#note3").text("请正确填写您的真实姓名");
+                    //$(this).focus();
+                } else {
+                    $("#note3").text("");
+                }
+            });
+
+            $("#password").blur(function () {
+                var val = $(this).val();
+                if (val == "" || val.length < 6 || val.length > 20) {
+                    $("#note4").text("密码格式不正确，请重新输入。");
+                    //$(this).focus();
+                } else {
+                    $("#note4").text("");
+                }
+            });
+
+            $("#password_confirm").blur(function () {
+                if ($(this).val() != $("#password").val()) {
+                    $("#note5").text("两次密码不一致");
+                    //$(this).focus();
+                } else {
+                    $("#note5").text("");
+                }
+            });
+
+            $("#regbtn").click(function (e) {
+                if (!$("#checkid").is(':checked')) {
+                    //$("#checkid").focus();
+                    alert("请勾选 我已阅读并同意《平台服务协议》按钮");
+                    return false;
+                }
+                if ($("#extCode").val() == "") {
+                    alert("请输入邀请码");
+                    return false;
+                }
+                var tel = $("#phone").val();
+                var code = $("#code").val();
+                var name = $("#name").val();
+                var pwd = $("#password").val();
+                /* reg.datas.account = $("#account").val();
+                reg.datas.password = $("#password").val();
+                reg.datas.sms_code = $("#smsCode").val();
+                reg.datas.ext_code = $("#extCode").val(); */
+                $.post(
+                    "http://qh.1caopan.com/index/api/reg/",
+                    {
+                        account: tel,
+                        password: pwd,
+                        sms_code: code,
+                        ext_code: $("#ext_code").val()
+                    },
+                    function (_d) {
+                        if (_d.code == 1) {
+                            alert(_d['msg']);
+                            window.location.href = "login";
+                        } else {
+                            alert(_d['msg']);
+                        }
+                    },
+                    "JSON"
+                );
+                /* $.ajax({
+                    url: "http://www.fuqitong18.com:9880/telreg?WebCallBack=telreg_callback",
+                    data: { 'Tel': tel, 'Pwd': pwd, 'TradeName': name, 'TelYZM': code },
+                    type: "get",
+                    dataType: "jsonp",
+                    jsonpCallback: "telreg_callback",
+                    success: function (data) {
+                        if (data.StatusCode == 0) {
+                            $(".pop").show();
+                            var InterValWin = window.setInterval(newwin, 3000);
+                            //top.location.href='login';
+                        } else {
+                            alert(data.StatusDesc);
+                        }
+                    }
+                }); */
+            });
+        })
+
+        function newwin() {
+            top.location.href = 'login';
+        }
+        //document.getElementById("regbtn").disabled = true;
+        //验证手机格式，以及手机号码是否已注册过。
+        function get_phone() {
+            var tel = $('#phone').val();
+            var partten = /^0?(13[0-9]|15[012356789]|18[0-9]|17[0-9]|19[0-9])[0-9]{8}$/;
+            if (!partten.test(tel)) {
+                $("#note1").text("手机号格式不正确！");
+                $('#phone').focus();
+                //return false;
+            } else {
+                $("#note1").text("");
+                //验证手机号码
+                $.ajax({
+                    url: "http://www.fuqitong18.com:9880/checktel?WebCallBack=checktel_callback&Tel=" + tel,
+                    type: "get",
+                    dataType: "jsonp",
+                    jsonpCallback: "checktel_callback",
+                    success: function (data) {
+                        if (data.StatusCode != 0) {
+                            $("#note1").text(data.StatusDesc);
+                            $('#phone').focus();
+                            return false;
+                        } else {
+                            var t = new Date().getTime();
+                            $("#Serial").val(t);
+                            $("#yzmpic").html("<img src='http://www.fuqitong18.com:9880/getyzm?Tel=" + tel + "&Serial=" + t + "'>");
+                        }
+                    }
+                });
+            }
+        }
+        //发送手机验证码
+        function check_mess() {
+            var tel = $("#phone").val();
+            if (tel == "") {
+                return false;
+            }
+            var code = "";
+            var Serial = $("#Serial").val();
+            var yzm = $("#yzm").val();
+            let datas = {};
+            datas.account = $("#phone").val();
+            datas.type = 0;
+            $.post(
+                "http://qh.1caopan.com/index/api/sms_send/",
+                datas,
+                function (_d) {
+                    if (_d.code == 0) {
+                        $("#btnSendCode").attr("disabled", "true");
+                        $("#btnSendCode").val("发送成功！");
+                        curCount = count;
+                        InterValObj = window.setInterval(SetRemainTime, 1000);
+                    }
+                },
+                "JSON"
+            );
+        }
+        function get_yzm() {
+            var tel = $('#phone').val();
+            var t = new Date().getTime();
+            $("#Serial").val(t);
+            $("#yzmpic").html("<img src='http://www.fuqitong18.com:9880/getyzm?Tel=" + tel + "&Serial=" + t + "'>");
+        }
+        function SetRemainTime() {
+            if (curCount == 0) {
+                window.clearInterval(InterValObj);//停止计时器
+                $("#btnSendCode").removeAttr("disabled");//启用按钮
+                $("#btnSendCode").val("重新发送");
+                code = ""; //清除验证码。如果不清除，过时间后，输入收到的验证码依然有效
+            } else {
+                curCount--;
+                $("#btnSendCode").val(curCount + "s后重新发送");
+            }
+        }
+
+        function code_callback() { }
+        function checktel_callback() { }
+        function telreg_callback() { }
+    </script>
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="top">
+            <div class="wrap">
+                <ul class="userTop">
+                    <!--a>客服热线：$site.tel}</a-->
+                </ul>
+                <ul class="topNav">
+                    <li>
+                        <a href="login">登录</a>
+                        <a href="register">注册</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="header">
+            <div class="wrap">
+                <ul class="logo">
+                    <a href="index">
+                        <img style="width:270px; margin-top:10px; margin-bottom:10px;margin-left:30px;" src="/web/logo.png">
+                    </a>
+                </ul>
+                <div class="nav-bar"></div>
+                <ul style="margin-top:5px;" class="p_nav">
+                    <li class="cur">
+                        <a href="index" class="first">首页</a>
+                    </li>
+                    <li>
+                        <a href="futures">国内期货</a>
+                    </li>
+                    <li>
+                        <a href="rules">交易规则</a>
+                    </li>
+                    <li>
+                        <a href="about">关于我们</a>
+                    </li>
+                    <li>
+                        <a href="download">软件下载</a>
+                    </li>
+                    <li>
+                        <a href="service">客戶服务</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div align="center" style="font-size:18px">提示：富期通是一家可提供给操盘手优质服务的平台，并非属于任何一家期货公司的子公司，请各操盘手在进行操盘之前仔细阅读本平台的风险揭示书及交易规则，任何操盘以本平台信息为准！</div>
+        <div class=" mb">
+            <div id="user">
+                <div class="passport">
+                    <div class="register" name="pzuce" id="pzuce">
+                        <div class="kh_nav_nav_nr_top step1"></div>
+                        <form id="register" name="frm" action="" method="post" enctype="multipart/form-data" onSubmit="return check()">
+                            <div class="step-1">
+                                <div class="step-left">
+                                    <dl>
+                                        <dt>手机号码</dt>
+                                        <dd>
+                                            <input name="phone" id="phone" type="text" class="textInput w245" value="" onChange="get_phone()" size="30" placeholder="请输入手机号码">
+                                            <p>
+                                                <span id="note1" class="cur"></span>
+                                            </p>
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>手机验证码</dt>
+                                        <dd>
+                                            <input type="text" id="code" class="textInput w110" name="code" placeholder="请输入手机验证码">
+                                            <input type="button" class="textInput w90" onClick="check_mess()" id="btnSendCode" value="发送验证码">
+                                            <p>
+                                                <span id="note2" class="cue"></span>
+                                            </p>
+                                        </dd>
+                                    </dl>
+
+                                    <dl>
+                                        <dt>登录密码</dt>
+                                        <dd>
+                                            <input id="password" name="password" type="password" class="textInput w245" size="36" placeholder="请输入您的密码">
+                                            <p>
+                                                <span id="note4" class="cue"></span>
+                                            </p>
+                                            <p>6-20个字符（字母、数字），区分大小写</p>
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>确认登录密码</dt>
+                                        <dd>
+                                            <input id="password_confirm" name="password_confirm" type="password" class="textInput w245" size="36" placeholder="请再次输入您的密码">
+                                            <p>
+                                                <span id="note5" class="cue"></span>
+                                            </p>
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>邀请码</dt>
+                                        <dd>
+                                            <input id="extCode" name="extCode" type="number" class="textInput w245" size="36" placeholder="请输入邀请码">
+                                            <p>
+                                                <span id="note5" class="cue"></span>
+                                            </p>
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>&nbsp;</dt>
+                                        <dd>
+                                            <p style="line-height:50px;">
+                                                <input id="checkid" type="checkbox" name="checkid">我已阅读并同意
+                                                <a href="agreement" target="_blank" style="color:#f54837;">《富期通操盘手风险揭示书》</a>
+                                            </p>
+                                            <input type="button" class="btn w250" value="立即注册" id="regbtn">
+                                            <p class="tx-ri">已有账号，
+                                                <a href="login">立即登录</a>
+                                            </p>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pop" style="position:absolute;z-index:1000;background:#eee;border:solid 1px #ccc;width:400px;height:50px;line-height:50px;top:50%;left:50%;margin-top:-25px;margin-left:-200px;text-align:center;display:none;">注册成功，正跳转至登录页面...</div>
+
+            <!-- 首页 bottom start -->
+            <div class="bottom">
+                <div class="bottom_a">
+                    <div class="bottom_a_left">
+                        <ul>
+                            <li>
+                                <p class="bottom_a_left_font">
+                                    <a>期貨交易</a>
+                                </p>
+                                <a href="tencent://message/?uid=2066604037&amp;Site=&amp;Menu=yes" target="_blank" class="down-load">线上咨询</a>
+                                <br>
+                                <a href="download">软件下載</a>
+                                <br>
+                                <a href="futures">期货品种</a>
+
+                            </li>
+                            <li>
+                                <p class="bottom_a_left_font">
+                                    <a>了解我们</a>
+                                </p>
+                                <a href="about">关于我们</a>
+                                <br>
+                                <a href="service">联系我们</a>
+                                <br>
+                                <a href="news">最新公告</a>
+
+                            </li>
+                            <li>
+                                <p class="bottom_a_left_font">
+                                    <a>条款声明</a>
+                                </p>
+                                <a href="important">特别声明</a>
+                                <br>
+                                <a href="kehu.html">服务条款</a>
+                                <br>
+                                <a href="disclaimer">免则声明</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bottom_a_xian"></div>
+                    <div class="bottom_a_nav">
+                        <img style="margin-top:-20px;" src="/web/erweima.png">
+                    </div>
+
+                    <div class="bottom_a_right">
+                        <div class="bottom_btn">
+                            <a href="http://wpa.qq.com/msgrd?v=3&uin=2066604037&site=qq&menu=yes" target="_blank" class="down-load">线上咨询服务</a>
+                        </div>
+                        <div class="bottom_a_right_font">交易日（周一至周五）08:30-23:30</div>
+                        <div <div class="bottom_a_right_font">我们提醒您：期货有风险，投资需谨慎！市场风险莫测，务请谨慎行事！</div>
+                    </div>
+                </div>
+
+                <style>
+                    .youqing_bg {
+                        width: 100%;
+                        margin: 0 auto;
+                        background-color: #333333;
+                        padding-bottom: 20px;
+                    }
+
+                    .youqing_bg .youqing {
+                        width: 1000px;
+                        margin: 0 auto;
+                    }
+
+                    .youqing_bg .youqing li {
+                        color: #ccc;
+                        float: left;
+                        margin-left: 3%;
+                        ;
+                        font-size: 14px;
+                        line-height: 25px;
+                    }
+
+                    .youqing_bg .youqing a {
+                        color: #ccc;
+                        font-size: 14px;
+                        line-height: 25px;
+                    }
+
+                    .youqing_bg .youqing a:hover {
+                        color: white;
+                    }
+                </style>
+                <div class="youqing_bg">
+                    <ul class="youqing">
+                        <li style="margin-left:0">友情链接：</li>
+                        <li style="margin-left:0">
+                            <a href="http://www.ine.com.cn/" target="_blank">上海国际能源交易中心</a>
+                        </li>
+                        <li>
+                            <a href="http://www.shfe.com.cn/" target="_blank">上海期货交易所</a>
+                        </li>
+                        <li>
+                            <a href="http://www.czce.com.cn/portal/index.htm" target="_blank">郑州商品交易所</a>
+                        </li>
+                        <li>
+                            <a href="http://www.dce.com.cn/" target="_blank">大连商品交易所</a>
+                        </li>
+                        <li>
+                            <a href="http://www.cffex.com.cn/" target="_blank">中国金融期货交易所</a>
+                        </li>
+                        <li>
+                            <a href="http://www.hkex.com.hk/?sc_lang=en" target="_blank">香港交易所</a>
+                        </li>
+                        <li>
+                            <a href="http://www.sse.com.cn/" target="_blank">上海证券交易所</a>
+                        </li>
+                        <li style="margin-left:0">
+                            <a href="http://www.szse.cn/" target="_blank">期货日报</a>
+                        </li>
+                        <li>
+                            <a href="http://www.10jqka.com.cn/" target="_blank">同花顺</a>
+                        </li>
+                        <li>
+                            <a href="http://www.cfachina.org/" target="_blank">中国期货业协会</a>
+                        </li>
+                        <li>
+                            <a href="http://www.xfn.com/en/home/index.htm" target="_blank">新华财经</a>
+                        </li>
+                        <li>
+                            <a href="http://www.amm.com/" target="_blank">美国金属市场</a>
+                        </li>
+                        <li>
+                            <a href="https://www.smm.cn/" target="_blank">上海有色网</a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="footer ">
+                    <div class="footer_a">
+                        <span>　　　　　　　　　　　　　　　　　　　　湖南正奇万合资产管理有限公司 -- Copyright &copy; 2018 All Rights Reserved </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

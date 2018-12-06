@@ -1,0 +1,108 @@
+{include file="common/head"/}
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+  <div class="layui-padded-15">
+    <blockquote class="layui-elem-quote layui-text">
+        <h4>当前位置：{:lang('settlementManage')}<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>手动结算</h4>
+    </blockquote>
+    <div class="layui-form">
+      <div class="layui-form-item" style="margin-bottom: 5px;">
+        <div class="layui-inline">
+          <label class="layui-form-label" style="padding:9px 0;">选择日期：</label>
+          <div class="layui-input-inline" style="margin-right:0;width: 150px;">
+            <input type="text" class="layui-input" id="reg_start_time" placeholder="yyyy-MM-dd">
+          </div>
+            <input type="hidden" id="acc">
+            <input type="hidden" id="det">
+            <input type="hidden" id="dal">
+            <input type="hidden" id="clo">
+            <input type="hidden" id="tra">
+            <input type="hidden" id="err">
+          <button class="layui-btn" id="layui-search-btn" data-type="reload" style="width:100px;"><i class="layui-icon">&#xe615;</i> 检测 </button>
+            <span>（默认检测当天！）</span>
+          <button class="layui-btn" id="wansbtn" style="width:100px;">完善数据 </button>
+        </div>
+      </div>
+    </div>
+    <div class="layui-form">
+      <div id="msg"></div>
+    </div>
+  </div>
+</div>
+{include file="common/foot"/}
+<script>
+    var message;
+    layui.config({
+        base: ADMIN+'build/js/',
+        version: '1.0.1'
+    }).use(['app','table','form','laypage','laydate','message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            table = layui.table,
+			form = layui.form,
+			laypage = layui.laypage,
+            laydate = layui.laydate,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+    //列表数据
+
+    //时间控件渲染
+    laydate.render({
+      elem: '#reg_start_time'
+    });
+
+	//提交
+	$('#layui-search-btn').on('click', function(){
+		$.post("{:url('settlement/artificial')}",{'day':$("#reg_start_time").val()},function(res){
+			$("#msg").html(res.errmsg);
+            $("#err").val(res.err);
+            $("#tra").val(res.tra);
+            $("#clo").val(res.clo);
+            $("#dal").val(res.dal);
+            $("#det").val(res.det);
+            $("#acc").val(res.acc);
+            layer.msg(res.errmsg, {icon: 1, time: 2000});
+		});
+	});
+
+    $('#wansbtn').on('click', function(){
+        err = $("#err").val();
+        if(err == ''){
+            layer.msg('请先检测报表数据，默认为检测当天!', {icon: 1, time: 2000});
+            return false;
+        }
+        if(err == 0){
+            layer.msg('该日报表数据完整，不需要完善!', {icon: 1, time: 2000});
+            return false;
+        }
+        tra = $("#tra").val();
+        clo = $("#clo").val();
+        dal = $("#dal").val();
+        det = $("#det").val();
+        acc = $("#acc").val();
+        day=$("#reg_start_time").val();
+        $.post("{:url('settlement/wanshan')}",{
+            'day':day,
+            'clo':clo,
+            'tra':tra,
+            'dal':dal,
+            'acc':acc,
+            'det':det
+        },function(res){
+            $("#msg").html(res.errmsg);
+            $("#err").val(res.err);
+            layer.msg(res.errmsg, {icon: 1, time: 2000});
+        });
+
+    });
+  });
+</script>
+</body>
+</html>

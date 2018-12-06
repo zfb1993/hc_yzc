@@ -1,0 +1,270 @@
+{include file="common/head"/}
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+  <div class="layui-padded-15">
+    <blockquote class="layui-elem-quote layui-text">
+        <h4 class="layui-pull-left">当前位置：{:lang('riskManage')}<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>{:lang('productManage')}</h4>
+        <button id="product" class="layui-btn layui-btn-normal layui-pull-right">新增品种</button>
+    </blockquote>
+    <div class="layui-form">
+       <table class="layui-table" id="list" lay-filter="list"></table>
+    </div>
+  </div>
+</div>
+{include file="common/foot"/}
+<script type="text/html" id="action">
+  <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+  <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="edit">手续费</a>
+  <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="iframe">强平时间</a>
+  <a class="layui-btn  layui-btn-sm" lay-event="trade">交易时间</a>
+</script>
+<script>
+    var message;
+    layui.config({
+        base: ADMIN+'build/js/',
+        version: '1.0.1'
+    }).use(['app','table','form','laydate','message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            table = layui.table,
+            laydate = layui.laydate,
+            form = layui.form,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+    //列表数据
+    var tableIn = table.render({
+        elem: '#list',
+        url: '{:url("risk/productManage")}',
+        method: 'post',
+        page: true,
+        cols: [[
+            {type:'numbers',title:'序号',width:60,fixed: true},
+            {field:'ex_name',align:'center',title:'交易所', width:120, sort: true},
+            {field:'p_name',align:'center',title:'品种名', width:120, sort: true},
+            {field:'min_rate',align:'center',title:'最小变动单位',width:150},
+            {field:'c_multiplier', align:'center',title:'合约乘数',width:150},
+            {field:'ptglf',align:'center',title:'平台管理费', width:150},
+            {field:'sxf',align:'center', title:'手续费',width:150},
+            {field:'jsfwf',align:'center', title:'技术服务费',width:150},
+            {width: 360, align: 'center', toolbar: '#action',title:'操作'}
+        ]],
+        limit: 10,
+        height: 600, //固定值
+        text: {
+          none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+        }
+    });
+    //监听工具条
+    table.on('tool(list)', function(obj){
+      var data = obj.data;
+      var id = data.id;
+      var url="{:url('risk/deliveryDate',['pid'=>'w'])}";
+          url=url.replace(/w/,id);
+      var tradeurl="{:url('risk/tradeDate',['pid'=>'w'])}";
+          tradeurl=tradeurl.replace(/w/,id);
+      if(obj.event === 'del'){
+        //layer.msg('ID：'+ data.id + ' 的查看操作');
+        layer.confirm('真的要删除该品种么？', function(index){
+          $.post("{:url('risk/del_product')}",{'id':data.id},function(res){
+            if(res.code==1){
+              layer.msg(res.msg,{icon: 1, time: 1000},function(){
+                obj.del();
+                layer.close(index);
+              });
+            }else{
+              layer.msg(res.msg,{icon: 2, time: 1000},function(){
+                layer.close(index);
+              });
+            }
+          });
+
+        });
+      } else if(obj.event === 'iframe'){
+        layer.open({
+          type: 2, 
+          title:'强平时间设置',
+          area:['900px','450px'],
+          content: [''+url, 'no']
+        });
+      } else if(obj.event === 'trade'){
+          layer.open({
+              type: 2,
+              title:'强平时间设置',
+              area:['900px','450px'],
+              content: [''+tradeurl, 'no']
+          });
+      } else if(obj.event === 'edit'){
+        var id=data.id;
+        var str='';
+            str+='<div class="layui-product">';
+            str+='<form class="layui-form">';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">平台管理费</label>';
+            str+='<div class="layui-input-block">';
+            str+='<input type="number" name="ptglf" placeholder="请输入开仓手续费" value="'+data.ptglf+'" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">手续费</label>';
+            str+='<div class="layui-input-block">';
+            str+='<input type="number" name="sxf" placeholder="请输入平今手续费" value="'+data.sxf+'" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">技术服务费</label>';
+            str+='<div class="layui-input-block">';
+            str+='<input type="number" name="jsfwf" placeholder="请输入平仓手续费" value="'+data.jsfwf+'" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='</form>';
+            str+='</div>';
+        layer.open({
+            type: 1, 
+            skin: 'layui-product',
+            title:'手续费 | 设置',
+            area:['600px','350px'],
+            content:str,
+            btn: ['提交', '放弃'],
+            btnAlign: 'c',
+            yes: function(index, layero){
+              var ptglf=$('input[name="ptglf"]').val();
+              var sxf=$('input[name="sxf"]').val();
+              var jsfwf=$('input[name="jsfwf"]').val();
+              $.post("{:url('risk/edit_product')}", {'id':id,'ptglf':ptglf,'sxf':sxf,'jsfwf':jsfwf}, function(res){
+                if(res.code==1){
+                  layer.msg(res.msg,{icon:1,time:1000},function(){
+                    layer.close(index);
+                    tableIn.reload();
+                  });
+                }else{
+                  layer.msg(res.msg,{icon:2,time:1000},function(){
+                    layer.close(index);
+                  });
+                }
+              });
+            },
+            btn2: function(index, layero){
+              layer.close(index);
+              //return false 开启该代码可禁止点击该按钮关闭
+            },
+            cancel: function(index){ 
+              layer.close(index);
+              //return false; 
+              //return false 开启该代码可禁止点击该按钮关闭
+            }
+          });
+          form.render();
+      }
+    });
+    //添加品种
+    $('#product').click(function(){
+      $.post("{:url('risk/getExId')}", {}, function(data){
+        var str='';
+        //var data=['SHFE','CZCE','CFFEX','DCE'];
+          str+='<div class="layui-product">';
+              str+='<form class="layui-form">';
+              str+='<div class="layui-form-item">';
+              str+='<label class="layui-form-label">交易所</label>';
+              str+='<div class="layui-input-block">';
+              str+='<select id="ex_name" name="ex_name" lay-verify="required" lay-search="">';
+              str+='<option value="">直接选择或搜索交易所名称</option>';
+              for(var i=0;i<data.length;i++){
+                str+='<option value="'+data[i].name+'">'+data[i].name+'</option>';
+              }
+              str+='</select>';
+              str+='</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item">';
+              str+='<label class="layui-form-label">品种名</label>';
+              str+='<div class="layui-input-block">';
+              str+='<input type="text" name="p_name" placeholder="请输入品种名" autocomplete="off" class="layui-input">';
+              str+='</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item">';
+              str+='<label class="layui-form-label">最小变动单位</label>';
+              str+='<div class="layui-input-block">';
+              str+='<input type="number" name="min_rate" placeholder="请输入最小变动单位" class="layui-input">';
+              str+='</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item">';
+              str+='<label class="layui-form-label">合约乘数</label>';
+              str+='<div class="layui-input-block">';
+              str+='<input type="number" name="c_multiplier" placeholder="请输入合约乘数" class="layui-input">';
+              str+='</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item">';
+              str+='<label class="layui-form-label">平台管理费</label>';
+              str+='<div class="layui-input-block">';
+              str+='<input type="number" name="ptglf" placeholder="请输入平台管理费" class="layui-input">';
+              str+='</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item">';
+              str+='<label class="layui-form-label">手续费</label>';
+              str+='<div class="layui-input-block">';
+              str+='<input type="number" name="sxf" placeholder="请输入手续费" class="layui-input">';
+              str+='</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item">';
+              str+='<label class="layui-form-label">技术服务费</label>';
+              str+='<div class="layui-input-block">';
+              str+='<input type="number" name="jsfwf" placeholder="请输入技术服务费" class="layui-input">';
+              str+='</div>';
+              str+='</div>';
+              str+='</form>';
+              str+='</div>';
+        layer.open({
+            type: 1, 
+            skin: 'layui-product',
+            title:'添加品种',
+            area:['600px','550px'],
+            content:str,
+            btn: ['提交', '放弃'],
+            btnAlign: 'c',
+            yes: function(index, layero){
+              var ex_name=$('#ex_name option:selected').val();
+              var p_name=$('input[name="p_name"]').val();
+              var min_rate=$('input[name="min_rate"]').val();
+              var c_multiplier=$('input[name="c_multiplier"]').val();
+              var ptglf=$('input[name="ptglf"]').val();
+              var sxf=$('input[name="sxf"]').val();
+              var jsfwf=$('input[name="jsfwf"]').val();
+              $.post("{:url('risk/add_product')}",
+                {'ex_name':ex_name,'p_name':p_name,'min_rate':min_rate,'c_multiplier':c_multiplier,'ptglf':ptglf,'sxf':sxf,'jsfwf':jsfwf},
+                function(res){
+                if(res.code==1){
+                  layer.msg(res.msg, {icon: 1, time: 1000}, function(){
+                      layer.close(index);
+                      tableIn.reload();
+                  });
+                }else{
+                  layer.msg(res.msg, {icon: 2, time: 1000}, function(){
+                      layer.close(index);
+                  });
+                }
+              });
+            },
+            btn2: function(index, layero){
+              layer.close(index);
+              //return false 开启该代码可禁止点击该按钮关闭
+            },
+            cancel: function(index){ 
+              layer.close(index);
+              //return false; 
+              //return false 开启该代码可禁止点击该按钮关闭
+            }
+          });
+        form.render();
+      });
+    });
+        
+  });
+</script>
+</body>
+</html>

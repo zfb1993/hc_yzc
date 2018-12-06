@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+	<meta name="x5-fullscreen" content="true">
+	<meta name="full-screen" content="yes">
+	<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+	<link rel="stylesheet" href="https://at.alicdn.com/t/font_659316_kic3h2esv5.css">
+	<script src="https://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+	<title>跟随设置</title>
+</head>
+<style>
+	* {
+		padding: 0;
+		margin: 0;
+	}
+
+	html,
+	body {
+		width: 100%;
+		background: #1D1C1C;
+	}
+
+	.headA {
+		height: 50px;
+		width: 100%;
+		position: fixed;
+		top: 0;
+		box-sizing: border-box;
+		background: #202932;
+		z-index: 10000;
+
+	}
+
+	.headtit {
+		text-align: center;
+		line-height: 50px;
+		color: #D6D6D6;
+	}
+
+	.headA>a {
+		position: absolute;
+		display: inline-block;
+		top: 13px;
+		color: #D6D6D6;
+		left: 10px;
+		width: 30px;
+		text-decoration: none;
+	}
+
+	.tteyf {
+		padding: 8px;
+		margin-bottom: 8px;
+		background: #202932;
+		display: block;
+	}
+
+	.tiema {
+		justify-content: space-between;
+		display: flex;
+
+	}
+
+	.tiema>p {
+		height: 30px;
+	}
+
+	.tiema>p:nth-child(1)>img {
+		width: 30px;
+		height: 30px;
+		float: left;
+		border-radius: 50%;
+	}
+
+	.tiema>p:nth-child(1)>span {
+		display: inline-block;
+		/* float: left; */
+		font-size: 14px;
+		line-height: 30px;
+		padding-left: 15px;
+	}
+
+	#named {
+		color: #EBEBEB;
+	}
+
+	#grades {
+		color: #fb640e;
+	}
+
+	.tiema>a {
+		width: 90px;
+		border-radius: 8px;
+		height: 24px;
+		border: 1px solid #FB640e;
+		color: #FB640e;
+		font-size: 14px;
+		text-align: center;
+		line-height: 24px;
+		display: inline-block;
+		text-decoration: none;
+	}
+
+	.wsews {
+		display: flex;
+		margin-top: 3px;
+	}
+
+	.eefw-a {
+		list-style: none;
+		width: 100%;
+		float: left;
+	}
+
+	.eefw-a>li {
+		width: 33.3%;
+		float: left;
+		text-align: center;
+		color: #D6D6D6;
+		font-size: 13px;
+	}
+
+	.eefw-a>li>p:nth-child(2) {
+		color: #FB640e;
+	}
+
+	#lstes {
+		position: fixed;
+		width: 100%;
+		left: 0;
+		top: 62px;
+		bottom: 0;
+		overflow: auto;
+	}
+</style>
+
+<body>
+	<header class="headA">
+		<a href="mine.html">
+			<i class="iconfont icon-iconfontjiantou1"></i>
+		</a>
+		<div class="headtit">跟随管理</div>
+	</header>
+	<div style="width:100%;height:12px;margin-top:50px;"></div>
+	<div id="lstes">
+		<!--循环第一个-->
+		<!-- <div class="tteyf">
+				<div class="tiema">
+					<p>
+						<img src="/static/assets/images/k-1@2x.png" />
+						<span id="named">海子山基金使徒...</span>
+						<span id="grades">#2</span>
+					</p>
+					<a href="set.html">编辑跟随</a>
+				</div>
+				<div class="wsews">
+					<ul class="eefw-a">
+						<li>
+							<p>跟随获利</p>
+							<p>----</p>
+						</li>
+						<li>
+							<p>盈亏点数</p>
+							<p>----</p>
+						</li>
+						<li>
+							<p>收益率</p>
+							<p>----</p>
+						</li>
+						<li>
+							<p>平均获利点数</p>
+							<p>----</p>
+						</li>
+						<li>
+							<p>交易笔数</p>
+							<p>----</p>
+						</li>
+						<li>
+							<p>交易周期</p>
+							<p>----</p>
+						</li>
+					</ul>
+				</div>
+			</div> -->
+		<!--循环第二个-->
+		<!-- <div class="tteyf">
+				<div class="tiema">
+					<p>
+						<img src="/static/assets/images/k-1@2x.png" />
+						<span id="named">海子山基金使徒...</span>
+						<span id="grades">#2</span>
+					</p>
+					<a href="set.html">编辑跟随</a>
+				</div>
+				<div class="wsews">
+					<ul class="eefw-a">
+						<li>
+							<p>跟随获利</p>
+							<p>----</p>
+						</li>
+						<li>
+							<p>盈亏点数</p>
+							<p>----</p>
+						</li>
+						<li>
+							<p>收益率</p>
+							<p>----</p>
+						</li>
+						<li>
+							<p>平均获利点数</p>
+							<p>----</p>
+						</li>
+						<li>
+							<p>交易笔数</p>
+							<p>----</p>
+						</li>
+						<li>
+							<p>交易周期</p>
+							<p>----</p>
+						</li>
+					</ul>
+				</div>
+			</div> -->
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+	<script>
+		Vue.component('tteyf', {
+			template: '<div class="tteyf"><div class="tiema"><p><img src="/static/assets/images/k-1@2x.png" /><span id="named">{{item.zaccount}}</span><span id="grades">#{{index}}</span></p><a href="set.html">编辑跟随</a></div><div class="wsews"><ul class="eefw-a"><li><p>亏损效率</p><p>{{item.deficitrate|formatNumber(2)}}</p></li><li><p>失败率</p><p>{{item.lossrate |formatNumber(2)}}</p></li><li><p>交易频率</p><p>{{item.tradefrequently|formatNumber(2)}}</p></li><li><p>亏损因子</p><p>{{item.lossreason|formatNumber(2)}}</p></li><li><p>盈/亏比</p><p>{{item.winlossrate|formatNumber(2)}}</p></li><li><p>平均持仓</p><p>{{item.avgpositiontime|formatNumber}}</p></li></ul></div></div>',
+			props: ['item', 'index']
+		});
+		Vue.filter('formatNumber', function (num, precision, separator) {
+			var parts;
+			// 判断是否为数字
+			if (!isNaN(parseFloat(num)) && isFinite(num)) {
+				// 把类似 .5, 5. 之类的数据转化成0.5, 5, 为数据精度处理做准, 至于为什么
+				// 不在判断中直接写 if (!isNaN(num = parseFloat(num)) && isFinite(num))
+				// 是因为parseFloat有一个奇怪的精度问题, 比如 parseFloat(12312312.1234567119)
+				// 的值变成了 12312312.123456713
+				num = parseFloat(num);
+				// 处理小数点位数
+				num = (typeof precision !== "undefined"
+					? num.toFixed(precision)
+					: num
+				).toString();
+				// 分离数字的小数部分和整数部分
+				parts = num.split(".");
+				// 整数部分加[separator]分隔, 借用一个著名的正则表达式
+				parts[0] = parts[0]
+					.toString()
+					.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1" + (separator || ","));
+
+				return parts.join(".");
+			}
+			return NaN;
+		})
+		let vm = new Vue({
+			el: '#lstes',
+			template: "<div><tteyf v-for='(item,index) in items' :item='item' :key='index' :index='index'></tteyf></div>",
+			data: { items: [] },
+			created: function () {
+				var that = this;
+				$.ajax({
+					type: 'get',
+					url: '/index/Api/getMyFollowAccount',
+					data: { account: localStorage.getItem('user_name') },
+					dataType: 'json',
+					success: function (res) {
+						if (res.code == 1) {
+							that.items = res.data
+						}
+					}
+				})
+			}
+		})	
+	</script>
+</body>
+
+</html>

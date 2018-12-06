@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+	<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+	<title>跟随设置</title>
+	<link rel="stylesheet" href="/static/assets/css/documentary.css">
+	<link rel="stylesheet" href="https://at.alicdn.com/t/font_659316_6nm7iodpcfg.css">
+	<link rel="stylesheet" href="https://at.alicdn.com/t/font_707895_nyqx6oay7fd.css"><!--弹框的关闭-->
+	<link href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css" rel="stylesheet">
+	<!--减-->
+	<!--加-->
+
+</head>
+
+<body>
+	<header class="headA">
+		<a href="javascript:history.go(-1);">
+			<i class="iconfont icon-iconfontjiantou1"></i>
+		</a>
+		<div class="headtit">跟随设置</div>
+		<div id='isEdit' style="position:fixed;right: 0;top: 16px;">
+			<a href="javaScript:unFollow();" style="padding:5px;text-decoration:none;color:#fff;">取消跟随</a>
+		</div>
+
+	</header>
+	<div class="ecfe">
+		<p class="heret">
+			<span>跟随</span>
+			<span>海子山基金使徒二号</span>
+		</p>
+		<p class="cenff">
+			<span>你的跟随账户</span>
+
+		</p>
+		<p class="frey">
+			<span>2000180171</span>
+		</p>
+	</div>
+	<div class="magssz">
+		<p>跟随方式</p>
+		<div class="man-a">
+			<div class="tufa" data-direction='0' id="tufa">
+				<span data-direction='0' class="zhfan active">正向</span>
+				<span data-direction='1' class="zhfan">反向</span>
+			</div>
+		</div>
+		<div class="man-b" id="man-b">
+			<div class="xuze" data-type='2' id="xuze">
+				<a data-type='1' style="display:none" class="" href="#">
+					<i class="iconfont icon-shuzi-copy"></i>
+					<p>固定数量下单</p>
+				</a>
+				<a data-type='2' class=".active" style="display:none;" href="#">
+					<i class="iconfont icon-bilitu"></i>
+					<p>按比例下单</p>
+				</a>
+			</div>
+			<div class="ona" style="display:none;">
+				<div class="shshu">
+					<p>跟随手数
+						<span>（标准手）</span>
+					</p>
+					<p>
+						<span class="adda">
+							<i class="iconfont icon-jian1"></i>
+						</span>
+						<input class="jajia" id="ewfr" type="text" value="0.01" min="0.01" >
+						<span class="enda">
+							<i class="iconfont icon-icon-plus"></i>
+						</span>
+					</p>
+				</div>
+				<div class="shuomi">
+					例如您设置固定数量0.01手，不论交易员下单多少标准手，您手数均为0.01标准手。最低跟随手数为0.01标准手
+				</div>
+			</div>
+			<div class="ona" style="display:block">
+				<div class="shshu">
+					<p>跟随比例
+						<span>（倍）</span>
+					</p>
+					<p>
+						<span class="adda">
+							<i class="iconfont icon-jian1"></i>
+						</span>
+						<input class="jajia" id="ewfr1" step="1" type="text" value="1" min="1">
+						<span class="enda">
+							<i class="iconfont icon-icon-plus"></i>
+						</span>
+					</p>
+				</div>
+				<div class="shuomi">
+					按比例下单，例如您设置为0.5倍比例跟随，交易员下单1标准手，您手数为0.5标准手。
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="trues">
+		确定
+	</div>
+	<p class="foottxt">跟随可能存在点差、交易品种及开/休市时间的差异
+		<a id="xieyipage" style="color:#fb640e;">查看风险提示</a>
+	</p>
+<div id="xieyifull" style="z-index: 9999;" class='weui-popup__container'>
+      <div class="weui-popup__modal" style="background:#1d1c1c;">
+            <article class="weui-article" style="margin-top:50px;padding-bottom:5px;">
+                  <div class="weui-header">
+                        <div class="title" style="color: white;text-align:center;">
+                              <h3 style="font-size:18px;">期货交易风险说明书</h3>
+                              <small></small>
+                        </div>
+                  </div>
+                  <div class="weui-body" style="font-size:13px;color:#d6d6d6;">
+				        
+                        <h3>（市场风险莫测 务请谨慎从事）</h3>
+
+
+                        <p>尊敬的客户：
+                        </p>
+                        <p>进行期货交易风险相当大，可能发生巨额损失，您应当充分理解并遵循“买卖自负”的金融市场原则，充分认识境外期货交易风险，自行承担交易结果。因此，您必须认真考虑自己的经济能力是否适合进行期货交易。考虑是否进行期货交易时，您应当明确以下几点：
+                        </p>
+                        <p>一、您在期货市场进行交易，假如市场走势对您不利导致您的账户入金金额亏损达到 70%时，您需主动追加保证金或减仓操作，以使您能继续持有未平仓合约。若您亏损到甲方提供资金的 103%时，会触发账户强行平仓操作指令，如您未在强平线前存入所需保证金，您持有的未平仓合约将可能在亏损的情况下被强行平仓，您必须承担由此导致的一切损失。您应主动进行仓位调整和主动止损，因为无法知晓您的操作意向及操作时间，在账户触发强行平仓操作指令时，如果您也同时平仓，由此可能会造成仓位比正常强平时多出或者减少，您必须承担由此导致的一切损失。
+                        </p>
+                        <p>二、您必须认真阅读并遵守期货交易的业务规则，如果您无法满足期货交易业务规则规定的要求，您所持有的未平仓合约将可能根据有关规则被强行平仓，您必须承担由此产生的后果。在您注册成为用户时，您已经阅读、理解并接受本协议的全部条款及各类规则，并承诺遵守中国的各类法律规定，如有违反而导致任何法律后果的发生，您将以自己的名义独立承担所有相应的法律责任。
+                        </p>
+                        <p>三、在某些市场情况下，您可能会难以或无法将持有的未平仓合约平仓。（例如，这种情况可能在市场达到涨跌停板时）出现这类情况，您的所有保证金有可能无法弥补全部损失，您必须承担由此导致的全部损失。
+                        </p>
+                        <p>四、由于国家法律、法规、政策的变化、期货交易所交易规则的修改、紧急措施的出台等原因，您持有的未平仓合约可能无法继续持有，您必须承担由此导致的损失。
+                        </p>
+                        <p>五、由于非期货交易所或者期货公司所能控制的原因，例如：地震、水灾、火灾等不可抗力因素或者计算机系统、通讯系统、互联网系统、电力系统故障等，可能造成您的指令无法成交或者无法全部成交，您必须承担由此导致的损失。
+                        </p>
+                        <p>六、利用互联网进行期货交易、资金划转等相关业务时将存在（但不限于）以下风险，您将承担由此导致的损失：
+                        </p>
+                        <p>1．由于无法控制和不可预测的系统故障、设备故障、通讯故障、电力故障、网络故障及其它因素，可能导致交易系统非正常运行甚至瘫痪，使您的交易指令出现延迟、中断、数据错误等情况；
+                        </p>
+                        <p>2．由于网上交易系统存在被网络黑客和计算机病毒攻击的可能性，由此可能导致交易系统故障，使交易无法进行及行情信息出现错误或延迟；
+                        </p>
+                        <p>3．互联网上的数据传输可能因通信繁忙等原因出现延迟、中断、数据错误或不完全，从而使网上交易出现延迟、中断；
+                        </p>
+                        <p>4．如果您缺乏网上交易经验，可能因操作不当造成交易失败或交易失误；
+                        </p>
+                        <p>5．您的密码失密或被他人盗用。本《期货交易风险说明书》无法揭示从事期货交易的所有风险和有关期货市场的全部情形。故您在入市交易之前，应全面了解期货交易法律法规、期货交易所规则及期货公司的业务规则，对自身的经济承受能力、风险控制能力、身体及心理承受能力（仅对自然人客户而言）作出客观判断，对期货交易作仔细的研究。
+                        </p>
+                        <p>以上《期货交易风险说明书》的各项内容，本人/单位已阅读并完全理解。
+                        </p>
+                       
+                  </div>
+            </article>
+            <a href="javascript:;" class="weui-btn_close close-popup" style="font-size:18px;text-align:center;display:block;">
+                  <i class="iconfont icon-guanbi" style="font-size:20px;color:#d6d6d6;"></i>
+            </a>
+      </div>
+</div>
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/jquery-weui.min.js"></script>
+	<script>
+	        $('#xieyipage').off().on("click", function () {
+                  $("#xieyifull").popup();
+            });
+		//跟随
+		$('.heret').html(`
+		<span>跟随</span>
+			<span>${getUrlName('nick_name')}&nbsp;${getUrlName('zid')}</span>
+		`)
+		//你的跟随账户
+		$('.frey span').html(localStorage.getItem('user_name'))
+		$("#tufa span").on("click", function () {
+			$(this).addClass("active");
+			$(this).siblings().removeClass("active");
+			$('#tufa').attr('data-direction', $(this).attr('data-direction'))
+		});
+		//          $("#xuze a").on("click", function () {
+		//              $(this).addClass("active");
+		//              $(this).siblings().removeClass("active");
+		//          });
+		$(".enda").click(function () {
+			// $(this).prev() 就是当前元素的前一个元素，即 jajia
+			$(this).prev().val(parseInt($(this).prev().val()) + 1);
+		});
+		$(".adda").click(function () {
+			console.log(666)
+			var numn = $("#ewfr").val();
+			if ($("#ewfr1").val() < 1) {
+				$("#ewfr1").val(1)
+				alert("最低跟随手数为1标准手");
+				return;
+			}
+			// $(this).next() 就是当前元素的下一个元素，即 jajia
+			$(this).next().val(parseInt($(this).next().val()) - 1);
+
+		});
+		var max = null;
+		var aInput = null;
+		var aDiv = null;
+		max = document.getElementById("man-b");
+		nand = document.getElementById("xuze");
+		aux = xuze.getElementsByTagName("a");
+		desa = max.getElementsByClassName("ona");
+		init();
+
+		function init() {
+			for (var i = 0; i < aux.length; i++) {
+				aux[i].index = i;
+				aux[i].onclick = fun;
+			}
+		}
+
+		function fun() {
+			for (var j = 0; j < aux.length; j++) {
+				aux[j].className = "";
+				desa[j].style.display = "none";
+			}
+			this.className = "active";
+			$('#xuze').attr('data-type', $(this).attr('data-type'))
+			desa[this.index].style.display = "block";
+		}
+
+		function getUrlName(name) {
+			let str = location.search.substring(1, )
+			let strArr = str.split('&');
+			let o = new Object();
+			for (let i = 0; i < strArr.length; i++) {
+				o[strArr[i].split('=')[0]] = strArr[i].split('=')[1];
+			}
+
+			return decodeURIComponent(o[name])
+		}
+		if (getUrlName('isEdit') != 'edit') {
+			$('#isEdit').hide();
+		}
+		function unFollow() {
+			$.ajax({
+				type: 'get',
+				url: '/index/api2/delfollow',
+				data: {
+					childid: localStorage.getItem('zid'),
+                    followed: getUrlName('zid'),
+				},
+				dataType: 'json',
+				beforeSend: function (request) { },
+				success: function (data) {
+					console.log(data)
+					if (data.code == 1) {
+						console.log('success');
+						$.alert('设置成功');
+						setTimeout(function(){ 
+							location.href = 'gendan.html'
+						}, 1500);
+					}
+				},
+			})
+		}
+		$('#dominate').attr('href', $('#dominate').attr('href') + location.search)
+		$('.trues').click(e => {
+			if ($('input[name="pattern"]:checked').length < 0) {
+				return
+			}
+			$.ajax({
+				type: 'get',
+				url: '/index/api2/FollowInsert',
+				data: {
+					childid: localStorage.getItem('zid'),
+                    followed: getUrlName('zid'),
+                    direct: $('#tufa').attr('data-direction'), // [0:正跟; 1:反跟]
+                    multiple: $('#ewfr1').val(),
+				},
+				dataType: 'json',
+				beforeSend: function (request) { },
+				success: function (data) {
+					//
+					console.log(data)
+					if (data.code == 1) {
+						console.log('success')
+						$.alert('设置成功');
+						setTimeout(function(){ 
+							location.href = 'gendan.html'
+						}, 1500);
+						
+					}
+				},
+				error: function (message) {
+					//
+				}
+			})
+		})
+	</script>
+</body>
+
+</html>

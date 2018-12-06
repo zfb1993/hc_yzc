@@ -1,0 +1,102 @@
+{extend name="static/assets/base.html" /}{block name="title"}
+<title>开通MT4模拟账户</title>{/block} {block name="style"}
+<link rel="stylesheet" href="/static/assets/css/login.css">
+<link rel="stylesheet" href="https://at.alicdn.com/t/font_654076_ttlrawxsyxa2lnmi.css">
+<style>
+	* {
+		padding: 0;
+		margin: 0;
+	}
+
+	body {
+		width: 100%;
+		font-family: SimHei;
+		font-size: 12px;
+		box-sizing: border-box;
+		font-family: "微软雅黑";
+		/*background-color: #20212a;*/
+	}
+
+	.rtre {
+		width: 84%;
+		padding: 25% 0;
+		margin: 0 auto;
+	}
+
+	.tupian {
+		width: 5%;
+		color: #00FA00;
+	}
+
+	.hetop {
+		text-align: center;
+		font-size: 0.8rem;
+	}
+
+	.bttit {
+		font-weight: 600;
+		font-size: 1rem;
+	}
+
+	.uyiy {
+		margin-top: 10%;
+		line-height: 1.8rem;
+	}
+
+	.uaiy {
+		line-height: 1.8rem;
+	}
+
+	.trues {
+		display: inline-block;
+		background: #FFC107;
+		padding: 0.2rem;
+		color: #F0F0F0;
+		text-decoration: none;
+		margin-top: 0.7rem;
+		font-size: 1rem;
+	}
+
+	.weui-btn_ {
+		color: #ffffff;
+		border: 1px solid #ff8c19;
+		background: #ff8c19;
+		margin-top: 3rem;
+	}
+</style>
+
+{/block} {block name="body"}
+<div class="rtre">
+	<div class="hetop">
+		<i class="tupian iconfont icon-gouxuan"></i>
+		<span class="bttit">开通MT4模拟账户成功</span>
+		<p class="uyiy">尊敬的
+			<span id="name" style="color:#EF4F4F"></span> 您已成功开通MT4模拟账户。</p>
+		<p class="uaiy">MT4模拟账户：
+			<span id="id" style="user-select: text;">861916350</span>
+		</p>
+		<p class="uaiy">MT4密码：
+			<span id="pwd" style="user-select: text;"></span>
+		</p>
+		<!-- <p class="uaiy">MT4服务器：
+			<span>Financemanagers-Demo</span>
+		</p> -->
+		<a class="weui-btn weui-btn_" href="#">开通MT4真实账户</a>
+	</div>
+</div>
+
+{/block} {block name="tabbar"}{/block} {block name="script"}
+<script>
+	$(function () {
+		$("#name").html(localStorage.mobile);
+		$.post("/index/otherapi/getopenAccountStatus", {
+			userid: localStorage.id,
+			auth: localStorage.auth
+		}, function (_d) {
+			if (_d['code'] == 1) {
+				$("#id").html(_d['zid']);
+				$("#pwd").html(_d['pwd']);
+			}
+		});
+	});
+</script> {/block}{block name="checkLogin"}{/block}

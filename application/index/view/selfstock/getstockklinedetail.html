@@ -1,0 +1,973 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Access-Control-Allow-Origin" content="*" />
+
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0"/>
+<title>{$Think.config.site_title}-股票行情</title>
+
+<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<link href="/qiquand/css/index.df691.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="__STATIC__/pc/layui/css/layui.css">
+<script type="text/javascript" src="__STATIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__STATIC__/js/layer_mobile/layer.js"></script>
+<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style type="text/css">
+	body,html{
+		overflow: scroll;
+		background: #f7f7f7;
+	}
+	.echart_div{
+		background: #fff;
+		margin:10px 0;
+		width:100%;
+		height:300px;
+		border:1px solid #ddd;
+	}
+	.row{
+		margin:0;
+		padding: 0;
+		border-bottom: 1px solid #ddd;
+	}
+    .col-xs-2,.col-xs-8,.col-xs-3,.col-xs-4,.col-xs-6{
+
+    	padding: 0;
+    	text-align: center;
+    }
+    .col-xs-4{
+    	padding: 3px;
+
+    }
+	.page_header{
+		border-bottom: 1px solid #ccc;		
+		position: absolute;
+		top:0;
+		z-index: 10;
+		width:100%;
+
+	}
+	.stock_header{
+		background:#f7f7f7;
+	}
+	.title{
+		font-size:18px;
+	}
+	.stock_info{
+		padding: 10px;
+	}
+	.footer{
+		position: fixed; width:100%;bottom: 0;height: 50px;background: #303849;color:#f3f3f3;
+	}
+	.footer div{
+		padding-top:14px;
+		cursor: pointer;
+		color:#fff;
+	}
+	#myTab{
+		padding: 10px 0;
+	}
+	#myTab span{
+		padding: 4px;
+		transition: 0.3s;
+		cursor: pointer;
+		
+	}
+	#myTab div{
+		border-right: 1px solid #f00;
+	}
+	.selected{
+		border-bottom: 2px solid #f00;
+	}
+
+</style>
+
+</head>
+
+<body>
+	<div class="wrap">
+	    <div class="page_header">
+	        <div class="row" style="color:#f7f7f7;font-size:18px;line-height:  50px;height: 50px;background: #303849;">
+	            <div class="col-xs-2" onclick="javascript:history.back();">
+	            	<span class="glyphicon glyphicon-chevron-left"></span>
+	            </div>
+	          <div class="col-xs-8">
+	             <!-- 	<img src="/qiquand/img/logo.png" height="35px;" />    -->        	<p id="stock_name title"></p>
+	            </div>
+	            <div class="col-xs-2">
+	            	<!-- <span class="glyphicon glyphicon glyphicon-align-justify"></span> -->
+	            </div>
+	        </div>
+
+	        <div class="row stock_header">
+	            <div class="col-xs-4">
+	            	<p class="stock_name title" id="stock_name"></p>
+	            	<p class="stock_id"></p>
+	            </div>
+
+	            <div class="col-xs-4">
+	            	<p class="stock_price title" style="font-size:30px;"></p>
+	            </div>
+
+	            <div class="col-xs-4">
+            		<p id="updown_amount" style="margin-right:10px;"></p>
+            		<p id="updown_rate"></p>
+	            </div>
+	        </div> 
+
+
+	        <div class="row stock_info" style="background: #f3f3f3;">
+	       		<div class="col-xs-4" style="text-align: left;">
+	       			<span>今开:</span>
+	       			<span class="open_price"></span>
+	       		</div>
+	       		<div class="col-xs-4">
+	       			<span>最高:</span>
+	       			<span class="max_price"></span>
+	       		</div>
+	       		<div class="col-xs-4" style="text-align: right;">
+	       			<span>成交量:</span>
+	       			<span class="done_count" ></span>
+	       		</div>     
+	       		<div class="col-xs-4" style="text-align: left;">
+	       			<span>昨收:</span>
+	       			<span class="yesterday_close_price"></span>
+	       		</div>
+	       		<div class="col-xs-4">
+	       			<span>最低:</span>
+	       			<span class="min_price" ></span>
+	       		</div>
+	       		<div class="col-xs-4" style="text-align: right;">
+	       			<span>成交额:</span>
+	       			<span class="done_amount"></span>
+	       		</div>          		  		
+	       	</div>  
+		</div>
+	
+		<div class="page_body" style="margin-top:170px;">
+
+			<div id="myTab" class="row">
+				<div class="col-xs-3" >
+					<span kline_type="min" class="selected" >
+						分时
+					</span>
+				</div>
+
+				<div class="col-xs-3" >
+					<span kline_type="day" >
+						日Ｋ
+					</span>
+				</div>
+
+				<div class="col-xs-3">
+					<span kline_type="week" >
+						 周Ｋ
+					</span>
+				</div>
+
+				<div class="col-xs-3" style="border:0;">
+					<span kline_type="month" >
+						月Ｋ
+					</span>
+				</div>
+			
+			</div>
+	
+	    </div>
+
+		<div id="kline_container">
+			<div style="position: relative;">
+				<div id="kline_for_min" class='echart_div' style="border-top:0;margin-top:0;" ></div>
+<!-- 				<div id="line_for_done" style="width:100%;height:100px;border-bottom:1px solid #ccc;border:1px solid #f60;z-index: 10;"></div> -->
+			</div>
+			<div id="cash_in_out"  class='echart_div' ></div>
+
+		</div>
+
+		<div id="cash_count">
+			<table class="table table-striped">
+				<tr>
+					<th></th>
+					<th>流入</th>
+					<th>流出</th>
+					<th>净流入</th>
+				</tr>
+				<tr>
+					<td>主力</td>
+					<td><span id="bank_in"></span></td>
+					<td><span id="bank_out"></td>
+					<td><span id="bank_inout_rate"></td>
+				</tr>
+				<tr>
+					<td>散户</td>
+					<td><span id="san_in"></td>
+					<td><span id="san_out"></td>
+					<td><span id="san_inout_rate"></td>					
+				</tr>
+				<tr>
+					<td>汇总</td>
+					<td><span id="sum_in"></td>
+					<td><span id="sum_out"></td>
+					<td><span id="sum_inout"></td>					
+				</tr>				
+			</table>
+			
+		</div>
+
+		<div class="row footer" >
+			<div class="col-xs-4" id="del_or_add" flag='' ></div>
+			<div class="col-xs-4" id="xunjia" style="border-bottom: 4px solid #f3f3f3;color:#f7f7f7;">一键询价</div>
+			<div class="col-xs-4" id="userinfo">我的</div>
+		</div>
+		<div style="height: 60px"></div>
+
+
+	</div>
+
+	<script type="text/javascript" src="__STATIC__/js/echarts.js"></script>	
+	<!-- <script type="text/javascript" src="__STATIC__/js/kline.js"></script>
+ -->
+    <script type="text/javascript">
+
+		var data0=null;
+		var myChart=null;
+		var cash_flow_chart=null;
+
+		var stock_id= '';
+		var type = "day";
+
+	  var USER_ID = localStorage.getItem("id");
+	  var USER_AUTH = localStorage.getItem("auth");			
+
+		//取得传入的股票代码
+		var url = window.location.href;
+		if(url.indexOf('?')>0){
+			 var url_arr = url.split('?');
+			 var stock_arr=url_arr[1].split("=");
+			 stock_id = stock_arr[1];
+		}else{
+			layer.open({content:'没有股票信息!',time:2});
+		}
+
+		//k线函数－－－－－－－－－－－－－－
+		function splitData(rawData) {
+		    var categoryData = [];
+		    var values = [];
+		    var volumes = [];
+		    for (var i = 0; i < rawData.length; i++) {
+		        categoryData.push(rawData[i].splice(0, 1)[0]);
+		        values.push(rawData[i]);
+		        volumes.push([i, rawData[i][4], rawData[i][0] > rawData[i][1] ? 1 : -1]);
+		    }
+
+		    return {
+		        categoryData: categoryData,
+		        values: values,
+		        volumes: volumes
+		    };
+		}
+
+		function calculateMA(dayCount, data) {
+		    var result = [];
+		    for (var i = 0, len = data.values.length; i < len; i++) {
+		        if (i < dayCount) {
+		            result.push('-');
+		            continue;
+		        }
+		        var sum = 0;
+		        for (var j = 0; j < dayCount; j++) {
+		            sum += data.values[i - j][1];
+		        }
+		        result.push(+(sum / dayCount).toFixed(3));
+		    }
+		    return result;
+		}
+		//-----------------------------------
+
+		//k线图（stock_id,type:周期,day,week,month）
+		var get_kline = function(stock_id,type){
+			var upColor = '#00da3c';
+			var downColor = '#ec0000';
+
+			$.ajax({
+				//url:'//echarts.baidu.com/examples/data/asset/data/stock-DJI.json',
+				url:'/index/Selfstock/getStockKlineData?stockid='+stock_id+"&type="+type,
+				type:'get',
+
+				cache:true,
+				success:function(rawData){
+
+
+					rawData=eval(rawData);
+
+					console.log(rawData);
+				    var data = splitData(rawData);
+
+					if(myChart){
+						myChart.dispose();
+					}
+					myChart = echarts.init(document.getElementById('kline_for_min'));
+
+				    option = {
+				        backgroundColor: '#fff',
+				        animation: true,
+				        legend: {
+				            top: 10,
+				            left: 'center',
+				            data: ['MA5', 'MA10', 'MA20', 'MA30']
+				        },
+				        tooltip: {
+				            trigger: 'axis',
+				            axisPointer: {
+				                type: 'cross'
+				            },
+				            backgroundColor: 'rgba(245, 245, 245, 0.8)',
+				            borderWidth: 1,
+				            borderColor: '#ccc',
+				            padding: 10,
+				            textStyle: {
+				                color: '#000'
+				            },
+				            position: function (pos, params, el, elRect, size) {
+				                var obj = {top: 10};
+				                obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
+				                return obj;
+				            },
+				            
+				        },
+				        axisPointer: {
+				            link: {xAxisIndex: 'all'},
+				            label: {
+				                backgroundColor: '#777'
+				            }
+				        },
+				        // toolbox: {
+				        //     feature: {
+				        //         dataZoom: {
+				        //             yAxisIndex: false
+				        //         },
+				        //         brush: {
+				        //             type: ['lineX', 'clear']
+				        //         }
+				        //     }
+				        // },
+				        // brush: {
+				        //     xAxisIndex: 'all',
+				        //     brushLink: 'all',
+				        //     outOfBrush: {
+				        //         colorAlpha: 0.1
+				        //     }
+				        // },
+
+				        visualMap: {
+				            show: false,
+				            seriesIndex: 5,
+				            dimension: 2,
+				            pieces: [{
+				                value: 1,
+				                color: downColor
+				            }, {
+				                value: -1,
+				                color: upColor
+				            }]
+				        },
+				        grid: [
+				            {
+				                left: '10%',
+				                right: '8%',
+				                height: '60%'
+				            },
+				            {
+				                left: '10%',
+				                right: '8%',
+				                bottom: '10',
+				                height: '10%'
+				            }
+				        ],
+				        xAxis: [
+				            {
+				                type: 'category',
+				                data: data.categoryData,
+				                scale: true,
+				                boundaryGap : true,
+				                axisLine: {onZero: false},
+				                splitLine: {show: false},
+				                splitNumber: 20,
+				                min: 'dataMin',
+				                max: 'dataMax',
+				                axisPointer: {
+				                    z: 100
+				                }
+				            },
+				            {
+				                type: 'category',
+				                gridIndex: 1,
+				                data: data.categoryData,
+				                scale: true,
+				                boundaryGap : true,
+				                axisLine: {onZero: false},
+				                axisTick: {show: false},
+				                splitLine: {show: false},
+				                axisLabel: {show: false},
+				                splitNumber: 20,
+				                min: 'dataMin',
+				                max: 'dataMax'
+
+				            }
+				        ],
+				        yAxis: [
+				            {
+				                scale: true,
+				                splitArea: {
+				                    show: true
+				                }
+				            },
+				            {
+				                scale: true,
+				                gridIndex: 1,
+				                splitNumber: 2,
+				                axisLabel: {show: false},
+				                axisLine: {show: false},
+				                axisTick: {show: false},
+				                splitLine: {show: false}
+				            }
+				        ],
+				        dataZoom: [
+				            {
+				                type: 'inside',
+				                xAxisIndex: [0, 1],
+				                start: 70,
+				                end: 100
+				            },
+				            {
+				                show: false,
+				                xAxisIndex: [0, 1],
+				                type: 'slider',
+				                top: '85%',
+				                start: 70,
+				                end: 100
+				            }
+				        ],
+				        series: [
+				            {
+				                name: 'Dow-Jones index',
+				                type: 'k',
+				                data: data.values,
+				                itemStyle: {
+				                    normal: {
+				                        color: upColor,
+				                        color0: downColor,
+				                        //borderColor: '#888',
+				                        //borderColor0: '#888'
+				                    }
+				                },
+				                tooltip: {
+				                    formatter: function (param) {
+				                        param = param[0];
+				                        return [
+				                            'Date: ' + param.name + '<hr size=1 style="margin: 3px 0">',
+				                            'Open: ' + param.data[0] + '<br/>',
+				                            'Close: ' + param.data[1] + '<br/>',
+				                            'Lowest: ' + param.data[2] + '<br/>',
+				                            'Highest: ' + param.data[3] + '<br/>'
+				                        ].join('');
+				                    }
+				                }
+				            },
+				            {
+				                name: 'MA5',
+				                type: 'line',
+				                data: calculateMA(5, data),
+				                smooth: true,
+				                lineStyle: {
+				                    normal: {opacity: 0.5}
+				                }
+				            },
+				            {
+				                name: 'MA10',
+				                type: 'line',
+				                data: calculateMA(10, data),
+				                smooth: true,
+				                lineStyle: {
+				                    normal: {opacity: 0.5}
+				                }
+				            },
+				            {
+				                name: 'MA20',
+				                type: 'line',
+				                data: calculateMA(20, data),
+				                smooth: true,
+				                lineStyle: {
+				                    normal: {opacity: 0.5}
+				                }
+				            },
+				            {
+				                name: 'MA30',
+				                type: 'line',
+				                data: calculateMA(30, data),
+				                smooth: true,
+				                lineStyle: {
+				                    normal: {opacity: 0.5}
+				                }
+				            },
+				            {
+				                name: 'Volume',
+				                type: 'bar',
+				                xAxisIndex: 1,
+				                yAxisIndex: 1,
+				                data: data.volumes
+				            }
+				        ]
+				    };
+				    myChart.setOption(option);		
+				}
+			});
+		};
+
+
+
+
+		//分时图拆线图
+		var get_mline =function(stock){
+			var timer_arr=[];
+			for(var h=9;h<15;h++){
+				if(h==9){
+					var mt=30;
+				}else{
+					var mt=0;
+				}
+				for(var m=mt;m<60;m++){
+
+					if(h!=11 && h!=15 && h!=12){
+						timer_arr.push(h+":"+m);
+					}else{
+						if(m<31 && h!=12){
+							timer_arr.push(h+":"+m);
+						}
+					}
+					
+				}
+			}
+			//console.log(timer_arr);
+
+			$.ajax({
+				url:'/index/Selfstock/getMinuteData?stockid='+stock_id,
+				type:'get',
+				//dataType:'String',
+				success:function(data){
+					data = eval(data);
+					//console.log(data);
+					if(data){
+						//data0 = splitData(data);
+						if(myChart){
+							myChart.dispose();
+						} 				// 基于准备好的dom，初始化echarts实例
+
+						myChart = echarts.init(document.getElementById('kline_for_min'));
+						option = {
+							animation:false,
+							noDataLoadingOption: {
+		                        text: '暂无数据',
+		                        effect: 'bubble',
+		                      	effectOption: {
+		                            effect: {
+		                                n: 0
+		                            }
+		                        }
+							},								
+						    // title: {
+						    //     text: '',
+						    //     left: 0
+						    // },
+
+						    xAxis: {
+						        type: 'category',
+						        data:timer_arr,
+						        //data: ['111111', '111112', '1111113', '11111114', '111115', '26', 'wwwwwww7','8', '9', 'a', 'bdddddddd', 'c', 'd', 'e']
+
+						    },
+						    yAxis: {
+						        type: 'value',
+						        max: function(value){
+										return (value.max+value.min/100).toFixed(2);
+						        	},
+						        min: function(value) {
+										return (value.min-value.min/100).toFixed(2);
+									},
+						        splitLine:{show:true}  //改设置不显示坐标区域内的y轴分割线
+
+						    },
+
+
+						    series: [{
+						    	data:data[1],
+						        //data: [820, 932, 901, 934, 1290, 1330, 1320,820, 540, 901, 934, 59, 600, 203],
+						        type: 'line'
+						    }]
+
+						};
+						myChart.setOption(option);
+					}
+				}
+			});
+		};
+
+		var refresh_color=function(flag){
+		  var rg=flag*1>=0?'#f00':'#0f0';
+		  $(".stock_price").css({'color':rg});
+		  $("#updown_amount").css({'color':rg});
+		  $("#updown_rate").css({'color':rg});
+		  $(".max_price").css({'color':rg});
+		  $(".min_price").css({'color':rg});
+		  $(".open_price").css({'color':rg});
+		  if(flag){
+		      $("#updown_amount").text("+"+$("#updown_amount").text());
+		      $("#updown_rate").text("+"+$("#updown_rate").text());          	
+		  }
+		}
+
+	  //股票详细资料
+	  var get_stock_info = function(stock_id){
+	    if(stock_id.substr(0,1)==='6'){
+	      var stock = 'sh'+stock_id;
+	    }else{
+	      var stock = 'sz'+stock_id;
+	    };
+
+	    $.ajax({
+	        url:"//hq.sinajs.cn/list="+stock,
+	        dataType:"script",
+	        cache:"false",
+	        type:"GET",
+	        async:true,
+	        success:function(a){
+	            var stock_detail = eval("hq_str_"+stock);
+	            if(stock_detail){
+	              var arr =  stock_detail.split(",");
+	              //console.log(arr);
+	              //console.log(stock+":,"+arr[1]+","+arr[3]);
+	              $("#stock_name").text(arr[0]);
+	              $(".stock_name").text(arr[0]);
+	              $(".stock_id").text(stock_id);
+	              $(".stock_price").text(arr[3]);
+	              var updown_amount = (arr[3]-arr[2]);
+
+	              $("#updown_amount").text((updown_amount).toFixed(2));
+	              $("#updown_rate").text(((updown_amount)/arr[2]*100).toFixed(2)+'%');
+
+	              $(".open_price").text(arr[1]);
+	              $(".yesterday_close_price").text(arr[2]);
+	              
+	              $(".max_price").text(arr[4]);
+	              $(".min_price").text(arr[5]);
+
+	              var done_amount=arr[9];
+	              if(arr[9]>100000000){
+	              	done_amount =(done_amount/100000000).toFixed(2)+'亿';
+	              }else{
+	              	done_amount =(done_amount/10000).toFixed(0)+'万';
+	              }
+
+				  $(".done_count").text((arr[8]/1000000).toFixed(2)+"万");
+				  $(".done_amount").text(done_amount);
+	              
+	              if(updown_amount*1>0){
+	              	 refresh_color(1);
+	              }else{
+	              	 refresh_color(0);
+	              }
+
+	            }
+	        },
+	        error:function(e){
+	          console.log(e.responseText);
+	        }
+	    });
+
+	  };
+
+
+
+		//资金流向图表
+		var case_flow = function(stock_id){
+
+			// if(stock_id.substr(0,1)==='6'){
+			// 	var stock = 'sh'+stock_id;
+			// }else{
+			// 	var stock = 'sz'+stock_id;
+			// }
+			$.ajax({
+					url:"/index/Selfstock/getMainCapital?stockid="+stock_id,
+					//url:'http://107.1caopan.com/index/Selfstock/getStockKlineData?stockid=600300',
+					type:'get',
+					//dataType:'script',
+					success:function(data){
+						data = eval(data);
+
+						data[0] = (data[0]*10000).toFixed(0);
+						data[1] = -(data[1]*10000).toFixed(0);
+						data[2] = (data[2]*10000).toFixed(0);
+						data[3] = -(data[3]*10000).toFixed(0);
+						//console.log(data);
+
+						if(data){
+							//data0 = splitData(data);
+							//data = [[],[1200, -2000, 1500, -800]];
+							var bank_in = data[0];
+							var bank_out = data[1];
+							var san_in = data[2];
+							var san_out = data[3];
+
+
+							$("#bank_in").text(bank_in);
+							$("#bank_out").text(bank_out);
+							$("#bank_inout_rate").text(bank_in*1 +bank_out*1);
+							$("#san_in").text(san_in);
+							$("#san_out").text(san_out);
+							$("#san_inout_rate").text(san_in*1 +san_out*1 );
+
+							$("#sum_in").text(bank_in*1 + san_in*1);
+							$("#sum_out").text(bank_out *1 +san_out *1 );
+							$("#sum_inout").text( ($("#sum_in").text())*1 + ($("#sum_out").text())*1);
+
+
+							$("#cash_count span").each(function(){
+								if($(this).text()*1>0){
+									$(this).css({'color':'red'});
+								}else{
+									$(this).css({'color':'green'});
+								}
+							})
+
+							if(cash_flow_chart){
+								cash_flow_chart.dispose();
+							} 	
+
+							cash_flow_chart = echarts.init(document.getElementById('cash_in_out'));
+
+							option = {
+							    title: {
+							        text: '资金流向图表',
+							        left: 0
+							    },
+							    xAxis: {
+							        type: 'category',
+							        data: ['主力流入', '主力流出', '散户流入', '散户流出']
+							    },
+							    yAxis: {
+							        type: 'value'
+							    },
+							    color:['#0f0'],
+							    
+							    series: [{
+							        data: data,
+							        type: 'bar',
+
+						            itemStyle: {   
+						                //通常情况下：
+						                normal:{  
+											label:{
+									            show: true,
+									            position: 'top',
+									            textStyle: {
+									                color: '#615a5a'
+									            }
+									        },						                	
+						　　　　　　　　//每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
+						                    color: function (params){
+						                    	//console.log(params.data);
+
+						                        if(params.data*1>0){
+						                        	return '#f00';
+						                        }else{
+						                        	return '#0f0';
+						                        }
+
+							                }
+						                },
+						                //鼠标悬停时：
+						                emphasis: {
+						                        shadowBlur: 10,
+						                        shadowOffsetX: 0,
+						                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+						                }
+						            }
+							    }]
+							};
+							cash_flow_chart.setOption(option);
+						}
+					}
+
+					// 使用刚指定的配置项和数据显示图表。  
+    				//$("#kline_min").find('img').attr('src','http://image.sinajs.cn/newchart/min/n/sh000001.gif');
+    		});
+		};
+
+		//定时刷新图表
+		setInterval(function(){
+    		// $("#myTab li").each(function(index, el) {
+    		// 	if($(this).hasClass('active')){
+    		// 		$(this).find('a').trigger('click');
+    		// 	}
+
+    		// });
+
+			get_stock_info(stock_id);
+    		//case_flow(stock_id);
+
+		},10000);
+
+	 //获取自选股--------------*/
+	  var get_mystock = function(){
+	    //$("#mystock").empty();
+
+	    $.ajax({
+	      type: 'POST',
+	      url: "/index/Selfstock/myStockList",
+	      dataType: 'json',
+	      data: {
+	        user_id:USER_ID,
+	        auth:USER_AUTH
+	      },
+	      async: false,
+	      success: function(data) {
+	        //console.log(data);
+	        var list=data.data;
+	        var is_my_stock = false;
+	        $(list).each(function(index,value){
+	          //遍历股票数据，
+	          if(value.stockID ===stock_id){
+	          	is_my_stock =　true;
+	          	return false;
+	          }
+	          //$("#mystock").prepend(mystock_html2(value));
+	        });
+
+	        if(is_my_stock){
+	        	$("#del_or_add").attr('flag','0').text('删除自选');
+	        }else{
+	        	$("#del_or_add").attr('flag','1').text('加入自选');
+	        }
+	      },
+	      error: function() {
+	        console.log('请求超时');
+	      }
+	    });
+	  };
+
+
+	//添加自选股
+	function addMyStock(id) {
+		var USER_ID = localStorage.getItem("id");
+		var USER_AUTH = localStorage.getItem("auth");
+		var stock_name = $(".stock_name").text();
+		var stock_id =id;
+		
+		$.ajax({
+			type: 'POST',
+			url: "/index/Selfstock/myStockAdd",
+			dataType: 'json',
+			data: {
+				user_id: USER_ID,
+				auth: USER_AUTH,
+				stock: stock_name,
+				stockID: stock_id,
+
+			},
+			async: true,
+			success: function(data) {
+				layer.open({content:data.msg,time:2});
+				$("#del_or_add").attr('flag',0).text('删除自选');
+			},
+			error: function(e) {
+				layer.open({content:'添加失败!',time:2});
+				//console.log(e.responseText);
+			}
+		});
+
+	}
+
+	  //删除自选股---------------*/
+	  var delMyStock = function(id){
+		  layer.open({
+		    content: '确定删除吗？'+id
+		    ,btn: ['确定', '取消']
+		    ,yes: function(index){
+			    $.ajax({
+			      type: 'POST',
+			      url: "/index/Selfstock/myStockAddDelete",
+			      dataType: 'json',
+			      data: {
+			        user_id:USER_ID,
+			        auth:USER_AUTH,
+			        stockID:id
+			      },
+			      async: false,
+			      success: function(data) {
+			        layer.open({content:'删除成功!',time:2});
+			        layer.close(index);
+			        $("#del_or_add").attr('flag',1).text('加入自选');
+			      },
+			      error: function(e) {
+			        layer.open({content:'请求超时!',time:2});
+			        layer.close(index);
+			        console.log(e.responseText);
+			      }
+			    });	
+		      	layer.close(index);
+		    }
+		  });
+
+	  }; 
+	  //删除自选股---------------*/
+
+    	$(function(){
+
+    		$("#myTab span").on('click',function(){
+    			$("#myTab span").removeClass('selected');
+    			$(this).addClass('selected');
+
+    			if($(this).attr('kline_type')==='min'){
+     				get_mline(stock_id);
+     			}else{
+     				get_kline(stock_id,$(this).attr('kline_type'));
+     			}
+
+				get_stock_info(stock_id);
+				case_flow(stock_id);     			
+   				
+    		});
+
+
+    		$("#myTab span").each(function(index, el) {
+    			if($(this).hasClass('selected')){
+    				$(this).trigger('click');
+    			}
+    		});
+
+    		$("#del_or_add").on('click',function(){
+    			if($(this).attr('flag')*1<1){
+    				delMyStock(stock_id);
+    			}else{
+    				addMyStock(stock_id);
+    			}
+    		});
+
+    		$("#xunjia").on('click',function(){
+    			location.href="/index/qiquanb/myoperate.html?stock_id="+stock_id;
+    		});
+
+    		$("#userinfo").on('click',function(){
+				location.href="/index/qiquanb/mine.html";
+    		});
+			get_stock_info(stock_id);
+    		case_flow(stock_id);
+    		get_mystock();
+
+    	});
+
+
+		
+	</script>
+</body>
+</html>

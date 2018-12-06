@@ -1,0 +1,64 @@
+{extend name="static/assets/base.html" /}{block name="title"}
+<title>期货</title>{/block} {block name="style"}
+<link rel="stylesheet" href="https://at.alicdn.com/t/font_659316_dzz6ssv8f2sm7vi.css">
+<link rel="stylesheet" href="https://at.alicdn.com/t/font_659316_rrcagu3k1v6de7b9.css">
+<style>
+     .icon-jinrong{
+              font-family: "iconfont" !important;
+              font-size:80px !important;
+              font-style:normal;
+              color:#DAA520;
+	}
+    .yyoe{
+    	text-align:center;
+    	width:100%;
+    	line-height: 1;
+              padding-top:10px;
+              margin-top:40px;
+    	}
+    .appxz{
+    	width:100%;
+    	text-align:center;
+    	margin-top:15%;
+    	}
+    a{
+    	text-decoration:none;
+    	}
+    .appal{
+    	display:block;
+    	width:60%;
+    	padding:10px 5px;
+    	background:#ffd700;
+    	margin:20px auto 30px;
+    	border-radius:18px;
+    	color:#333;
+    	font-weight: 400;
+    	}
+</style>
+
+{/block} {block name="body"}
+<div class="weui-content">
+	<div class="weui-title_" style="margin-bottom: 10px;text-align:center;">
+        <a href="javascript:history.go(-1);" class="weui-back" style="color:#fff;float:left;">
+            <i class="iconfont icon-fanhui"></i>
+        </a>
+               软件下载
+	</div>
+		    <div class="yyoe">
+                <i class="iconfont icon-jinrong"></i>
+		        <p class"txtqh" style="font-size:22px !important;font-weight:800;color:#FFD700;font-family: '楷体';margin-top:0;">吉投资管</p>
+		    </div>
+
+		    <div class="appxz">
+		    	<a class="appal" href="http://139.129.33.171:21306/apk/jtandroidtrade2.apk">
+		    		<i class="iconfont icon-qihuo1"></i>
+		    		安卓版下载
+		    	</a>
+		    	<a class="appal" href="https://fir.im/19nz">
+		    		<i class="iconfont icon-qihuo1"></i>
+		    		苹果版下载
+		    	</a>
+		    </div>
+</div>
+{/block}{block name="script"}
+<script src="/static/assets/jscode/login.bundle.js"></script> {/block}{block name="checkLogin"}{/block}

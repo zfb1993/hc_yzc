@@ -1,0 +1,347 @@
+ 
+@media (max-width: 1100px) {
+    a,button,input,optgroup,select,textarea {-webkit-tap-highlight-color:rgba(0,0,0,0); }
+    label {cursor: inherit;}
+    body{min-width:320px;max-width:640px; margin: 0 auto;}
+    #top,.p_nav,#user .userTree h3{display: none !important;}
+    #wrapper{overflow: hidden;}
+    #wrapper .wrap{ width:100%;}
+    #header{position: relative;min-width: 100%; min-height: 60px;}
+    #header .logo{line-height: 60px;}
+    #header .logo img {height: 60px;}
+    .nav-bar{
+        display: block;
+        width:22px;
+        height:19px;
+        position: absolute;
+        z-index: 999999;
+        top:20px;
+        right:18px;
+        border-top: 3px solid #999;
+        border-bottom: 3px solid #999;
+    }
+    .nav-bar:before{
+        content:" ";
+        position: absolute;
+        top:5px;
+        left:0;
+        display: block;
+        width:22px;
+        height:0;
+        border-top: 3px solid #999;
+    }
+    .p_nav{
+        width:140px;
+        position: absolute;
+        right:0;
+        top:60px;
+        transform:translateX(140px);
+        z-index: 9999;
+        background: rgba(0,0,0,0.6);
+        transition:all 0.3s;
+    }
+    .trx140{transform:translateX(0px);}
+    .p_nav li{
+        line-height: 45px;
+        font-size: 16px;
+        float: none;
+        text-align: center;
+        padding: 0;
+    }
+    .p_nav li a{color:#fff;}
+    #user .passport .register{width:100%;margin-bottom: 30px;}
+    .step1,.step2,.step3{width:auto; margin:0 30px; height:100px; background-size:contain;}
+    .step-1{background: #fff;padding: 0;}
+    .step-left{
+        width:auto;
+        margin: 50px 30px;
+        padding:0;
+        border:none;
+    }
+    .step-left dl dd{
+        width:100%;
+    }
+    .step-left dl dt{
+        display: none;
+    }
+    .step-left dl dd input[type="text"],.step-left dl dd input[type="password"]{
+        box-sizing: border-box;
+        width:100%;
+        max-width: 100%;
+    }
+    .step-left dl dd input[type="checkbox"]{
+        width:13px;
+    }
+    .step-left dl dd input[id="truecode"].w110 {
+    width: 140px;
+    }
+    .step-left dl dd .w90{
+        margin: 0;
+        float:right;
+    }
+    #user .passport .register .btn{
+        width:100%!important;
+        max-width:100%;
+    }
+    .step-left dl dd .tx-ri{
+        width:auto;
+    }
+.ziliaoone dl dt{
+    width:100%;text-align: center;
+}
+.ziliaoone dl dd{
+    float:none;
+    text-align: center;
+    padding: 0;
+}
+.l_change{
+    margin: 0 30px;
+}
+.ziliaoone dl dd label{
+    margin: 0 30px;
+}
+.ziliaoone dl dd label .l_change{
+    margin: 0;
+    margin-bottom: 10px;
+}
+.ziliaotwo dl dd {
+    float: none;
+    padding: 0;
+}
+.ziliaotwo dl dd #referee{
+    margin: 10px 0;
+    width: 100%;
+    line-height: 38px;
+    height: 38px;
+    border-radius: 4px;
+}
+.ziliaotwo dl dd #bank_type{
+    margin: 10px 0;
+    width: 80%;
+    margin-right: 10px;
+    line-height: 38px;
+    height: 38px;
+    border-radius: 4px;
+}
+.ziliaotwo dl dd input[name="kaihubank"]{
+    width:80%;
+    margin-right: 10px;
+}
+
+#user .passport .register .redbtn{
+    margin:0 auto;
+}
+    .bottom{
+        display: none;
+    }
+    .footer{
+        height:auto;
+            padding-bottom: 22px;
+    }
+    .footer_a{
+        width:auto;
+        line-height: 25px;
+        text-align: center;
+    }
+    /*完善资料*/
+    .kh .kh_a .kh_text{display: none;}
+    .pp-box{    width: 200px;}
+    /*会员中心*/
+    .lp_wrap{
+        width:100%;
+        position: relative;
+    }
+	.jtw-left-blck{right:0 !important;/* transform:translate3d(0,0,0)!important; */}
+    .lp_wrap .jtw-left{
+        margin: 0;
+        float: none;
+        width:100%;
+        height:100%;
+        margin: 0px;
+        /* transform:translate3d(100%,0,0); */
+        right:-100%;
+        position:fixed;
+        top:0;
+        background:#fff;
+        z-index:9999;
+        overflow-y: auto;
+        transition: all 0.3s;
+    }
+    .lp_wrap .jtw-left .jtw-leftnav{
+        border-bottom: none;
+    overflow-y: auto;
+    width: 100%;
+    }
+   /* .lp_wrap .jtw-left .jtw-leftnav li.cur {
+        border-left: none;
+        background: #ffffff;
+    }
+    .lp_wrap .jtw-left .jtw-leftnav li,.lp_wrap .jtw-left .jtw-leftnav .ernav {
+        width: auto;
+        float: none;
+        display: inline-block;
+        border: none;
+        padding: 0 15px;
+        border-top: 0px;
+        background: none;
+        text-indent: 0px;
+    }
+	*/
+    .lp_wrap .jtw-right{
+        width:100%;
+		margin:0;
+    }
+	.lp_wrap .jtw-right .my-account-info{
+		padding:0;
+	}
+	.lp_wrap .jtw-right .my-account-info ul{
+		padding:10px 0;
+	}
+	.lp_wrap .jtw-right .my-account-info ul li{
+		padding:10px 0;
+		width:50%;
+	}
+	.lp_wrap .jtw-right .my-account-info ul .mai-btn a{
+		display:inline-block;
+		
+	}
+	
+	
+    .lp_wrap .jtw-right table.tableBasic tr td .textInput{
+        width:170px;
+    }
+	.lp_wrap .jtw-right table.tableBasic tr th, .lp_wrap .jtw-right table.tableBasic tr td{padding:10px 5px;}
+	.lp_wrap .jtw-right table.tableBasic tr td img{padding-top:20px;}
+	.lp_wrap .jtw-right .my-account .my-account-bot a {padding: 8px 20px; margin: 0 ;}
+	.lp_wrap .jtw-right .gengletou .jtw-tab{
+		overflow-x: auto;
+		margin: 30px 20px;
+	}
+	.lp_wrap .jtw-right .gengletou .jtw-tab .bd{
+		min-width:800px;
+	}
+    .lp_wrap .jtw-right .safety .safety-ul {
+		margin: 50px 10px;
+	}
+	.lp_wrap .jtw-right .safety .safety-ul li .l{width:100%;}
+	.lp_wrap .jtw-right .safety .safety-ul li .c,.lp_wrap .jtw-right .safety .safety-ul li .r{width:50%;}
+	.lp_wrap .jtw-right .safety .safety-ul li label{display:block;margin-bottom:10px;text-align:left;}
+	.lp_wrap .jtw-right .safety .safety-ul li input{width:100%;}
+	.lp_wrap .jtw-right .safety .safety-ul li #btnSendCode{float:right;}
+	.lp_wrap .jtw-right .safety .safety-ul li input[type="submit"]{width:100%;padding: 10px;font-size: 15px;}
+	
+	.lp_wrap .jtw-right .invite .invite-cont .yqlj input{width:100%;margin-bottom:10px;}
+	
+	.lp_wrap .jtw-right .niu .niu-tab ul{margin: 50px 10px 30px;}
+	.lp_wrap .jtw-right .message .jtw-tab2,.lp_wrap .jtw-right .invite .invite-cont {margin: 30px 10px;}
+	#user .tableBasic td, #user .tableBasic th {min-width: 90px;}
+	.tableBasic td label{margin-right:5px;font-size: 12px;}
+	.orderList {overflow-x: auto;}
+	.orderList table{min-width:800px;}
+	.pager {text-align: center;margin: 0;}
+	
+    .p_box{padding-top:50px;}
+    .p_box .login{
+        float: none;
+    }
+    #user .passport .login{
+        width:253px;
+    }
+    #user .passport .login .textInput {
+        width: 100%;
+        box-sizing: border-box;
+        height: 32px;
+    }
+    #user .passport .login .btnRegister{
+        width:100%;
+            box-sizing: border-box;
+    }
+
+    /*产品自适应*/
+    .god_level_stars,.god_head_photo + div{display: none;}
+    #pageIn{
+        width:100%;
+    }
+    .god_prj_item{
+        position: relative;
+    }
+    .god_info{
+        position: absolute; z-index: 999;
+        width:100px;
+        height:100px;
+    }
+   .prj_info{
+    width:100%;
+    float: none;
+    height:auto;
+    padding-bottom:60px;
+   }
+   .god_info .god_base_info {
+    width: auto;
+    margin-left: 8px;
+    margin-top: 7px;
+}
+   .prj_info_header{
+    width: auto;
+    height: 80px;
+    margin-top: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 100px;
+    line-height: 28px;
+   }
+   .prj_info_header .prj_title,.prj_info_header .prj_other_tip{float: none;}
+   .prj_info_header .prj_title a{display: block}
+   .prj_props{width:auto;position: relative; margin: 0;   padding: 10px 0;}
+   .prj_props:before, .prj_props:after {content: "";display: table;}
+    .prj_props:after {clear: both;}
+
+    .prj_info_footer {
+        position: static;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    width: auto;
+    padding: 10px;
+    }
+    .prj_props .prop_col4,.prj_props .prop_col2, .prj_props .prop_col3,.prj_props .prop_col1{
+        width:25%;
+    }
+    .prj_props li{
+        box-sizing: border-box;
+         text-align: center;
+    }
+    .prj_props .prop_col6{
+        width:100%;
+        position: absolute;
+            bottom: -95px;
+    }
+    .prj_props .prj_button{position: static;width:80%;margin:0 auto;}
+    .pro_data{
+        width:auto;
+        margin: 0;
+        float:none;
+    }
+     .pro_base ul:before,.pro_base ul:after {content: "";display: table;}
+    .pro_base ul:after {clear: both;}
+    .pro_base ul{padding-left: 1px; }
+    .pro_base ul li{
+        padding: 10px;
+        margin: 0;
+        width:50%;
+        box-sizing: border-box;
+        border:1px solid #eee;
+        margin-left: -1px;
+        margin-top:-1px;
+        text-align: center;
+    }
+    .pro_base ul li.botto{
+        border-right:1px solid #eee;
+    }
+    .pro_mes{
+        padding-bottom:15px;
+    }
+    .pro_ment{
+        float:none;
+        margin: 0 auto;
+    }
+}

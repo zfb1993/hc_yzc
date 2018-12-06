@@ -1,0 +1,136 @@
+{extend name="static/assets/base.html" /}{block name="title"}
+<title>修改昵称</title>{/block} {block name="style"}
+<style>
+    .weui-cell {
+        background: none;
+    }
+
+    .weui-cell__bd {
+        text-align: left;
+    }
+
+    .weui-label {
+        width: 40px;
+        position: absolute;
+        top: 16px;
+        color: black;
+        left: 25px;
+    }
+
+    input.weui-input {
+        text-align: left;
+        width: 100%;
+        border: 1px solid #778091;
+        background: white;
+        color: black;
+        line-height: 22px;
+        height: 30px;
+        border-radius: 4px;
+        text-indent: 30px;
+    }
+
+    button.weui-vcode-btn {
+        border-left: 1px solid #303849;
+        line-height: 11px;
+        padding: 0 0.6em 0 0.7em;
+        background: #e64340;
+        margin: 0px 10px;
+        height: 36px;
+        border-radius: 4px;
+    }
+
+    label>* {
+        pointer-events: inherit;
+    }
+
+    .avatar {
+        width: 50px;
+        border-radius: 50%;
+    }
+
+    /*白头写法*/
+
+    header.bar h1.title,
+    header.bar,
+    body,
+    html,
+    .weui-content {
+        background: white;
+    }
+
+    header.bar .weui-back>i,
+    header.bar .tools a>i {
+        color: black;
+    }
+
+    .taitou {
+        padding: 0 20px;
+        padding-top: 20px;
+    }
+
+    .taitou small {
+        color: #707070;
+    }
+
+    /*白头写法*/
+</style>
+
+{/block} {block name="tools"} {/block}{block name="header-title"} {/block}{block name="body"}
+<div class="weui-content">
+    <div class="taitou">
+        <h1>修改昵称</h1>
+        <small>请输入您要更改的昵称，如您是榜上高手，请慎重修改昵称</small>
+    </div>
+    <div class="weui-cells weui-cells_form" style="margin-top: 20px;">
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-label">
+                    <i class="iconfont icon-nicheng"></i>
+                </label>
+            </div>
+            <div class="weui-cell__bd">
+                <input id='nickname' class="mui-input-password weui-input" type="text" value="" placeholder="请输入新昵称">
+            </div>
+        </div>
+    </div>
+    <a id="btn" class="weui-btn weui-btn_ ">保存</a>
+</div>
+{/block} {block name="tabbar"}{/block} {block name="script"}
+<script src="/static/assets/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    $(function () {
+        $("#nickname").val(localStorage.nick_name);
+        $("#btn").on('click', function () {
+            if ($("#nickname").val() == '') {
+                $.alert('昵称不能为空');
+                return false;
+            }
+            if ($("#nickname").val() == localStorage.nick_name) {
+                $.alert('昵称没有任何变化');
+                return false;
+            }
+            $.ajax({
+                url: "/index/api/editUserInfo",
+                type: 'post',
+                data: {
+                    nick_name: $("#nickname").val(),
+                    uid: localStorage.id,
+                    type: localStorage.type,
+                    auth: localStorage.auth
+                },
+                cache: false,
+                dataType: 'json',
+                success: function (data) {
+                    $.alert(data.msg, function () {
+                        if (data.code == 1) {
+                            window.location = "/index/index/mine";
+                        }
+                    });
+                },
+                error: function () {
+                    $.toast('请求超时');
+                }
+            });
+        });
+    });
+</script> {/block}

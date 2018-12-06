@@ -1,0 +1,28 @@
+使用说明，请详阅
+
+1.必须部署在根目录,php环境>=5.3，必须以二进制上传，无需数据库
+
+2.修改api目录中config.php中token为你的token，其他更新频率参数可以按需修改
+
+3.设置api目录中runtime目录为可写(linux为777权限)
+
+4.api目录中yundou.txt记录云豆消耗情况，也需要设置为可写
+
+5.访问chart.php?code=产品代码
+  股票代码参数为code，例如平安银行为 网址/chart.php?code=sz000001  上证指数为 网址/chart.php?code=sh000001
+  港股为hk+股票代码 例如腾讯控股为 网址/chart.php?code=hk00700   恒生指数为 网址/chart.php?code=hkHSI (区分大小写)
+  美股为 gb_+股票代码  例如京东为   网址/chart.php?code=gb_jd    道琼斯指数为  网址/chart.php?code=gb_$dji
+  国际期货为 hf_+期货代码 例如布伦特原油为   网址/chart.php?code=hf_OIL    伦敦金为  网址/chart.php?code=hf_XAU
+  国内期货为 nf_+期货代码 例如原油连续为   网址/chart.php?code=nf_SC0   沪铜连续为  网址/chart.php?code=nf_CU0
+
+6.chart.php为图表单独调用，自适应页面宽度，可利用iframe方式嵌入你对应的项目中（复权选择只支持沪深）
+
+7.api目录中除config.php其他文件禁止编辑修改
+
+8.水印修改 style/images/watermark.png  不需要水印请在chart.php中设置var watermarke_data='';
+
+调用方式：上传至根目录，通过iframe调用，代码举例：
+
+	<iframe frameborder="0" width="100%" height="300" scrolling="no" src="/chart.php?code=sz000001"></iframe>
+
+ 

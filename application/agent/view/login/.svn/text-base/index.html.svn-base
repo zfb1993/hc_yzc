@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>期货系统-用户登录</title>
+    <link rel="stylesheet" href="__STATIC__/plugins/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="__STATIC__/agent/css/login.css" />
+    <link rel="stylesheet" href="__STATIC__/common/css/font.css" />
+</head>
+<body class="beg-login-bg">
+<div class="container login">
+    <div class="content">
+        <div id="large-header" class="large-header">
+            <canvas id="demo-canvas"></canvas>
+            <div class="main-title">
+                <div class="beg-login-box">
+                    <header>
+                        <h1>用户登录</h1>
+                    </header>
+                    <div class="beg-login-main">
+                        <form class="layui-form layui-form-pane" method="post">
+                            <div class="layui-form-item">
+                                <label class="beg-login-icon fs1">
+                                    <span class="icon icon-user"></span>
+                                </label>
+                                <input type="text" name="user_name" lay-verify="required" placeholder="请输入用户名" value="" class="layui-input">
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="beg-login-icon fs1">
+                                    <i class="icon icon-key"></i>
+                                </label>
+                                <input type="password"  name="user_pwd" lay-verify="required" placeholder="请输入密码" value="" class="layui-input">
+                            </div>
+                            <div class="layui-form-item">
+                                <input type="text" name="captcha" id="captcha" lay-verify="required" placeholder="验证码" autocomplete="off" class="layui-input">
+                                <div class="captcha">
+                                    <img src="{:captcha_src()}" alt="captcha" onclick="this.src=this.src+'?'+'id='+Math.random()"/>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <button type="submit" class="layui-btn btn-submit btn-blog" lay-submit lay-filter="login">登录</button>
+                            </div>
+                        </form>
+                    </div>
+                    <footer>
+                        <p>&copy;2018 期货系统</p>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="__STATIC__/agent/js/rAF.js"></script>
+<script src="__STATIC__/agent/js/login.js"></script>
+<script type="text/javascript" src="__STATIC__/plugins/layui/layui.js"></script>
+<script>
+    layui.use('form',function(){
+        var form = layui.form,$ = layui.jquery;
+        //监听提交
+        form.on('submit(login)', function(data){
+            loading =layer.load(1, {shade: [0.1,'#fff'] });//0.1透明度的白色背景
+            $.post('{:url("login/index")}',data.field,function(res){
+                layer.close(loading);
+                if(res.code == 1){
+                    layer.msg(res.msg, {icon: 1, time: 1000}, function(){
+                        location.href = res.url;
+                    });
+                }else if(res.code==2){
+                    $('#captcha').val('');
+                    layer.msg(res.msg, {icon: 2, anim: 6, time: 1000});
+                    $('.captcha img').attr('src','{:captcha_src()}?id='+Math.random());
+                }else if(res.code==0){
+                    layer.msg(res.msg, {icon: 2, anim: 6, time: 1000});
+                }else if(res.code==-1){
+                    layer.msg(res.msg, {icon: 2, anim: 6, time: 1000});
+                }else if(res.code==-2){
+                    layer.msg(res.msg, {icon: 2, anim: 6, time: 1000});
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

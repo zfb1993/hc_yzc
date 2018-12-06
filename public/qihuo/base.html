@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"> {block name="title"}
+    <title>{$Think.config.site_title}</title>{/block}
+    <link href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/qihuo/css/style2.css"> {block name="style"}{/block}
+</head>
+<!-- /static/qiquanb/zlassts/ -->
+
+<body>
+    {block name="bar"}
+    <header class="bar bar-nav">
+        <div id="full" class='weui-popup__container'>
+            <div class="weui-popup__modal">
+                <article class="weui-article">
+                    <!-- <div class="weui-header">
+                        <div class="weui-mine">
+                            <img id="avatar" src="/qiquand/img/404.png" onerror="javascript:this.src='/qiquand/img/404.png';this.onerror=null;">
+                            <p id="username">用户名称</p>
+                        </div>
+                    </div> -->
+                    <div class="bd">
+                        <div class="page__bd">
+
+                            <div class="weui-cells">
+                                <div class="weui-cell weui-cell-line weui-cell_access" style="margin-top: 10px;">
+                                    <div class="weui-cell__hd" style="margin-right: 5px;">
+                                        <img id="avatar" style="width: 50px;" src="/qihuo/image/404.png" onerror="javascript:this.src='/qihuo/image/404.png';this.onerror=null;">
+                                    </div>
+                                    <div class="weui-cell__bd" style="text-align: left;">
+                                        <p id="username">用户名称</p>
+                                    </div>
+                                    <div class="weui-cell__ft">
+                                    </div>
+                                </div>
+                                <div class="weui-cell weui-cell-line">
+                                    <div class="weui-cell__hd" style="margin-right: 5px;">
+                                        <span style="font-size:12px;">总资产</span>
+                                        <br>
+                                        <span id="use_money" style="font-size:15px; color:sandybrown;">300.00</span>
+                                    </div>
+                                    <div class="weui-cell__bd" style="text-align: left;">
+
+                                    </div>
+                                    <div class="weui-cell__ft" style="    margin-top: 10px;">
+                                        <a href="#" class="weui-btn weui-btn_mini weui-btn_warn" style="padding: 0 1.82em;line-height: 2.5em;">充值</a>
+                                        <a href="/index/qiquanb/withdraw" class="weui-btn weui-btn_mini weui-btn_default" style="padding: 0 1.82em;line-height: 2.5em;">提现</a>
+                                    </div>
+                                </div>
+                                <div class="weui-cell weui-cell-line">
+                                    <div class="weui-cell__hd" style="text-align: center;margin-right: 5px;">
+                                        <span style="font-size:12px;">证券</span>
+                                        <br>
+                                        <span style="font-size:12px;">00.00</span>
+                                    </div>
+                                    <div class="weui-cell__bd" style="text-align: center;">
+                                        <span style="font-size:12px;">投资VIP</span>
+                                        <br>
+                                        <span style="font-size:12px;">00.00</span>
+                                    </div>
+                                    <div class="weui-cell__ft" style="color: inherit;">
+                                        <span style="font-size:12px;">现金</span>
+                                        <br>
+                                        <span style="font-size:12px;">00.00</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="weui-cells" style="margin:0;margin-top: 2rem;margin-bottom: 10px;">
+                                <a class="weui-cell weui-cell-line weui-cell_access" style="background: #384155;" href="/index/qiquanb/myoperate">
+                                    <div class="weui-cell__hd" style="margin-right: 5px;">
+                                        <i class="iconfont icon-81"></i>
+                                    </div>
+                                    <div class="weui-cell__bd" style="text-align: left;">
+                                        我要操盘
+                                    </div>
+                                    <div class="weui-cell__ft">
+
+                                    </div>
+                                </a>
+                                <a class="weui-cell weui-cell-line weui-cell_access" style="background: #384155;margin-bottom: 10px;" href="#">
+                                    <div class="weui-cell__hd" style="margin-right: 5px;">
+                                        <i class="iconfont icon-zixuan"></i>
+                                    </div>
+                                    <div class="weui-cell__bd" style="text-align: left;">
+                                        自选股
+                                    </div>
+                                    <div class="weui-cell__ft">
+
+                                    </div>
+                                </a>
+                                <a class="weui-cell weui-cell-line weui-cell_access" style="background: #384155;margin-bottom: 10px;" href="#">
+                                    <div class="weui-cell__hd" style="margin-right: 5px;">
+                                        <i class="iconfont icon-shimingrenzheng"></i>
+                                    </div>
+                                    <div class="weui-cell__bd" style="text-align: left;">
+                                        实名认证
+                                    </div>
+                                    <div class="weui-cell__ft">
+
+                                    </div>
+                                </a>
+                                <a class="weui-cell weui-cell-line weui-cell_access" style="background: #384155;margin-bottom: 10px;" href="#">
+                                    <div class="weui-cell__hd" style="margin-right: 5px;">
+                                        <i class="iconfont icon-zixun"></i>
+                                    </div>
+                                    <div class="weui-cell__bd" style="text-align: left;">
+                                        资讯中心
+                                    </div>
+                                    <div class="weui-cell__ft">
+
+                                    </div>
+                                </a>
+                                <a class="weui-cell weui-cell-line weui-cell_access" style="background: #384155;margin-bottom: 10px;" href="#">
+                                    <div class="weui-cell__hd" style="margin-right: 5px;">
+                                        <i class="iconfont icon-bangzhu"></i>
+                                    </div>
+                                    <div class="weui-cell__bd" style="text-align: left;">
+                                        帮助中心
+                                    </div>
+                                    <div class="weui-cell__ft">
+
+                                    </div>
+                                </a>
+                                <a class="weui-cell weui-cell-line weui-cell_access" style="background: #384155;margin-bottom: 10px;" href="#">
+                                    <div class="weui-cell__hd" style="margin-right: 5px;">
+                                        <i class="iconfont icon-htmal5icon31"></i>
+                                    </div>
+                                    <div class="weui-cell__bd" style="text-align: left;">
+                                        联系客服
+                                    </div>
+                                    <div class="weui-cell__ft">
+
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+        {block name="back"}
+        <a href="javascript:history.go(-1);" class="weui-back">
+            <i class="iconfont icon-fanhui"></i>
+        </a>
+        {/block}
+        <div class="tools">
+            <div class="tools">
+                <a id="menu">
+                    <i class="iconfont icon-ego-caidan"></i>
+                </a>
+            </div>
+        </div>
+        <h1 class="title">
+            <img src="/qihuo/image/logo.png">
+        </h1>
+    </header>
+    {/block} {block name="body"}{/block} {block name="tabbar"}
+    <div class="weui-tabbar">
+        <a data-nav='index' href="{:url('index/index/index')}" class="weui-tabbar__item">
+             <span class="weui-badge" style="position: absolute;top: -.4em;right: 1em;">8</span>
+            <div class="weui-tabbar__icon">
+                <i class="iconfont icon-shouye"></i>
+            </div>
+            <p class="weui-tabbar__label">首页</p>
+        </a>
+        <a data-nav='operate' href="{:url('index/index/myoperate')}" class="weui-tabbar__item">
+            <div class="weui-tabbar__icon">
+                <i class="iconfont icon-xundijia"></i>
+            </div>
+            <p class="weui-tabbar__label">询价</p>
+        </a>
+        <a data-nav='trade' href="{:url('index/index/trade')}" class="weui-tabbar__item">
+            <div class="weui-tabbar__icon">
+                <i class="iconfont icon-27"></i>
+            </div>
+            <p class="weui-tabbar__label">交易</p>
+        </a>
+        <a data-nav='position' href="{:url('index/index/position')}" class="weui-tabbar__item">
+            <div class="weui-tabbar__icon">
+                <i class="iconfont icon-zhulichicang"></i>
+            </div>
+            <p class="weui-tabbar__label">持仓</p>
+        </a>
+        <a data-nav='userinfo' href="{:url('index/index/userinfo')}" class="weui-tabbar__item">
+            <div class="weui-tabbar__icon">
+                <i class="iconfont icon-iconfuzhi"></i>
+            </div>
+            <p class="weui-tabbar__label">我的</p>
+        </a>
+    </div>{/block}
+    <script src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/jquery-weui.min.js"></script>
+    <script src="/qihuo/js/app.js?v=1.1"></script>{block name="script"}{/block}
+</body>
+
+</html>

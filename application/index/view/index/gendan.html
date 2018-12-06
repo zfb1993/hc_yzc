@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+	<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+	<title>交易</title>
+	<link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
+	<link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+	<link rel="stylesheet" href="/static/assets/css/gendan.css">
+	<link rel="stylesheet" href="/static/assets/css/style.css">
+	<link rel="stylesheet" href="https://at.alicdn.com/t/font_722229_mv7dentrn6.css">
+	<link rel="stylesheet" href="/static/js/layui/css/layui.css">
+	<link rel="stylesheet" href="https://at.alicdn.com/t/font_784413_apk4rjhqysf.css"><!--弹框的关闭-->
+	<style>
+	.edit{
+		border: 1px solid #fb640c;
+		color: #fb640c !important;
+		background: #fff !important;
+	}
+	.weui-body{
+	    padding:15px;
+		boder-box:border-spacing;
+	}
+	.weui-popup__container .weui-article{
+	    position: static;
+	}
+	</style>
+</head>
+
+<body>
+
+	<div class="weui-tab" style="background:#fff;">
+
+		<div class="weui-navbar">
+			<a id="a1" class="weui-navbar__item weui-bar__item--on" href="#tab1">
+				交易员
+			</a>
+			<a id="a2" class="weui-navbar__item" href="#tab2">
+				跟随者
+			</a>
+
+		</div>
+		<div id='myrule' style="position:absolute;top:0;right:0;color:#999;font-size:14px;width:120px;text-align:center;height:34px;line-height:34px;">
+			<i class="iconfont icon-guize"></i>
+			<a style="color:#999;" href="#">跟单规则</a>
+		</div>
+		<!--<div class="weui-search-bar" id="searchBar" style="background:#202932;">
+			<form class="weui-search-bar__form">
+				<div class="weui-search-bar__box">
+					<i class="weui-icon-search"></i>
+					<input type="search" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
+					<a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+				</div>
+				<label class="weui-search-bar__label" id="searchText" style="line-height:26px;border-radius:5px;">
+					<i class="weui-icon-search"></i>
+					<span>搜索交易员/跟随者</span>
+				</label>
+			</form>
+			<a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+		</div>-->
+		<div class="weui-tab__bd">
+			<div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+				<!--<div class="cenA">
+					<div class="lek">
+						<div data-week="4" class="selemend">
+							请选择交易时间
+							<i class="iconfont icon-xiala"></i>
+						</div>
+						<div class="citylist" style="display:none;">
+							<span data-week="1">近一周有交易</span>
+							<span data-week="2">近两周有交易</span>
+							<span data-week="4">近一月有交易</span>
+						</div>
+					</div>
+					<div class="lesft">
+						<div class="selemenu">
+							<span data-order='deficit' class="sqinput">亏损效率</span>
+							<span data-direction='asc' class="csinput">高→低</span>
+						</div>
+						<div class="citylist2" style="display:none;">
+							<div class="xzk">
+								<ul class="shangquan">
+									<li data-order="deficit" class="active">亏损效率</li>
+									<li data-order="loss_rate">失败率</li>
+									<li data-order="trade_fp">交易频率</li>
+									<li data-order="deficit_yz">亏损因子</li>
+									<li data-order="deficit_profit_rate">亏/盈比</li>
+									<li data-order="position_avg">平均持仓</li>
+								</ul>
+							</div>
+							<div class="xzk">
+								<ul class="chengshi">
+									<li data-direction="desc" class="active">高→低</li>
+									<li data-direction="asc">低→高</li>
+									<li data-direction="desc" class="">高→低</li>
+									<li data-direction="asc">低→高</li>
+									<li data-direction="desc" class="">高→低</li>
+									<li data-direction="asc">低→高</li>
+									<li data-direction="desc" class="">高→低</li>
+									<li data-direction="asc">低→高</li>
+									<li data-direction="desc" class="">高→低</li>
+									<li data-direction="asc">低→高</li>
+									<li data-direction="desc" class="">高→低</li>
+									<li data-direction="desc">低→高</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>-->
+				<div class="mamax">
+					<!--第一个-->
+					<div class="lemain">
+						<div class="tiema">
+							<p>
+								<img src="/static/assets/images/k-1@2x.png" />
+								<span id="named">海子山基金使徒...</span>
+							</p>
+							<a href="set.html">跟随</a>
+						</div>
+						<div class="tiemb" onclick="details()">
+							<div class="quxiA">
+								<img style="width:100%;border-radius: 50%;" src="/static/assets/images/sw1.jpg"/>
+							</div>
+							<div class="shuzid">
+								<ul class="uils">
+									<li>
+										<p>亏损效率</p>
+										<p>99</p>
+									</li>
+									<li>
+										<p>失败率</p>
+										<p>1.6</p>
+									</li>
+									<li>
+										<p>交易频率</p>
+										<p class="res-p">0.00点</p>
+									</li>
+									<li>
+										<p>亏损因子</p>
+										<p>58周</p>
+									</li>
+									<li>
+										<p>亏/盈比</p>
+										<p>139小时</p>
+									</li>
+									<li>
+										<p>平均持仓</p>
+										<p>3772</p>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="tab2" class="weui-tab__bd-item">
+				<!--<div class="cenB">
+					<div class="lek">
+						<div data-week="4" class="selemend">
+							请选择交易时间
+							<i class="iconfont icon-xiala"></i>
+						</div>
+						<div class="citylist" style="display:none;">
+							<span data-week="1">近一周有交易</span>
+							<span data-week="2">近两周有交易</span>
+							<span data-week="4">近一月有交易</span>
+						</div>
+					</div>
+					<div class="lesri">
+						<div class="selemenu">
+							<span data-order='deficit' class="sqinput">跟随获利</span>
+							<span data-direction='asc' class="csinput">高→低</span>
+						</div>
+						<div class="citylist4" style="display:none;">
+
+							<div class="xzk">
+								<ul class="shangquan shanxu">
+									<li data-order="deficit" class="active">跟随获利</li>
+									<li data-order="loss_rate">盈亏点数</li>
+									<li data-order="trade_fp">收益率</li>
+									<li data-order="deficit_yz">平均获利点数</li>
+									<li data-order="deficit_profit_rate">交易点数</li>
+									<li data-order="position_avg">交易周期</li>
+								</ul>
+							</div>
+							<div class="xzk">
+								<ul class="chengshi chensh">
+									<li data-direction="desc" class="active">高→低</li>
+									<li data-direction="asc">低→高</li>
+									<li data-direction="desc" class="">高→低</li>
+									<li data-direction="asc">低→高</li>
+									<li data-direction="desc" class="">高→低</li>
+									<li data-direction="asc">低→高</li>
+									<li data-direction="desc" class="">高→低</li>
+									<li data-direction="asc">低→高</li>
+									<li data-direction="desc" class="">高→低</li>
+									<li data-direction="asc">低→高</li>
+									<li data-direction="desc" class="">高→低</li>
+									<li data-direction="asc">低→高</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>-->
+				<div class="mamax">
+					<!--第一个-->
+					<div class="rimain">
+						<div class="tiemb">
+							<p>
+								<img src="/static/assets/images/k-3@2x.png" />
+								<span id="namef">asukafeng</span>
+								<span id="gradef">#4</span>
+							</p>
+						</div>
+						<div class="tietb" onclick="derwdsy()">
+							<div class="quxiB">
+								<img style="width:100%;border-radius: 50%;" src="/static/assets/imgs/404.png"/>
+							</div>
+							<div class="shuzidy">
+								<ul class="uilsy">
+									<li>
+										<p>跟随获利</p>
+										<p class="res-p">$658.52</p>
+									</li>
+									<li>
+										<p>盈亏点数</p>
+										<p class="res-p">0.00点</p>
+									</li>
+									<li>
+										<p>收益率</p>
+										<p class="res-p">32.09%</p>
+									</li>
+									<li>
+										<p>平均获利点数</p>
+										<p class="res-p">6.46点</p>
+									</li>
+									<li>
+										<p>交易笔数</p>
+										<p>0笔</p>
+									</li>
+									<li>
+										<p>交易周期</p>
+										<p>33周</p>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="weui-tabbar" style="border-top: 1px solid #f2f2f2;">
+        <a data-nav="index" href="/index/index/index.html" class="weui-tabbar__item">
+            <div class="weui-tabbar__icon">
+                <i class="iconfont icon-shouye" style="line-height:1.6;"></i>
+            </div>
+            <p class="weui-tabbar__label">首页</p>
+        </a>
+        <a data-nav="optional|stock" href="/index/index/optional.html" class="weui-tabbar__item">
+            <div class="weui-tabbar__icon">
+                <i class="iconfont icon-27" style="line-height:1.6;"></i>
+            </div>
+            <p class="weui-tabbar__label">自选</p>
+        </a>
+        <a data-nav="position" href="/index/index/position.html" class="weui-tabbar__item">
+            <div class="weui-tabbar__icon">
+                <i class="iconfont icon-zhulichicang" style="line-height:1.6;"></i>
+            </div>
+            <p class="weui-tabbar__label">持仓</p>
+        </a>
+        <a data-nav='gendan' href="{:url('index/index/gendan')}" class="weui-tabbar__item weui-bar__item--on">
+			<div class="weui-tabbar__icon">
+				<i class="iconfont icon-xundijia" style="line-height:1.6;"></i>
+			</div>
+			<p class="weui-tabbar__label">跟单</p>
+		</a>
+        <a data-nav="mine|dredge|kaihu|readkh" href="/index/index/mine.html" class="weui-tabbar__item">
+            <div class="weui-tabbar__icon">
+                <i class="iconfont icon-iconfuzhi" style="line-height:1.6;"></i>
+            </div>
+            <p class="weui-tabbar__label">我的</p>
+        </a>
+    </div>
+<div id="xieyifull" style="z-index: 9999;" class='weui-popup__container'>
+      <div class="weui-popup__modal" style="background:#1d1c1c;">
+            <article class="weui-article" style="padding-bottom:5px;">
+                  <div class="weui-header">
+                        <div class="title" style="color: white;text-align:center;">
+                              <h3 style="font-size:18px;">《1期乐 AI免责条款》</h3>
+                              <small></small>
+                        </div>
+                  </div>
+                  <div class="weui-body" style="font-size:13px;color:#d6d6d6;background:#3b444f;text-align:left;">
+                        <h3></h3>
+                        <p>欢迎您使用1期乐  AI的服务。请您务必审慎阅读并遵守《1期乐   AI免责条款》（以下称“本条款”），充分了解《1期乐  AI免责条款》中各项内容及相关法律试用条款。若您阅读并接收本条款，试用1期乐   AI提供的产品和服务，即视为您已接受本条款的约束。这是您与1期乐  AI之间就隐私政策、风险警示以及免责声明而签署的法定条款。若您不同意本条款，请勿试用本公司的任何产品和服务。
+                        </p>
+                        <p>隐私条款：
+                        </p>
+                        <p>1：您同意并授权我们试用您的相关信息。我们使用您的相关信息，目的在于能为您提供更优质的服务和更好的产品体验，除非征得您的同意，或者在某些情况下，我们在政府、法律部门、监管机构的要求下，我们才会对外披露您的相关信息。除此情况外，我们不会向任何外部机构披露您的信息。
+                        </p>
+                        <p>2：1期乐AI高度重视用户的信息保密、数据保护和数据安全。我们有严格的安全制度，将会在任何时候竭力保护您的个人信息不会被人擅自或意外取得、处理或删除。我们将采取各种合适的物理、电子和管理方面的措施来保护您的个人数据，以实现我们对于数据安全的承诺，并遵守所有关于个人信息保存的法规要求。
+                        </p>
+                        <p>3：如您对隐私政策有任何疑问，请及时与我们的工作人员联系，我们将及时处理您的疑问。
+                        </p>
+                        <p>风险警示：
+                        </p>
+                        <p>考虑到投衍生性金融产品交易存在着巨大的风险，我们建议您在选择您接受并认可的经纪商平台开户及开始交易前，应充分了解相关法律法规、经纪商产品披露声明以及风险警示，并根据您个人的财务状况。投资经验、风险偏好等相关因素，慎重选择适合您的交易产品.1期乐 AI建议您除非完全了解自己所签订的合约性质以及所面临的高风险程度，否则不应贸然进行此类衍生性金融产品的交易。
+                        </p>
+                        <p>免责声明：
+                        </p>
+                        <p>1：1期乐 AI作为独立的第三方智能程序软件，仅作为您免费共享的辅助与参考工具使用，1期乐 AI并不收取任何费用。1期乐  AI不提供期货经纪商产品的交易撮合服务、不承担客户任何交易上的亏损，不参与分享用户交易过程的盈利、不涉及用户与用户选择的经纪商平台之间任何利益分配与法律纠纷。当用户选择试用1期乐  AI产品时，证明用户已经同意保证并承诺：用户与经纪商平台之间的任何问题，均与1期乐AI无关。
+                        </p>
+                        <p>2：1期乐  AI上的任何展示信息，旨在为公众提供免费的交易动态和咨询服务。本软件交易系统提供的交易策略和系统产生的交易信号，不代表任何形式的推荐或诱导信息。1期乐 AI不怂恿用户买卖期货、差价合约、衍生产品及其他金融工具，亦不对用户的交易行为与交易结果负责。
+                        </p>
+                        <p>3：无论是1期乐  AI或是本软件上的任何合作伙伴都不能保证，用户基于1期乐  AI提供的策略、信号以及用户试用个人配置交易系统进行投资一定会盈利。除此之外，1期乐  AI明确表明不会对交易员提供的策略和交易信号承担任何责任。
+                        </p>
+                        <p>4：您理解并同意，使用互联网的交易服务存在一些风险，包括硬件、软件或互联网链接等不可控因素，如信号强度。互联网的接收或路径、设备硬件或设备配置、或互联网链接的可靠性等不可控。1期乐  AI不对网络交易中出现的通讯故障、误传或延误造成的损失负任何责任。
+                        </p>
+                        <p>5：衍生性金融投资市场的波动性或非波动性可能阻碍委托以有利的价格执行，或根本无法执行。如因市场情况或您的经纪商的过错而导致交易无法执行，从而造成的任何损失、损害、成本或费用（包括但不限于，利润损失、直接、间接、偶发或结果性损害），1期乐  AI不承担任何责任。
+                        </p>6：1期乐  AI并不涉及任何用户账户的出入金及经济业务，用户交易试用的期货账户及账户资金业务均由期货经纪商提供。用户在期货经纪商遇到监管违规、信息延误、差点扩大、滑点、跳空、报价错误、套汇及报价操控、流动性缺失、周末风险、手续费和账户密码丢失等因经济商平台产生的任何问题，均与1期乐  AI无关，1期乐  AI不承担因经纪商平台造成的任何法律风险及赔偿责任。以上《期货交易风险说明书》的各项内容，本人/单位已阅读并完全理解。
+                        </p>
+						<p>其他：
+						</p>
+						<p>本协议由1期乐  AI与已明确接受此条款和条件的个人或公司共同签署。如果您对本协议有意见或建议，可与1期乐  AI客服联系，1期乐  AI将及时给予您帮助。
+						</p>
+                  </div>
+            </article>
+            <a href="javascript:;" class="weui-btn_close close-popup" style="font-size:18px;text-align:center;display:block;position: static;">
+                  <i class="iconfont icon-guanbi" style="font-size:20px;color:#d6d6d6;"></i>
+            </a>
+      </div>
+</div>
+	<script src="https://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/jquery-weui.min.js"></script>
+	<script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/jquery-weui.min.js"></script>
+	<script src="/static/js/layui/layui.all.js"></script>
+	<script>
+		//交易员页面的跳转
+		function details(zid) {
+			window.location.href = 'documentary.html?zid='+ zid ;
+		}
+		//跟随者页面的跳转
+		function derwdsy(zid) {
+			window.location.href = 'followsuit.html?zid='+ zid ;
+		}
+		getData();
+		getFollowData();
+
+		function getFollowData() {
+			$.ajax({
+				type: 'get',
+				url: '/index/api2/usermob',
+				data: {
+					zid:localStorage.zid,
+				},
+				dataType: 'json',
+				beforeSend: function (request) {},
+				success: function (data) {
+					console.log(data)
+					if (data.code == 0) {
+						let html = '';
+						for (let i = 0; i < data.data.length; i++) {
+							let o = data.data[i];
+							html +=
+								`
+							<div class="lemain">
+							<div class="tiema">
+								<p>
+									<img src="/static/assets/images/k-1@2x.png"/>
+									<span id="named">${o.nick_name}&nbsp;&nbsp;${(o.zid)}</span>
+								</p>
+								<a class="${Number(o.status)==0?'':'edit'}" href="set.html?zid=${o.zid}&nick_name=${o.nick_name}&isEdit=${Number(o.status)==0?'normal':'edit'}">${Number(o.status)==0?'启动跟随':'暂停跟随'}</a>
+							</div>
+							<div class="tiemb" onclick="details('${o.zid}')">
+								<div class="quxiA">
+								    <img style="width:100%;border-radius: 50%;" src="/static/assets/imgs/404.png"/>
+								</div>
+								<div class="shuzid">
+									<ul class="uils">
+										<li>
+											<p>平均盈利</p>
+											<p style="color:#E64340;">${o.avgprofit}</p>
+										</li>
+										<li>
+											<p>平均亏损</p>
+											<p style="color:#389607;">${o.avgloss}</p>
+										</li>
+										<li>
+											<p>交易笔数</p>
+											<p>${o.tradecount}</p>
+										</li>
+										<li>
+											<p>胜率</p>
+											<p>${o.profitrate}</p>
+										</li>
+										<li>
+											<p>累计盈亏</p>
+											<p>${parseFloat(Number(o.lossmoney)+Number(o.profitmoney))}</p>
+										</li>
+										<li>
+											<p>盈亏比例</p>
+											<p>${o.prorate}</p>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+							`;
+						}
+						$($('.mamax')[0]).html(html)
+					}
+				},
+				error: function (message) {
+					//
+				}
+			})
+		}
+
+		function getData() {
+			$.ajax({
+				type: 'get',
+				url: '/index/api2/gensui',
+				data: {
+					zid:localStorage.zid,
+				},
+				dataType: 'json',
+				beforeSend: function (request) {},
+				success: function (data) {
+					console.log(data)  			
+					if (data.code == 1) {
+						let html = '';
+						for (let i = 0; i < data.data.length; i++) {
+							let o = data.data[i];
+							html +=
+								`
+							<div class="lemain">
+							<div class="tiema">
+								<p>
+									<img src="/static/assets/images/k-1@2x.png"/>
+									<span id="named">${(o.zid)}</span>
+								</p>
+							</div>
+							<div class="tiemb" onclick="derwdsy('${o.zid}')">
+								<div class="quxiA">
+								    <img style="width:100%;border-radius: 50%;" src="/static/assets/imgs/404.png"/>
+								</div>
+								<div class="shuzid">
+									<ul class="uils">
+										<li>
+											<p>平均盈利</p>
+											<p>${o.avgprofit}</p>
+										</li>
+										<li>
+											<p>平均亏损</p>
+											<p>${o.avgloss}</p>
+										</li>
+										<li>
+											<p>交易笔数</p>
+											<p class="res-p">${o.tradecount}</p>
+										</li>
+										<li>
+											<p>胜率</p>
+											<p>${o.profitrate}</p>
+										</li>
+										<li>
+											<p>累计盈亏</p>
+											<p>${parseFloat(Number(o.lossmoney)+Number(o.profitmoney))}</p>
+										</li>
+										<li>
+											<p>盈亏比例</p>
+											<p>${o.prorate}</p>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+							`;
+						}
+						$($('.mamax')[1]).html(html)
+					}else{
+						let html = '';
+							html +=
+								`
+							<div class="lemain">
+							    <img style="width:100%;" src="/static/assets/img/gensui.png"/>
+						    </div>
+							`;
+						$($('.mamax')[1]).html(html)
+					}
+				},
+				error: function (message) {
+					//
+				}
+			})
+		}
+		//交易页面的选择
+		$(".selemenu").click(function () {
+			$(this).next().slideToggle()
+			$(this).parents().siblings().find(".citylist2,.citylist4").slideUp();
+		})
+		$(".selemend").click(function () {
+			$(this).next().slideToggle()
+			$(this).parents().siblings().find(".citylist,citylist3").slideUp();
+		})
+		$(".citylist span").click(function () {
+			var text = $(this).text();
+			$(this).parent().prev().html(text);
+			$(this).parent().prev().attr('data-week', $(this).attr('data-week'))
+			$(this).parent().prev().css("color", "#FB640E")
+			$(this).parent().fadeOut();
+			
+			if ($($('.weui-bar__item--on')[0]).attr('id') == 'a1') {
+				getData()
+			} else {
+				getFollowData()
+			}
+		})
+		$(".citylist3 span").click(function () {
+			var text = $(this).text();
+			$(this).parent().prev().html(text);
+			$(this).parent().prev().css("color", "#FB640E")
+			$(this).parent().fadeOut();
+		})
+		let index = 0;
+		let indexs = 0;
+
+		//2-1
+		$(".shangquan li").click(function () {
+			let target;
+			$(".shangquan li").removeClass("active")
+			$(this).addClass("active")
+			index = $(".shangquan li").index(this)
+			if ($(".chengshi li").index($(".chengshi li.active")[0]) % 2 == 0)
+				target = $($(".chengshi li")[2 * index])
+			else
+				target = $($(".chengshi li")[2 * index + 1])
+			$(".chengshi li").removeClass("active")
+			target.addClass("active")
+			$(".csinput").html(":" + target.text())
+			$(".csinput").attr('data-direction', target.attr('data-direction'))
+			var text1 = $(this).text();
+			$(".sqinput").html(text1)
+			$(".sqinput").attr('data-order', $(this).attr('data-order'))
+			$(".citylist2").slideUp();
+			
+			if ($($('.weui-bar__item--on')[0]).attr('id') == 'a1') {
+				getData()
+			} else {
+				getFollowData()
+			}
+		})
+		//2-2
+		$(".chengshi li").click(function () {
+			$(".chengshi li").removeClass("active")
+			$(this).addClass("active")
+			indexs = $(".chengshi li").index(this)
+			let target = $($(".shangquan li")[Math.floor(indexs / 2)]);
+			$(".shangquan li").removeClass("active")
+			target.addClass("active")
+			$(".sqinput").html(target.text())
+			$(".sqinput").attr('data-order', target.attr('data-order'))
+			var text2 = $(this).text();
+			$(".csinput").html(":" + text2)
+			$(".csinput").attr('data-direction', $(this).attr('data-direction'))
+			$(".citylist2").slideUp();
+			
+
+			if ($($('.weui-bar__item--on')[0]).attr('id') == 'a1') {
+				getData()
+			} else {
+				getFollowData()
+			}
+		})
+		$(function () {
+			$(document).not($(".lesft")).click(function () {
+				$(".citylist2").slideUp();
+			})
+			$(".lesft").click(function (event) {
+				event.stopPropagation();
+			})
+		})
+		//跟随页的设置
+		$(".shanxu li").click(function () {
+			$(".shanxu li").removeClass("active")
+			$(this).addClass("active")
+			var tex1 = $(this).text();
+			$(".sqinpuyy").html(tex1)
+		})
+		$(".chensh li").click(function () {
+			$(".chensh li").removeClass("active")
+			$(this).addClass("active")
+			var tex2 = $(this).text();
+			$(".csinpuyy").html(":" + tex2)
+			$(".citylist4").slideUp();
+		})
+		$(function () {
+			$(document).not($(".lesri")).click(function () {
+				$(".citylist4").slideUp();
+			})
+			$(".lesri").click(function (event) {
+				event.stopPropagation();
+			})
+		})
+		/*$('#myrule').click(e => {
+			//规则
+			layer.open({
+				title: '规则说明',
+				content: '这里是规则内容'
+			});
+		})*/
+		$('#myrule').off().on("click", function () {
+            $("#xieyifull").popup();
+        });
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,78 @@
+{include file="common/head"/}
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div class="layui-padded-15">
+        <blockquote class="layui-elem-quote layui-text">
+            <h3>当前位置：管理员管理 > 安全设置</h3>
+        </blockquote>
+        <fieldset class="layui-elem-field layui-field-title layui-margin-t-20">
+            <legend>修改密码</legend>
+        </fieldset>
+        <form class="layui-form" action="">
+            <div class="layui-form-item layui-hide">
+                <label class="layui-form-label">管理员</label>
+                <div class="layui-input-block layui-width-280">
+                    <input type="hidden" name="username" lay-verify="title" placeholder="请输入真实姓名" autocomplete="off" class="layui-input" value="{$admin.username}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">原始密码</label>
+                <div class="layui-input-block layui-width-280">
+                    <input type="password" name="oldpwd" lay-verify="required" placeholder="请输入原始密码" autocomplete="off" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">新密码</label>
+                <div class="layui-input-block layui-width-280">
+                    <input type="password" name="newpwd" lay-verify="required" placeholder="请输入新密码" autocomplete="off" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">确认密码</label>
+                <div class="layui-input-block layui-width-280">
+                    <input type="password" name="chkpwd" lay-verify="required" placeholder="请输入确认密码" autocomplete="off" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item layui-margin-t-50">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="alter-btn">立即修改</button>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+</div>   
+{include file="common/foot"/}
+<script>
+    layui.use(['form', 'layedit'], function(){
+      var form = layui.form
+      ,layer = layui.layer
+      ,$ = layui.jquery;
+      //自定义验证规则
+      form.verify({
+        pass: [/(.+){6,12}$/, '密码必须6到12位']
+        ,content: function(value){
+          layedit.sync(editIndex);
+        }
+      });
+      
+      //监听提交
+      form.on('submit(alter-btn)', function (data) {
+          var loading = layer.load(1, {shade: [0.1, '#fff']});
+          $.post("{:url('updatePwd')}", data.field, function (res) {
+              layer.close(loading);
+              if (res.code > 0) {
+                  layer.msg(res.msg, {time: 1800, icon: 1}, function () {
+                      location.href = res.url;
+                  });
+              } else {
+                  layer.msg(res.msg, {time: 1800, icon: 2});
+              }
+          });
+          return false;
+      });
+
+    });
+</script>
+</body>
+</html>

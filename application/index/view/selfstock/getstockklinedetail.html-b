@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="initial-scale=1,maximum-scale=1">
+<title>{$Think.config.site_title}-用户中心</title>
+
+<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="__STATIC__/pc/layui/css/layui.css">
+
+<script type="text/javascript" src="__STATIC__/js/jquery.min.js"></script>
+<style type="text/css">
+	body{
+
+	}
+	.row{
+		margin:0;
+		padding: 0;
+		border-bottom: 1px solid #ddd;
+	}
+    .col-xs-2,.col-xs-8,.col-xs-3,.col-xs-6{
+
+    	padding: 0;
+    	text-align: center;
+    }
+    .col-xs-4{
+    	padding: 3px;
+
+    }
+	.page_header{
+		height: 50px;
+		line-height: 50px;
+		font-size:18px;
+		border-bottom: 1px solid #ccc;		
+		background: #393E4B;		
+		color:#f7f7f7;
+
+	}
+	.stock_header{
+		background:#f7f7f7;
+	}
+	.title{
+		font-size:18px;
+	}
+	.stock_info{
+		padding: 10px;
+	}
+</style>
+
+</head>
+
+<body>
+	<div class="wrap">
+    <div class="page_header">
+        <div class="row">
+            <div class="col-xs-2">
+            	<span class="glyphicon glyphicon-chevron-left"></span>
+            </div>
+            <div class="col-xs-8">
+            	<img src="/qiquand/img/logo.png" height="35px;" />
+            </div>
+            <div class="col-xs-2">
+            	<span class="glyphicon glyphicon glyphicon-align-justify"></span>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="page_body">
+
+        <div class="row stock_header">
+            <div class="col-xs-3">
+            </div>
+
+            <div class="col-xs-6">
+            	<p class="stock_name title">上海XX</p>
+            	<p class="stock_id">000000</p>
+            </div>
+            <div class="col-xs-3">
+            	<p class="stock_price title">89.01</p>
+            	<p class="small_dec"></p>
+            </div>
+        </div> 
+
+
+        <div class="row stock_info">
+       		<div class="col-xs-4">
+       			<span>今开</span>
+       			<span class="open_price">99</span>
+       		</div>
+       		<div class="col-xs-4">
+       			<span>最高</span>
+       			<span class="open_price">99</span>
+       		</div>
+       		<div class="col-xs-4">
+       			<span>成交量</span>
+       			<span class="open_price">99</span>
+       		</div>     
+       		<div class="col-xs-4">
+       			<span>换手率</span>
+       			<span class="open_price">99</span>
+       		</div>
+       		<div class="col-xs-4">
+       			<span>最低</span>
+       			<span class="open_price">99</span>
+       		</div>
+       		<div class="col-xs-4">
+       			<span>成交额</span>
+       			<span class="open_price">99</span>
+       		</div>          		  		
+       	</div>  
+
+
+		<ul id="myTab" class="nav nav-tabs">
+			<li class="active">
+				<a href="#" data-toggle="tab">
+					 aaaaaaa
+				</a>
+			</li>
+			
+			<li>
+				<a href="#" data-toggle="tab">
+					bbbbbbbbbbb
+				</a>
+			</li>
+
+			<li>
+				<a href="#" data-toggle="tab">
+					ccccccccccc
+				</a>
+			</li>
+			<li class="active">
+				<a href="#" data-toggle="tab">
+					 aaaaaaa
+				</a>
+			</li>
+			
+			<li>
+				<a href="#" data-toggle="tab">
+					bbbbbbbbbbb
+				</a>
+			</li>
+
+			<li>
+				<a href="#" data-toggle="tab">
+					ccccccccccc
+				</a>
+			</li>	
+
+
+
+
+
+
+
+
+			　　		
+		</ul>
+
+    </div>
+
+
+
+	<div class="footer">
+		
+	</div>
+
+	</div>
+</body>
+</html>

@@ -1,0 +1,244 @@
+{extend name="static/assets/base.html" /} {block name="style"}
+<link rel="stylesheet" href="/static/assets/css/stock.css">{/block} {block name="bar"}{/block}{block name="body"}
+<div class="weui-content">
+    <div class="ban" id="qh">
+        <div class="weui-flex weui-flex-ui">
+            <div class="weui-flex__item text-center">
+                <h2 id="qh_name">--</h2>
+                <p id="qh_id">--</p>
+            </div>
+            <div class="weui-flex__item text-center">
+                <h2 id="zxj" style="line-height: 40px;">--</h2>
+            </div>
+            <div class="weui-flex__item text-center" style="line-height: 20px;">
+
+                <p id="updown_amount">--</p>
+                <p id="updown_rate">--</p>
+            </div>
+        </div>
+        <div class="weui-flex weui-flex-ui">
+            <div class="weui-flex__item weui-flex_table text-center">
+                <span>
+                    <p>最高价：</p>
+                    <p>最低价：</p>
+                </span>
+                <span>
+                    <p id="zgj">--</p>
+                    <p id="zdj">--</p>
+                </span>
+            </div>
+            <div class="weui-flex__item weui-flex_table text-center">
+                <span>
+                    <p>持仓量：</p>
+                    <p>成交量：</p>
+                </span>
+                <span>
+                    <p id="ccl">--</p>
+                    <p id="cjl">--</p>
+                </span>
+            </div>
+            <div class="weui-flex__item weui-flex_table text-center">
+                <span>
+                    <p>买价：</p>
+                    <p>卖价：</p>
+                </span>
+                <span>
+                    <p id="mj">--</p>
+                    <p id="mj_">--</p>
+                </span>
+            </div>
+            <!-- <div class="weui-flex__item weui-flex_table">
+                <span>
+                    <p>最新价：</p>
+                    <p>结算价：</p>
+                    <p>买价：</p>
+                </span>
+                <span>
+                    <p id="zxj_">--</p>
+                    <p id="jsj">--</p>
+                    <p id="mj">--</p>
+                </span>
+            </div>
+            <div class="weui-flex__item weui-flex_table">
+                <span>
+                    <p>开盘价：</p>
+                    <p>昨结算：</p>
+                    <p>卖价：</p>
+                </span>
+                <span>
+                    <p id="kpj">--</p>
+                    <p id="zjs">--</p>
+                    <p id="mj_">--</p>
+                </span>
+            </div>
+            <div class="weui-flex__item weui-flex_table">
+                <span>
+                    <p>最高价：</p>
+                    <p>持仓量：</p>
+                    <p>买量：</p>
+                </span>
+                <span>
+                    <p id="zgj">--</p>
+                    <p id="ccl">--</p>
+                    <p id="ml">--</p>
+                </span>
+            </div>
+            <div class="weui-flex__item weui-flex_table">
+                <span>
+                    <p>最低价：</p>
+                    <p>成交量：</p>
+                    <p>卖量：</p>
+                </span>
+                <span>
+                    <p id="zdj">--</p>
+                    <p id="cjl">--</p>
+                    <p id="ml_">--</p>
+                </span>
+            </div> -->
+        </div>
+    </div>
+    <div class="weui-tab">
+        <div class="weui-navbar">
+            <div data-chart="chart1" class="weui-navbar__item weui-bar__item--on">
+                分时
+            </div>
+            <div data-chart="chart5" class="weui-navbar__item">
+                5分钟
+            </div>
+            <div data-chart="chart6" class="weui-navbar__item">
+                15分钟
+            </div>
+            <div data-chart="chart7" class="weui-navbar__item">
+                30分钟
+            </div>
+            <div data-chart="chart8" class="weui-navbar__item">
+                60分钟
+            </div>
+            <div data-chart="chart2" class="weui-navbar__item">
+                日K
+            </div>
+            <div data-chart="chart3" class="weui-navbar__item">
+                周K
+            </div>
+
+        </div>
+        <div class="weui-tab__bd">
+            <div id="tab" class="weui-tab__bd-item weui-tab__bd-item--active">
+                <div id="chart" class="loading-chart">
+                    <img src="/static/assets/imgs/preloader.gif">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="weui-flex weui-flex-ui weui-flex-ui-border" style="padding: 20px 0;">
+        <div class="weui-flex__item text-center">
+            <p>帐户余额：
+                <span id="yue">--</span>
+            </p>
+        </div>
+        <div class="weui-flex__item text-center">
+            <p>持仓盈亏：
+                <span id="ccyk">--</span>
+            </p>
+        </div>
+    </div>
+    <div class="weui-flex weui-flex-ui">
+        <div class="weui-flex__item text-center">
+            <a id="buy" class="weui-btn weui-btn_warn">
+                买入
+                <span id="buytxt">--</span>
+            </a>
+        </div>
+        <div class="weui-flex__item text-center">
+            <a id="sale" class="weui-btn weui-btn_primary">
+                卖出
+                <span id="saletxt">--</span>
+            </a>
+        </div>
+    </div>
+</div>
+<div id="full" class='weui-popup__container popup-bottom'>
+    <div class="weui-popup__modal">
+        <div class="toolbar">
+            <div class="toolbar-inner">
+                <a href="javascript:;" class="picker-button close-popup">关闭</a>
+                <h1 class="title"></h1>
+            </div>
+        </div>
+        <div class="modal-content">
+            <div class="weui-cells">
+                <div class="weui-cell">
+                    <div class="weui-cell__hd">
+                        <p>交易数据</p>
+                    </div>
+                    <div class="weui-cell__bd">
+                    </div>
+                    <div id="shous" class="weui-cell__ft">
+                        <span data-num="1" class="zl-badge active">1手</span>
+                        <span data-num="2" class="zl-badge">2手</span>
+                        <span data-num="3" class="zl-badge">3手</span>
+                        <span data-num="4" class="zl-badge">4手</span>
+                        <span data-num="5" class="zl-badge">5手</span>
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd">
+                        <p>触发止盈</p>
+                    </div>
+                    <div class="weui-cell__bd">
+                    </div>
+                    <div class="weui-cell__ft">
+                        <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请设置止盈价">
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd">
+                        <p>触发止损</p>
+                    </div>
+                    <div class="weui-cell__bd">
+                    </div>
+                    <div id="zsuns" class="weui-cell__ft">
+                        <span id="zsun1" class="zl-badge active">--</span>
+                        <span id="zsun2" class="zl-badge">--</span>
+                        <span id="zsun3" class="zl-badge">--</span>
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd">
+                        <p>冻结履约保证金</p>
+                    </div>
+                    <div class="weui-cell__bd">
+                    </div>
+                    <div class="weui-cell__ft">
+                        <span id="bzj">--</span>
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd">
+                        <p>支付交易综合费</p>
+                    </div>
+                    <div class="weui-cell__bd">
+                    </div>
+                    <div class="weui-cell__ft">
+                        <span id="jyzhf">--</span>
+                    </div>
+                </div>
+            </div>
+            <div class="weui-flex weui-flex-ui">
+                <div class="weui-flex__item text-center">
+                    <a id="popup_buy" class="weui-btn weui-btn_default close-popup">
+                        取消
+                    </a>
+                </div>
+                <div class="weui-flex__item text-center">
+                    <a id="popup_sale" class="weui-btn weui-btn_primary">
+                        <span id="btntext">--</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block} {block name="checkLogin"}{/block} {block name="script"}
+<script src="https://cdn.bootcss.com/echarts/4.0.4/echarts.min.js"></script>
+<script src="/static/assets/jscode/stock.bundle.js"></script> {/block}

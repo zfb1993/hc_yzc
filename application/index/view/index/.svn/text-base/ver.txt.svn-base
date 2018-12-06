@@ -1,0 +1,11 @@
+M1156010 v8 2017.10.13
+修复问题：
+1.新闻调用头条新闻后，下方没有隐藏已显示在头条的文章
+2.首页banner文字添加可修改字体大小的格式
+修复文件：
+templates\M1156010\install\install.class.php
+templates\M1156010\modular\index\index.php
+templates\M1156010\modular\index\banner\banner_1.php
+templates\M1156010\modular\index\banner\banner_2.php
+templates\M1156010\modular\index\banner\banner_3.php
+templates\M1156010\news.php

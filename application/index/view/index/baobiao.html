@@ -1,0 +1,442 @@
+{extend name="static/assets/base.html" /} {block name="title"}
+<title>交易报表</title>{/block} {block name="style"}
+<style>
+    .weui-content {
+        position: relative;
+        height: auto;
+        width: 100%;
+		margin-top:48px;
+        background: #ffffff;
+
+    }
+    p {
+        color: #dfdfdf;
+        margin: 15px 0;
+    }
+
+    pre {
+        background: #f3f3f3;
+        color: #999;
+        /* overflow-x: hidden; */
+        padding-left: 10px;
+    }
+</style>
+<style>
+    .mada{
+	    width:100%;
+	    box-sizing: border-box;
+		padding-left:10px;
+		overFlow-x: auto ;
+        overFlow-y: hidden ; 
+		white-space: nowrap;
+		background:#f2f2f2;
+	}
+    .mada p{
+	    color: #999;
+        margin: 5px 0;
+	}
+	.ma_1{
+	    padding-left:10px;
+	}
+	.ma_2{
+	    padding-left:10px;
+	 }
+	.ma_2,.ma_3,.ma_4{
+		width: 100%;
+		
+	}
+	.ma_2>div{
+	    width:200px;
+		display:inline-block;
+        box-sizing: border-box;
+	}
+	.ma_2>div>p{
+		display:flex;
+		justify-content: space-between;
+	}
+	.ma_3>div:nth-child(1){
+	    
+	}
+	.ma_3 p{
+		width:90px;
+		display:inline-block;
+		text-align:center;
+        box-sizing: border-box;
+		border-left:1px solid #999;
+	}
+	.ma_4 p{
+		width:90px;
+		display:inline-block;
+		text-align:center;
+        box-sizing: border-box;
+		border-left:1px solid #999;
+	}
+	.ma_5 p{
+		width:90px;
+		display:inline-block;
+		text-align:center;
+        box-sizing: border-box;
+		border-left:1px solid #999;
+	}
+	.ma_6 p{
+		width:90px;
+		display:inline-block;
+		text-align:center;
+        box-sizing: border-box;
+		border-left:1px solid #999;
+	}
+	.whes{
+	    width:60px !important;
+	}
+	.endy{
+	    width:110px !important;
+	}
+	h3 {
+        font-weight: normal;
+        color: #f4c20c;
+    }
+</style>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+ {/block}{block name="body"}
+ <div class="weui-title_" style="text-align:center;height:48px;font-size: 18px;position:fixed;top:0px;left:0px;width:100%;z-index:10000;line-height: 48px;">
+        <a href="javascript:history.go(-1);" class="weui-back" style="color:#fff;float:left;">
+            <i class="iconfont icon-fanhui"></i>
+        </a>
+        交易报表
+    </div>
+<div class="weui-content">
+    
+    <div class="weui-title_" style="background:#f7f7f8;">
+        <input type="text" class="weui-input" id="rili" placeholder="请选择报表日期，默认为当日日期">
+    </div>
+    <div class="introduction child-view" style="padding:10px; font-size:13px;">
+
+		
+    </div>
+	<div class="mada">
+	        <h3>结算</h3>
+		    <div class="ma_1">
+			    
+				<p>账户：<span class="wozh1">----</span></p>
+				<p>日期：<span id="wozh2">----</span></p>
+				<!--<p>资管账号：<span id="wozh3">----</span></p>-->
+			</div>
+			<h3>资金状况</h3>
+			<div class="ma_2">
+			    
+			    <div>
+			    	<p>
+			    		<span>上次结算金：</span>
+			    		<span class="zj1">----</span>
+			    	</p>
+			    	<p>
+			    		<span>动态权益：</span>
+			    		<span class="zj2">----</span>
+			    	</p>
+			    	<p>
+			    		<span>可用资金：</span>
+			    		<span class="zj3">----</span>
+			    	</p>
+			    	
+			    	<p>
+			    		<span>持仓盈亏：</span>
+			    		<span class="zj5">----</span>
+			    	</p>
+			    	<p>
+			    		<span>平仓盈亏：</span>
+			    		<span class="zj6">----</span>
+			    	</p>
+			    </div>
+				<span style="width:1px;display:inline-block;height:105px;margin:0 10px;background:#999;"></span>
+			    <div>
+				    <p>
+			    		<span>手续费：</span>
+			    		<span class="zj4">----</span>
+			    	</p>
+			    	<p>
+			    		<span>占用保证金：</span>
+			    		<span class="zj7">----</span>
+			    	</p>
+			    	<p>
+			    		<span>冻结保证金：</span>
+			    		<span class="zj8">----</span>
+			    	</p>
+			    	<p>
+			    		<span>入金：</span>
+			    		<span class="zj9">----</span>
+			    	</p>
+			    <p>
+			    	<span>出金：</span>
+			    	<span class="zj10">----</span>
+			    </p>
+			</div>
+				
+		</div>
+		<h3>持仓明细</h3>
+		<div class="ma_3">
+			<div>
+			<!--禁止换行，这是清除display：inline-block;-->
+				<p style="width:60px;">ID</p><p>合约代码</p><p>开/平</p><p>买/卖</p><p>平仓盈亏</p><p>保证金</p><p>成交量</p><p>收盘价</p><p>开仓价</p><p style="width:100px;">交易日</p>
+			</div>    
+			<div id="ccmx">
+				<!--<div>
+					<p>aeae[j].id</p>
+					<p>aeae[j].instrumentid</p>
+					<p>aeae[j].zaccount</p>
+					<p>aeae[j].offset</p>
+					<p>aeae[j].direction</p>
+					<p>aeae[j].profit</p>
+					<p>aeae[j].bzj</p>
+					<p>aeae[j].tradevolume</p>
+					<p>aeae[j].price</p>
+					<p>aeae[j].tradeprice</p>
+					<p>aeae[j].tradedate</p>
+				<div>-->
+			</div>  
+		</div>
+		<h3>持仓汇总</h3>
+		<div class="ma_4">
+			<div>
+			<!--禁止换行，这是清除display：inline-block;-->
+				<p style="width:60px;">ID</p><p>合约代码</p><p>买/卖</p><p>开/平</p><p>保证金</p><p>成交量</p><p>平仓盈亏</p><p>开仓均价</p><p>收盘价</p><p style="width:110px;">成交日期</p>
+			</div>    
+			<div id="cchz">
+				<!--<div>
+					<p>asas[s].id</p>
+					<p>asas[s].instrumentid</p>
+					<p>asas[s].zaccount</p>
+					<p>asas[s].direction</p>
+					<p>asas[s].offset</p>
+					<p>asas[s].bzj</p>
+					<p>asas[s].tradevolume</p>
+					<p>asas[s].profit</p>
+					<p>asas[s].tradeprice</p>
+					<p>asas[s].price</p>
+					<p>asas[s].tradedate</p>
+				</div>-->
+            </div>			
+		</div>
+		<h3>成交明细</h3>
+		<div class="ma_5">
+			<div>
+			    <!--禁止换行，这是清除display：inline-block;-->
+				<p style="width:60px;">ID</p><p>合约代码</p><p>开/平</p><p>买/卖</p><p>成交价</p><p>成交量</p><p>手续费</p><p>成交时间</p><p>交易日</p><p style="width:110px;">交易编号</p>
+			</div>
+            <div id="cjmx">				
+				<!--<div>
+					<p>agag.id</p>
+					<p>agag.zaccount</p>
+					<p>agag.instrumentid</p>
+					<p>agag.offset</p>
+					<p>agag.direction</p>
+					<p>agag.commission</p>
+					<p>agag.tradedate</p>
+					<p>agag.tradeid</p>
+					<p>agag.tradeprice</p>
+					<p>agag.tradetime</p>
+					<p>agag.ip</p>
+					<p>agag.tradevolume</p>
+				</div>-->  
+		    </div>	
+		</div>
+		<h3>平仓明细</h3>
+		<div class="ma_6">
+			<div>
+			<!--禁止换行，这是清除display：inline-block;-->
+			    <p style="width:60px;">ID</p><p>合约代码</p><p>开/平</p><p>买/卖</p><p>平仓盈亏</p><p>成交量</p><p>平仓价</p><p>成交时间</p><p>交易日</p><p style="width:110px;">交易编号</p>
+			</div>
+            <div id="pcmx">			
+				<!--<div>
+					<p>erer.id</p>
+					<p>erer.zaccount</p>
+					<p>erer.instrumentid</p>
+					<p>erer.offset</p>
+					<p>erer.direction</p>
+					<p>erer.closeprofit</p>
+					<p>erer.tradedate</p>
+					<p>erer.tradeid</p>
+					<p>erer.tradeprice</p>
+					<p>erer.tradetime</p>
+					<p>erer.ip</p>
+					<p>erer.tradevolume</p>
+				</div>-->
+            </div>			
+		</div>
+	</div>
+	<div style="width:100%;height:30px;background:#f2f2f2;"><div>
+</div>
+<script>
+    var ser = localStorage.user_name;
+	console.log(ser);
+	$('.wozh1').html(ser);
+    function getData(value){      
+    }
+    function getDirection(value){
+    	if(value==1){
+    		return "买";
+    	}else if(value==0){
+			return "卖";
+    	}else{
+    		return "未知";
+    	}
+    }
+    $(function () {
+        let d=new Date();
+        let y=d.getFullYear().toString();
+        let m=(d.getMonth()+1)>9?(d.getMonth()+1).toString():'0'+(d.getMonth()+1).toString();
+        let day=d.getDate()>10?d.getDate().toString():'0'+d.getDate();
+        console.log(y+m+day)
+        $.ajax({
+            type: 'get',
+            url: '/qihuo/api/dayStatements',
+            data: {
+			    account: localStorage.getItem('user_name'),
+				day: y+m+day,
+				zid: localStorage.getItem('zid'),
+                //date: y+"-"+m+"-"+day
+				},
+            success: function (res) {
+                //$('pre').text(res.replace('风险度',`${'\n'}风险度`))//.replace(/\n$/g,`123${'\n'}`));
+				console.log(res);
+				$('#wozh2').html(res.day);
+				var dete = res.accountInfo;
+				console.log(dete);
+				//$('#wozh3').html(dete.zaccount);
+				var a1 = parseFloat(dete.prebalance).toFixed(2);
+				$('.zj1').html(a1);
+				var a2 = parseFloat(dete.balance).toFixed(2);
+				$('.zj2').html(a2);
+				var a3 = parseFloat(dete.available).toFixed(2);
+				$('.zj3').html(a3);
+				$('.zj4').html(dete.commission );
+				var a5 = parseFloat(dete.positionprofit).toFixed(2);
+				$('.zj5').html(a5); 
+				var a6 = parseFloat(dete.closeprofit).toFixed(2);
+				$('.zj6').html(a6); 
+				var a7 = parseFloat(dete.currmargin).toFixed(2);
+				$('.zj7').html(a7); 
+				var a8 = parseFloat(dete.frozenmargin).toFixed(2);
+				$('.zj8').html(a8); 
+				var a9 = parseFloat(dete.deposit).toFixed(2);
+				$('.zj9').html(a9); 
+				var a10 = parseFloat(dete.withdraw).toFixed(2);
+				$('.zj10').html(a10); 
+				
+				//持仓明细
+				var aeae = res.tradePositionDetail;
+				for(var j=0;j<aeae.length;j++){
+				    $("#ccmx").append('<div><p class="whes">'+ aeae[j].id +'</p><p>'+ aeae[j].instrumentid +'</p><p>'+ aeae[j].offset +
+					'</p><p>'+ getDirection(aeae[j].direction) +'</p><p>'+ aeae[j].profit +'</p><p>'+ aeae[j].bzj +'</p><p>'+ aeae[j].tradevolume +
+					'</p><p>'+ aeae[j].price +'</p><p>'+ aeae[j].tradeprice +'</p><p>'+ aeae[j].tradedate +'</p><div>');
+				}
+                //持仓汇总
+				var asas = res.tradePosition;
+				for(var s=0;s<asas.length;s++){
+				    $("#cchz").append('<div><p class="whes">'+ asas[s].id +'</p><p>'+ asas[s].instrumentid  +
+					'</p><p>'+ getDirection(asas[s].direction) +'</p><p>'+ asas[s].offset +'</p><p>'+ asas[s].bzj +'</p><p>'+ asas[s].tradevolume +
+					'</p><p>'+ asas[s].profit +'</p><p>'+ asas[s].tradeprice +'</p><p>'+ asas[s].price +'</p><p class="endy">'+ asas[s].tradedate +'</p></div>');
+				}
+				//成交明细
+				var agag = res.batchTrade;
+				for(var h=0;h<agag.length;h++){
+				    $("#cjmx").append('<div><p class="whes">'+ agag[h].id +'</p><p>'+ agag[h].instrumentid +
+					'</p><p>'+ agag[h].offset +'</p><p>'+ getDirection(agag[h].direction) +'</p><p>'+ agag[h].tradeprice +
+					'</p><p>'+ agag[h].tradevolume +'</p><p>'+ agag[h].commission +'</p><p>'+ agag[h].tradetime +'</p><p>'+ agag[h].tradedate +
+					'</p><p class="endy">'+ agag[h].tradeid +'</p></div>');
+				}	
+				//平仓明细
+				var erer = res.closePosition;
+				for(var i=0;i<erer.length;i++){
+				     $("#pcmx").append('<div><p class="whes">'+ erer[i].id +'</p><p>' +
+					erer[i].instrumentid +'</p><p>'+ erer[i].offset +'</p><p>'+ getDirection(erer[i].direction) +
+					'</p><p>'+ erer[i].closeprofit +'</p><p>'+ erer[i].tradevolume +'</p><p>'+ erer[i].tradeprice+
+					'</p><p>'+ erer[i].tradetime +'</p><p>'+ erer[i].tradedate +'</p><p class="endy">'+ erer[i].tradeid +'</p></div>');
+				}
+            }
+			//setTimeout(function () {
+			//}, 10000);
+        });
+		
+        $("#rili").calendar({
+            maxDate:y+"-"+m+"-"+day,
+            onDayClick:function(p, dayContainer, year, month, day){
+                month=parseInt(month)<9?'0'+(parseInt(month)+1).toString():(parseInt(month)+1).toString();
+                day=parseInt(day)<10?'0'+day:day;
+                $.ajax({
+            type: 'get',
+            url: '/qihuo/api/dayStatements',
+            data: {account: localStorage.getItem('user_name'),
+			    day: year+month+day,
+			    zid: localStorage.getItem('zid'),
+                },
+            success: function (res) { 
+			$("#ccmx").html('');
+			$("#cchz").html('');
+			$("#cjmx").html('');
+			$("#pcmx").html('');
+                //$('pre').text(res.replace('风险度',`${'\n'}风险度`))//.replace(/\n$/g,`123${'\n'}`));
+				console.log(res);
+				//window.location.reload(res);
+				$('#wozh2').html(res.day);
+				var dete = res.accountInfo;
+				console.log(dete);
+				//$('#wozh3').html(dete.zaccount);
+				var a1 = parseFloat(dete.prebalance).toFixed(2);
+				$('.zj1').html(a1);
+				var a2 = parseFloat(dete.balance).toFixed(2);
+				$('.zj2').html(a2);
+				var a3 = parseFloat(dete.available).toFixed(2);
+				$('.zj3').html(a3);
+				$('.zj4').html(dete.commission );
+				var a5 = parseFloat(dete.positionprofit).toFixed(2);
+				$('.zj5').html(a5); 
+				var a6 = parseFloat(dete.closeprofit).toFixed(2);
+				$('.zj6').html(a6); 
+				var a7 = parseFloat(dete.currmargin).toFixed(2);
+				$('.zj7').html(a7); 
+				var a8 = parseFloat(dete.frozenmargin).toFixed(2);
+				$('.zj8').html(a8); 
+				var a9 = parseFloat(dete.deposit).toFixed(2);
+				$('.zj9').html(a9); 
+				var a10 = parseFloat(dete.withdraw).toFixed(2);
+				$('.zj10').html(a10); 
+				
+				//持仓明细
+				var aeae = res.tradePositionDetail;
+				for(var j=0;j<aeae.length;j++){
+				    $("#ccmx").append('<div><p class="whes">'+ aeae[j].id +'</p><p>'+ aeae[j].instrumentid +'</p><p>' + aeae[j].offset +
+					'</p><p>'+ getDirection(aeae[j].direction) +'</p><p>'+ aeae[j].profit +'</p><p>'+ aeae[j].bzj +'</p><p>'+ aeae[j].tradevolume +
+					'</p><p>'+ aeae[j].price +'</p><p>'+ aeae[j].tradeprice +'</p><p>'+ aeae[j].tradedate +'</p><div>');
+				}
+                //持仓汇总
+				var asas = res.tradePosition;
+				for(var s=0;s<asas.length;s++){
+				    $("#cchz").append('<div><p class="whes">'+ asas[s].id +'</p><p>'+ asas[s].instrumentid +'</p><p>' +
+					getDirection(asas[s].direction) +'</p><p>'+ asas[s].offset +'</p><p>'+ asas[s].bzj +'</p><p>'+ asas[s].tradevolume +
+					'</p><p>'+ asas[s].profit +'</p><p>'+ asas[s].tradeprice +'</p><p>'+ asas[s].price +'</p><p class="endy">'+ asas[s].tradedate +'</p></div>');
+				}
+				//成交明细
+				var agag = res.batchTrade;
+				for(var h=0;h<agag.length;h++){
+				    $("#cjmx").append('<div><p class="whes">'+ agag[h].id +'</p><p>'+ agag[h].instrumentid +
+					'</p><p>'+ agag[h].offset +'</p><p>'+ getDirection(agag[h].direction) +'</p><p>'+ agag[h].tradeprice +
+					'</p><p>'+ agag[h].tradevolume +'</p><p>'+ agag[h].commission +'</p><p>'+ agag[h].tradetime +'</p><p>'+ agag[h].tradedate +
+					'</p><p class="endy">'+ agag[h].tradeid +'</p></div>');
+				}	
+				//平仓明细
+				var erer = res.closePosition;
+				for(var i=0;i<erer.length;i++){
+				    $("#pcmx").append('<div><p class="whes">'+ erer[i].id +'</p><p>' +
+					erer[i].instrumentid +'</p><p>'+ erer[i].offset +'</p><p>'+ getDirection(erer[i].direction) +
+					'</p><p>'+ erer[i].closeprofit +'</p><p>'+ erer[i].tradevolume +'</p><p>'+ erer[i].tradeprice+
+					'</p><p>'+ erer[i].tradetime +'</p><p>'+ erer[i].tradedate +'</p><p class="endy">'+ erer[i].tradeid +'</p></div>');
+				}
+				
+
+            }
+			
+        });
+            }
+        });    
+    })
+</script> {/block}{block name="tabbar"}{/block}{block name="checkLogin"}{/block}

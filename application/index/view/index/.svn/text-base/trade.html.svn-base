@@ -1,0 +1,67 @@
+{extend name="static/assets/base.html" /} {block name="title"}
+<title>帮助中心</title>{/block} {block name="style"}
+<style>
+    .weui-content {
+        position: relative;
+        height: auto;
+        width:100%;
+        background: #191a22;
+        margin-top:48px;
+    }
+h1,h2,h3{font-weight:normal;color: #f4c20c;}
+p{color: #dfdfdf;margin:15px 0;}
+</style>
+{/block}{block name="body"}
+    <header class="bar bar-nav">
+        <a href="javascript:history.go(-1);" class="weui-back">
+            <i class="iconfont icon-fanhui"></i>
+        </a>
+        <h1 class="title">简介</h1>
+    </header>
+<div class="weui-content">
+	<!--<div class="weui-title_" style="margin-bottom: 10px;text-align:center;">
+        <a href="javascript:history.go(-1);" class="weui-back" style="color:#fff;float:left;">
+            <i class="iconfont icon-fanhui"></i>
+        </a>
+                咨讯
+	</div>-->
+		<div class="introduction child-view" style=" padding:15px;font-size:13px;">
+			<h1 class="title" style="text-align:center;">平台介绍</h1> 
+			<p class="emphasize">
+				名称：盈众策略
+			</p> 
+			<p class="emphasize">
+				宗旨：通过行业领导者平台进行交易，正规监管确保公司透明、可信和安全。
+			</p> 
+			<p class="emphasize">
+				专业的网上交易平台，投资产品丰富多样，
+			</p> 
+			<p class="emphasize">
+				多种交易渠道，实现高效率，极具竞争性的交易条件。
+			</p> 
+			<h2 style="padding-top: 0.6rem;text-align:center;">
+				安全保障
+			</h2> 
+			<p style="text-indent:20px">
+				盈众策略是一家大型专业提供期货策略咨询的专业平台。在全球金融创新和互联网行业飞速发展的时代，公司以提供专业、安全、可靠的金融信息为使命，结合证券业先进的风控模型和互联网技术的创新建立一个安全、高效、诚信、透明的互联网策略咨询平台。<p/>
+   <p style="text-indent:20px">本平台自成立以来秉承坚持依法、规范、稳健的经营理念，对客户以“合作双赢，共同发展”为目标；对员工以“重视结果，控制过程”为岗位要求；对行业以“领先对手，超越自我”为竞争理念，为机构和客户提供一流的优质服务。<p/>
+
+   <p style="text-indent:20px">随着平台的慢慢扩大，也获得了更多投资，资本雄厚以及管理团队者多来自金融、互联网、银行等先进行业，对于金融理财有着自己独到的见解和认识，旗下有行业内销售精英，组建成了集风控、咨询、专业于一体的优秀团队。<p/>
+   <p style="text-indent:20px">盈众必将立足于客户，潜思精研，为客户提供高效、全方位的专业服务。
+			</p> 
+		</div>
+</div>
+<script type="text/javascript">
+function chatQQ(){
+	var ua = window.navigator.userAgent.toLowerCase();
+//	console.log(ua);
+  //通过正则表达式匹配ua中是否含有MicroMessenger字符串
+	if(ua.indexOf("micromessenger")> 0||ua.indexOf("huawei")> 0){
+		window.location.href="http://wpa.qq.com/msgrd?v=3&uin=793680313&site=qq&menu=yes";
+	}else{
+		window.location.href="mqqwpa://im/chat?chat_type=wpa&uin=793680313&version=1&src_type=web";
+	}
+}
+
+</script>
+{/block}{block name="tabbar"}{/block}{block name="checkLogin"}{/block}

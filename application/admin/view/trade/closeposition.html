@@ -1,0 +1,101 @@
+{include file="common/head"/}
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+  <div class="layui-padded-15">
+    <blockquote class="layui-elem-quote layui-text">
+        <h4>当前位置：{:lang('tradeManage')}<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>{:lang('closePosition')}</h4>
+    </blockquote>
+    <div class="layui-form">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label" style="padding:9px 0;">注册时间：</label>
+          <div class="layui-input-inline" style="margin-right:0;width: 150px;">
+            <input type="text" class="layui-input" id="reg_start_time" placeholder="yyyy-MM-dd">
+          </div>
+          <label class="layui-form-label" style="width:auto;display:inline-block;padding:9px 5px;color:#ccc;">-</label>
+          <div class="layui-input-inline" style="margin-right:20px;width: 150px;">
+            <input type="text" class="layui-input" id="reg_end_time" placeholder="yyyy-MM-dd">
+          </div>
+          <label class="layui-form-label" style="padding:9px 0;">所属机构：</label>
+          <div class="layui-input-inline" style="margin-right:0;width: 150px;">
+            <input type="text" name="title" required  lay-verify="required" placeholder="请输入所属机构" autocomplete="off" class="layui-input">
+          </div>
+          <label class="layui-form-label" style="padding:9px 0;">经纪人：</label>
+          <div class="layui-input-inline" style="margin-right:0;width: 150px;">
+            <input type="text" name="title" required  lay-verify="required" placeholder="请输入所属经纪人" autocomplete="off" class="layui-input">
+          </div>
+          <label class="layui-form-label" style="padding:9px 0;">关键词：</label>
+          <div class="layui-input-inline" style="margin-right:30px;width: 200px;">
+            <input type="text" name="title" required  lay-verify="required" placeholder="关键词：姓名或手机号" autocomplete="off" class="layui-input">
+          </div>
+          <button class="layui-btn" style="width:100px;"><i class="layui-icon">&#xe615;</i> 搜索 </button>
+          <button class="layui-btn layui-btn-warm" style="width:100px;"> 重置 </button>
+        </div>
+      </div>
+    </div>
+    <div class="layui-form">
+      <table class="layui-table" id="list" lay-filter="list"></table>
+    </div>
+  </div>
+</div>
+{include file="common/foot"/}
+<script>
+    var message;
+    layui.config({
+        base: ADMIN+'build/js/',
+        version: '1.0.1'
+    }).use(['app','table','laydate','message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            table = layui.table,
+            laydate = layui.laydate,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+    //列表数据
+    var tableIn = table.render({
+        elem: '#list',
+        url: '{:url("trade/closePosition")}',
+        method: 'post',
+        page: true,
+        cols: [[
+            {type:'numbers',title:'序号',fixed: true},
+            {field:'true_name',align:'center',title:'姓名',width:90},
+            {field:'mobile',align:'center',title:'手机号',width:120},
+            {field:'instrumentid', align:'center',title:'合约代码',width:90},
+            {field:'c_name', align:'center',title:'合约名称',width:90},
+            {field:'direction', align:'center',title:'多空',width:60},
+			{field:'offsetflag', align:'center',title:'开平',width:60},
+            {field:'price', align:'center',title:'成交价',width:90},
+            {field:'volume', align:'center',title:'成交数量',width:90},
+            {field:'stop_profit', align:'center',title:'止盈',width:60},
+            {field:'stop_loss', align:'center',title:'止损',width:60},
+            {field:'ptglf', align:'center',title:'平台管理费',width:100},
+            {field:'sxf', align:'center',title:'手续费',width:90},
+            {field:'jsfwf', align:'center',title:'技术服务费',width:100},
+            {field:'tradeid',align:'center',title:'成交编号',width:100},
+            {field:'ordersysid',align:'center',title:'报单编号',width:100},
+			{field:'trade_time',align:'center',title:'成交时间',width:180},
+        ]],
+        limit: 10,
+        height: 650 //固定值
+    });
+    //时间控件渲染
+    laydate.render({
+      elem: '#reg_start_time'
+    });
+    laydate.render({
+      elem: '#reg_end_time'
+    });
+    
+        
+  });
+</script>
+</body>
+</html>

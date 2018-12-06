@@ -1,0 +1,71 @@
+{extend name="static/assets/base.html" /}{block name="title"}
+<title>绑定账号</title>{/block} {block name="style"}
+<style>
+	body {
+		color: #ebebeb;
+		text-align: center;
+	}
+
+	.futures_account {
+		padding: 0 0 0 2rem;
+		margin-top: 48px;
+
+	}
+
+	.rett {
+		margin-bottom: 2rem;
+		display: flex;
+		height: 2.2rem;
+	}
+
+	.rett>img {
+		flex: 1;
+		height: 100%;
+	}
+
+	.rett>p {
+		flex: 9;
+		font-size: 105%;
+		line-height: 2.2rem;
+		padding-left: 5px;
+		color: #fff;
+		text-align: left;
+	}
+
+	.terr {
+		text-align: center;
+		font-size: 130%;
+		color: #fff;
+	}
+</style>
+
+{/block} {block name="body"}
+<div class="weui-content" style="background-color: #20212a;bottom:0;">
+	<div class="futures_account">
+		<div class="account_body">
+			<div class="detail">
+				<div class="rett">
+					<img src="/static/assets/images/kh_bg2.png" />
+					<p>30秒极速开户，固定账户，全年无休</p>
+				</div>
+				<div class="rett">
+					<img src="/static/assets/images/kh_bg2.png" />
+					<p>高效出入金，秒进秒出秒到账，随时提现</p>
+				</div>
+				<div class="rett">
+					<img src="/static/assets/images/kh_bg3.png" />
+
+					<p>权威软件，合规支付，交易可进可退</p>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+	<h2>一个账户交易四大所品种</h2>
+	<div class="btn_box" style="padding: 3rem 1.2rem 2.5rem;">
+		<a href="/index/index/readkh" class="weui-btn weui-btn_">马上开户</a>
+	</div>
+</div>
+{/block} {block name="tabbar"}{/block} {block name="script"}
+<script src="/static/assets/jscode/login.bundle.js"></script> {/block}{block name="checkLogin"}{/block}

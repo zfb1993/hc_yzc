@@ -1,0 +1,265 @@
+﻿{extend name="static/assets/base.html" /}{block name="title"}
+<title>资金明细</title>{/block} {block name="style"}
+<link rel="stylesheet" href="/static/assets/css/mui.min.css">
+<style>
+	html,
+	body {
+		background-color: #efeff4;
+	}
+
+	.mui-bar~.mui-content .mui-fullscreen {
+		top: 44px;
+		height: auto;
+	}
+
+	.mui-pull-top-tips {
+		position: absolute;
+		top: -20px;
+		left: 50%;
+		margin-left: -25px;
+		width: 40px;
+		height: 40px;
+		border-radius: 100%;
+	}
+
+	.mui-bar~.mui-pull-top-tips {
+		top: 24px;
+	}
+
+	.mui-pull-top-wrapper {
+		width: 42px;
+		height: 42px;
+		display: block;
+		text-align: center;
+		background-color: #efeff4;
+		border: 1px solid #ddd;
+		border-radius: 25px;
+		background-clip: padding-box;
+		box-shadow: 0 4px 10px #bbb;
+		overflow: hidden;
+	}
+
+	.mui-pull-top-tips.mui-transitioning {
+		-webkit-transition-duration: 200ms;
+		transition-duration: 200ms;
+	}
+
+	.mui-pull-top-tips .mui-pull-loading {
+		/*-webkit-backface-visibility: hidden;
+            -webkit-transition-duration: 400ms;
+            transition-duration: 400ms;*/
+		margin: 0;
+	}
+
+	.mui-pull-top-wrapper .mui-icon,
+	.mui-pull-top-wrapper .mui-spinner {
+		margin-top: 7px;
+	}
+
+	.mui-pull-top-wrapper .mui-icon.mui-reverse {
+		/*-webkit-transform: rotate(180deg) translateZ(0);*/
+	}
+
+	.mui-pull-bottom-tips {
+		text-align: center;
+		background-color: #efeff4;
+		font-size: 15px;
+		line-height: 40px;
+		color: #777;
+	}
+
+	.mui-pull-top-canvas {
+		overflow: hidden;
+		background-color: #fafafa;
+		border-radius: 40px;
+		box-shadow: 0 4px 10px #bbb;
+		width: 40px;
+		height: 40px;
+		margin: 0 auto;
+	}
+
+	.mui-pull-top-canvas canvas {
+		width: 40px;
+	}
+
+	.mui-slider-indicator.mui-segmented-control {
+		background-color: #efeff4;
+	}
+
+	.mui-fullscreen {
+		margin-top: 48px;
+	}
+
+	header.bar .tools {
+		float: right;
+		top: 4px;
+		position: relative;
+	}
+
+	header.bar .weui-back {
+		cursor: pointer;
+		float: left;
+		position: relative;
+		top: 13px;
+		z-index: 12;
+	}
+
+	.mui-segmented-control.mui-scroll-wrapper .mui-scroll {
+		position: relative;
+		display: flex;
+		white-space: unset;
+	}
+
+	.mui-segmented-control.mui-scroll-wrapper .mui-control-item {
+		flex: 1;
+		white-space: unset;
+		padding: 0 10px;
+	}
+
+	.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
+		color: #303849;
+		text-align: left;
+	}
+</style>
+{/block} {block name="body"}
+    <header class="bar bar-nav">
+        <a href="javascript:history.go(-1);" class="weui-back">
+            <i class="iconfont icon-fanhui"></i>
+        </a>
+        <h1 class="title">资金明细</h1>
+    </header>
+<div class="mui-content">
+	<!--<div class="weui-title_" style="margin-bottom: 10px;text-align:center;">
+        <a href="javascript:history.go(-1);" class="weui-back" style="color:#fff;float:left;">
+            <i class="iconfont icon-fanhui"></i>
+        </a>
+                资金明细
+	</div>-->
+	<div id="slider" class="mui-slider mui-fullscreen">
+		<div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+			<div class="mui-scroll">
+				<a class="mui-control-item mui-active" href="#item1mobile">
+					充值提现记录
+				</a>
+			</div>
+		</div>
+		<div class="mui-slider-group">
+			<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+				<div id="scroll1" class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<ul class="mui-table-view" data-page="0">
+							<!-- <li class="mui-table-view-cell">
+								<div class="mui-row">
+									<h5>余额充值
+										<span class="mui-pull-right">+2000</span>
+									</h5>
+									<h5>余额:1000.00
+										<span class="mui-pull-right">2017-12-06 13:55:50</span>
+									</h5>
+								</div>
+							</li> -->
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{/block} {block name="tabbar"}{/block} {block name="script"}
+<script src="/static/assets/js/mui.min.js"></script>
+<script src="/static/assets/js/mui.pullToRefresh.js"></script>
+<script src="/static/assets/js/mui.pullToRefresh.material.js"></script>
+<script>
+	mui.init();
+	//定义page属性
+	window.page = {
+		0: 0
+	};
+
+
+	window.formatDate = function (ns) {
+		var d = new Date(ns * 1000);
+		var dformat =
+			[d.getFullYear(), d.getMonth() + 1, d.getDate()].join("-") +
+			" " +
+			[d.getHours(), d.getMinutes()].join(":");
+		return dformat;
+	};
+
+	(function ($) {
+		//阻尼系数
+		var deceleration = mui.os.ios ? 0.003 : 0.0009;
+		$('.mui-scroll-wrapper').scroll({
+			bounce: false,
+			indicators: true, //是否显示滚动条
+			deceleration: deceleration
+		});
+		$.ready(function () {
+			//循环初始化所有下拉刷新，上拉加载。
+			$.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function (index, pullRefreshEl) {
+				$(pullRefreshEl).pullToRefresh({
+					up: {
+						auto: true,
+						callback: function () {
+							var type = index + 1;
+							var id = index;
+							var self = this;
+							$.ajax({
+								type: 'POST',
+								url: "/index/api/viewFlowLog",
+								dataType: 'json',
+								data: {
+									uid: localStorage.id,
+									type: localStorage.type,
+									auth: localStorage.auth,
+									logtype: type,
+									page: window.page[index]
+								},
+								async: false,
+								success: function (data) {
+									var ul = self.element.querySelector('.mui-table-view');
+									ul.appendChild(createFragment(data.data));
+									window.page[id] = window.page[id] + 1;
+									//self.endPullUpToRefresh(data.lastpage);
+									document.querySelector(".mui-pull-bottom-wrapper").remove();
+								},
+								error: function () {
+									mui.toast('请求超时');
+								}
+							});
+						}
+					}
+				});
+			});
+
+			function createFragment(data) {
+				var fragment = document.createDocumentFragment();
+				var li;
+				$(data).each(function (index, value) {
+					li = document.createElement('li');
+					li.className = 'mui-table-view-cell';
+					if (value.type == 0) {
+						value.memo = "提现";
+					} else if (value.type == 1) {
+						value.memo = "充值";
+					}
+					value.memo = value.memo || "未知 ";
+					li.innerHTML = '<div class="mui-row"><h5>' + value.memo + ' <span class="mui-pull-right">' + parseFloat(value.money).toFixed(0) + '</span></h5><h5>余额: ' + parseFloat(value.total_money).toFixed(0) + '<span class="mui-pull-right">' + formatDate(value.add_time) + '</span></h5></div>';
+					fragment.appendChild(li);
+				});
+				return fragment;
+			};
+		});
+	})(mui);
+
+</script>
+	<script>
+	    var ser = localStorage.id;
+		console.log(ser);
+			  if (localStorage.id === undefined) {
+				$.toast("登陆已过期，重新登陆！", function() {
+				  window.location.href = "/index/index/login";
+				});
+			};
+	</script>
+ {/block}

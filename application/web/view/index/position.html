@@ -1,0 +1,113 @@
+{extend name="static/assets/base.html" /} {block name="title"}
+<title>我的持仓</title>{/block} {block name="style"}
+<style>
+    .weui-tab__bd-item {
+        padding-bottom: 105px;
+    }
+
+    #btns {
+        display: none;
+    }
+
+    .weui-cells__title {
+        background: white;
+        color: #2c3341;
+        border-bottom: 1px solid #efefef;
+        font-size: 17px;
+    }
+</style>
+{/block} {block name="back"}{/block}{block name="body"}
+<div class="weui-content">
+    <div class="weui-buttons">
+        <a href="/index/index/optional" data-tab="all" class="weui-grid weui-grid-2 ">
+            <h2 id="total">
+                <i class="iconfont icon-81"></i>
+            </h2>
+            <p class="weui-grid__label">
+                交易
+            </p>
+        </a>
+        <a href="/index/index/position" data-tab="all" class="weui-grid weui-grid-2 active">
+            <h2>
+                <i class="iconfont icon-27"></i>
+            </h2>
+            <p class="weui-grid__label">
+                持仓
+            </p>
+        </a>
+    </div>
+    <!-- 容器 -->
+    <div class="weui-tab">
+        <div class="weui-navbar">
+            <a class="weui-navbar__item weui-bar__item--on" href="#tab1">
+                当前操盘
+            </a>
+            <a class="weui-navbar__item" href="#tab2">
+                委托记录
+            </a>
+            <a class="weui-navbar__item" href="#tab3">
+                成交记录
+            </a>
+        </div>
+        <div id="lists" class="weui-tab__bd">
+        </div>
+    </div>
+</div>
+
+<div class="ui-dialog">
+    <div class="weui-cells__title">止损止盈设置</div>
+    <div class='numboxs'>
+        <ul class="btn-numbox">
+            <li>
+                <span class="number">盈利金额</span>
+            </li>
+            <li>
+                <ul class="count">
+                    <li>
+                        <span id="num-jian" class="num-jian">-</span>
+                    </li>
+                    <li>
+                        <input type="text" class="input-num" id="input-num" value="6" />
+                    </li>
+                    <li>
+                        <span id="num-jia" class="num-jia">+</span>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <span class="kucun">元时，触发卖出</span>
+            </li>
+        </ul>
+        <ul class="btn-numbox">
+            <li>
+                <span class="number">亏损金额</span>
+            </li>
+            <li>
+                <ul class="count">
+                    <li>
+                        <span id="num-jian" class="num-jian">-</span>
+                    </li>
+                    <li>
+                        <input type="text" class="input-num" id="input-num" value="5" />
+                    </li>
+                    <li>
+                        <span id="num-jia" class="num-jia">+</span>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <span class="kucun">元时，触发卖出</span>
+            </li>
+        </ul>
+    </div>
+    <div class="weui-dialog__ft">
+        <a href="javascript:;" id="cancel" class="weui-dialog__btn default">取消</a>
+        <a href="javascript:;" class="weui-dialog__btn primary">确定</a>
+    </div>
+
+
+</div>
+<!--  -->
+</div>
+{/block} {block name="script"}
+<script src="/static/assets/jscode/position.bundle.js"></script> {/block}

@@ -1,0 +1,36 @@
+{extend name="static/assets/base.html" /}{block name="title"}
+<title>自选</title>{/block} {block name="style"}
+<style type="text/css">
+    table.weui-table thead>tr>th {
+        padding: 0;
+    }
+
+    table.weui-table {
+        font-size: 13px;
+    }
+
+    table.weui-table tbody>tr>td {
+        padding: 0;
+        line-height: unset;
+    }
+</style>
+{/block}{block name="back"}{/block}{block name="body"}
+<div class="weui-content">
+    <div class="weui-cells cell-white">
+        <div class="weui-scrollable-horizontal ">
+            <table class="weui-table">
+                <thead>
+                    <tr>
+                        <th>名称代码</th>
+                        <th>涨跌幅</th>
+                        <th>现价</th>
+                    </tr>
+                </thead>
+                <tbody id="mystock">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{/block} {block name="script"}
+<script type="text/javascript" src="/static/assets/jscode/optional.bundle.js"></script> {/block}

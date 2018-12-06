@@ -1,0 +1,285 @@
+{include file="common/head"/}
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div class="layui-padded-15">
+        <blockquote class="layui-elem-quote layui-text">
+            <h4 class="layui-pull-left">当前位置：{:lang('systemManage')}<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>{:lang('manageList')}</h4>
+            <button id="user_reg" class="layui-btn layui-btn-normal layui-pull-right">添加管理员</button>
+        </blockquote>
+        <div class="layui-form">
+            <table class="layui-table" id="list" lay-filter="list" style="margin-top:0;"></table>  
+        </div>
+    </div>
+</div>
+{include file="common/foot"/}
+<script type="text/html" id="action">
+  <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+</script>
+<script>
+    var message;
+    layui.config({
+        base: ADMIN+'build/js/',
+        version: '1.0.1'
+    }).use(['app','form','table','layer','laydate','message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            table = layui.table,
+            laydate = layui.laydate,
+            form = layui.form,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+	//列表数据
+    var tableIn = table.render({
+        elem: '#list',
+        url: '{:url("system/manageList")}',
+        method: 'post',
+        page: true,
+        cols: [[
+            {type:'numbers',title:'序号',width:60,fixed: true},
+            {field:'username',align:'center',title:'账号', width:120},
+            {field:'realname',align:'center',title:'姓名', width:120},
+            {field:'tel',align:'center',title:'联系电话',width:150},
+            {field:'create_time',align:'center',title:'注册时间', width:200},
+            {field:'ip',align:'center',title:'登录IP', width:200},
+            {field:'is_open', align:'center', title:'状态',width:120},
+            {width: 200, align: 'center', toolbar: '#action',title:'操作'}
+        ]],
+        limit: 10,
+        height: 600 //固定值
+    });
+	//监听工具条
+    table.on('tool(list)', function(obj){
+      var data = obj.data;
+      if(obj.event === 'detail'){
+        //layer.msg('ID：'+ data.id + ' 的查看操作');
+      } else if(obj.event === 'del'){
+        layer.confirm('真的要删除该管理员吗？', function(index){
+          $.post("{:url('system/delManager')}",{'id':data.admin_id},function(res){
+            if(res.code==1){
+              layer.msg(res.msg,{icon: 1, time: 1000},function(){
+                obj.del();
+                layer.close(index);
+              });
+            }else{
+              layer.msg(res.msg,{icon: 2, time: 1000},function(){
+                layer.close(index);
+              });
+            }
+          });
+        });
+      } else if(obj.event === 'edit'){
+        //layer.alert('编辑行：<br>'+ JSON.stringify(data))
+		$.post("{:url('getGroupData')}",{},function(res){
+          var str='';
+              str+='<div class="layui-user">';
+              str+='<form class="layui-form">';
+			  str+='<div class="layui-form-item">';
+              str+='<label class="layui-form-label">所属用户组</label>';
+              str+='<div class="layui-input-block">';
+			  str+='<select id="group" name="group" lay-verify="required">';
+			  str+='<option value=""></option>';
+			  for(var i=0;i<res.length;i++){
+				if(data.group_id==res[i].group_id){
+					str+='<option value="'+res[i].group_id+'" selected>'+res[i].title+'</option>';
+				}else{
+					str+='<option value="'+res[i].group_id+'">'+res[i].title+'</option>';
+				}
+			  }
+			  str+='</select>';
+			  str+='</div>';
+              str+='</div>';
+			  str+='<div class="layui-form-item">';
+              str+='<label class="layui-form-label">账号</label>';
+              str+='<div class="layui-form-mid layui-word-aux">'+data.username+'</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item">';
+              str+='<label class="layui-form-label">姓名</label>';
+              str+='<div class="layui-input-block">';
+              str+='<input type="text" name="realname" placeholder="请输入姓名" autocomplete="off" value="'+data.realname+'" class="layui-input">';
+              str+='</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item">';
+              str+='<label class="layui-form-label">电话</label>';
+              str+='<div class="layui-input-block">';
+              str+='<input type="number" name="tel" placeholder="请输入电话" value="'+data.tel+'" class="layui-input">';
+              str+='</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item">';
+              str+='<label class="layui-form-label">邮箱</label>';
+              str+='<div class="layui-input-block">';
+              str+='<input type="text" name="email" placeholder="请输入邮箱" value="'+data.email+'" class="layui-input">';
+              str+='</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item">';
+              str+='<label class="layui-form-label">重置密码</label>';
+              str+='<div class="layui-input-block">';
+              str+='<input type="password" name="user_pwd" placeholder="请输入新密码" class="layui-input">';
+              str+='</div>';
+              str+='</div>';
+              str+='</form>';
+              str+='</div>';
+            layer.open({
+            type: 1, 
+            skin: 'layui-user-reg',
+            title:'编辑用户资料',
+            area:['600px','430px'],
+            content:str,
+            btn: ['提交', '放弃'],
+            btnAlign: 'c',
+            yes: function(index, layero){
+              var user_pwd=$('input[name="user_pwd"]').val();
+              var tel=$('input[name="tel"]').val();
+              var email=$('input[name="email"]').val();
+              var realname=$('input[name="realname"]').val();
+			  var group_id=$('#group option:selected').val();
+              $.post("{:url('system/editManager')}",{'gid':group_id,'id':data.admin_id,'user_pwd':user_pwd,'tel':tel,'email':email,'realname':realname},function(res){
+                if(res.code==1){
+                  layer.msg(res.msg,{icon:1,time:1500},function(){
+					tableIn.reload();
+                    layer.close(index);
+                  });
+                }else if(res.code==0){
+                  layer.msg(res.msg,{icon:2,time:1500},function(){
+                    layer.close(index);
+                  });
+                }else{
+                  layer.msg(res.msg,{icon:2,time:1500},function(){
+                    layer.close(index);
+                  });
+                }
+              });
+            },
+            btn2: function(index, layero){
+              layer.close(index);
+              //return false 开启该代码可禁止点击该按钮关闭
+            },
+            cancel: function(index){ 
+              layer.close(index);
+              //return false; 
+              //return false 开启该代码可禁止点击该按钮关闭
+            }
+          });
+          form.render();
+		});
+      }
+    });
+	//注册新用户
+    $('#user_reg').click(function(){
+      $.post("{:url('getGroupData')}", {}, function(res){
+        //alert(JSON.stringify(data));
+        var str='';
+            str+='<div class="layui-user">';
+            str+='<form class="layui-form">';
+			str+='<div class="layui-form-item">';
+			str+='<label class="layui-form-label">所属用户组</label>';
+			str+='<div class="layui-input-block">';
+			str+='<select id="group" name="group" lay-verify="required">';
+			str+='<option value=""></option>';
+			for(var i=0;i<res.length;i++){
+				str+='<option value="'+res[i].group_id+'">'+res[i].title+'</option>';
+			}
+			str+='</select>';
+			str+='</div>';
+			str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">账号</label>';
+            str+='<div class="layui-input-block">';
+            str+='<input type="text" name="user_name" placeholder="请输入管理员账号" autocomplete="off" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">密码</label>';
+            str+='<div class="layui-input-block">';
+            str+='<input type="password" name="user_pwd" placeholder="请输入密码" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='</form>';
+            str+='</div>';
+        layer.open({
+          type: 1, 
+          skin: 'layui-user',
+          title:'添加管理员',
+          area:['550px','380px'],
+          content:str,
+          btn: ['提交', '放弃'],
+          btnAlign: 'c',
+          yes: function(index, layero){
+            var user_name=$('input[name="user_name"]').val();
+            var user_pwd=$('input[name="user_pwd"]').val();
+			var group_id=$('#group option:selected').val();
+            $.post("{:url('system/addManager')}",{'gid':group_id,'user_name':user_name,'user_pwd':user_pwd},function(res){
+              if(res.code==1){
+                layer.msg(res.msg, {icon: 1, time: 1000}, function(){
+                    layer.close(index);
+                    tableIn.reload();
+                });
+              }else{
+                layer.msg(res.msg, {icon: 2, time: 1000});
+              }
+            });
+          },
+          btn2: function(index, layero){
+            layer.close(index);
+            //return false 开启该代码可禁止点击该按钮关闭
+          },
+          cancel: function(index){ 
+            layer.close(index);
+            //return false; 
+            //return false 开启该代码可禁止点击该按钮关闭
+          }
+        });
+      form.render();
+      });
+    
+    });
+
+
+    //恢复密码
+    $('.repwd').click(function(){
+        var j = $(this).data("uid");
+        layer.confirm('您确定要重置密码吗？',{icon:3},function(data){
+            var loading = layer.load(1, {shade: [0.1, '#fff']});
+            $.post('{:url("user/resetPwd")}', {id:j}, function (res) {
+                layer.close(loading);
+                if (res.code > 0) {
+                    layer.msg(res.msg, {time: 1800, icon: 1}, function () {
+                        location.href = res.url;
+                    });
+                } else {
+                    layer.msg(res.msg, {time: 1800, icon: 2});
+                }
+            });
+
+        });
+    });
+    //删除用户
+    $('.del').click(function(){
+        var j = $(this).data("uid");
+        layer.confirm('您确定要删除该用户吗？',{icon:3},function(data){
+            var loading = layer.load(1, {shade: [0.1, '#fff']});
+            $.post('{:url("user/userDel")}', {id:j}, function (res) {
+                layer.close(loading);
+                if (res.code > 0) {
+                    layer.msg(res.msg, {time: 1800, icon: 1}, function () {
+                        location.href = res.url;
+                    });
+                } else {
+                    layer.msg(res.msg, {time: 1800, icon: 2});
+                }
+            });
+
+        });
+    });  
+        
+  });
+</script>
+</body>
+</html>

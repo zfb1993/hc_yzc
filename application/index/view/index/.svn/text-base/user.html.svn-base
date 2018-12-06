@@ -1,0 +1,209 @@
+{extend name="static/assets/base.html" /}{block name="title"}
+<title>修改用户信息</title>{/block} {block name="style"}
+<style>
+    .weui-cell {
+        background: none;
+        margin: 20px 0;
+    }
+
+    .weui-cell__bd {
+        text-align: left;
+    }
+
+    .weui-label {
+        width: 40px;
+        position: absolute;
+        top: 18px;
+        color: black;
+        left: 25px;
+    }
+
+    input.weui-input {
+        text-align: left;
+        width: 100%;
+        border: 1px solid #778091;
+        background: white;
+        color: black;
+        line-height: 22px;
+        height: 30px;
+        border-radius: 4px;
+        text-indent: 50px;
+    }
+
+    button.weui-vcode-btn {
+        border-left: 1px solid #303849;
+        line-height: 11px;
+        padding: 0 0.6em 0 0.7em;
+        background: #e64340;
+        margin: 0px 10px;
+        height: 36px;
+        border-radius: 4px;
+    }
+
+    label>* {
+        pointer-events: inherit;
+    }
+
+    .avatar {
+        width: 50px;
+        border-radius: 50%;
+    }
+
+    .weui-cells {
+        border-bottom: transparent;
+    }
+
+    /*白头写法*/
+
+    header.bar h1.title,
+    header.bar,
+    body,
+    html,
+    .weui-content {
+        background: white;
+    }
+
+    header.bar .weui-back>i,
+    header.bar .tools a>i {
+        color: black;
+    }
+
+    .taitou {
+        padding: 0 20px;
+        padding-top: 20px;
+    }
+
+    .taitou small {
+        color: #707070;
+    }
+
+    /*白头写法*/
+
+    .aixuexi {
+        width: 50px;
+        height: 50px;
+
+    }
+
+    .aixuexi img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+    }
+</style>
+
+{/block} {block name="tools"} {/block}{block name="header-title"} {/block} {block name="body"}
+<div class="weui-content">
+    <!-- <div class="taitou">
+        <h1>个人信息修改</h1>
+        <small>说点什么好呢？</small>
+    </div> -->
+    <div class="weui-title_" style="margin-bottom: 10px;text-align: center;">
+            <a href="javascript:history.go(-1);" class="weui-back" style="color:#fff;float:left;">
+                <i class="iconfont icon-fanhui"></i>
+            </a>
+			<h1 class="title" style="font-size:18px;font-weight:normal;">修改用户信息</h1>
+        </div>
+    <input id="image" type="file" type="file" hidden accept="image/*" multiple="" />
+    <div class="weui-cells weui-cells_form">
+        <div id="upload" class="weui-cell  weui-cell_access">
+            <div class="weui-cell__hd">
+                <label class="weui-label" style="top: 27px;">
+                    头像
+                </label>
+            </div>
+            <div class="weui-cell__bd">
+
+            </div>
+            <div class="weui-cell__ft">
+                <div class="aixuexi">
+                    <img id="touxiang" src="/static/assets/img/404.png" onerror="javascript:this.src='/static/assets/img/404.png';this.onerror=null;">
+                </div>
+            </div>
+        </div>
+        <a class="weui-cell weui-cell_access" href="nickname">
+            <div class="weui-cell__hd">
+                <label class="weui-label" style="top: 0px; width: 67px;">
+                    修改昵称
+                </label>
+            </div>
+            <div class="weui-cell__bd">
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+        <a class="weui-cell weui-cell_access" href="password">
+            <div class="weui-cell__hd">
+                <label class="weui-label" style="top: 0px; width: 67px;">
+                    修改密码
+                </label>
+            </div>
+            <div class="weui-cell__bd">
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+    </div>
+</div>
+{/block} {block name="tabbar"}{/block} {block name="script"}
+<script src="/static/assets/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    $(function () {
+        $("#touxiang").attr("src", localStorage.user_logo);
+
+        $("#upload").on('click', function () {
+            event.stopPropagation();
+            $("#image").click();
+        });
+
+        $('#image').change(function () {
+            var file_ = $('#image')[0].files[0];
+            var objUrl = $.getObjectURL(file_);
+            $("#_avatar").attr("src", objUrl);
+            var formData = new FormData();
+            formData.append("user_logo", file_);
+            formData.append("uid", localStorage.id);
+            formData.append("auth", localStorage.auth);
+            formData.append("type", localStorage.type);
+            $.ajax({
+                url: '/index/api/upload_logo',
+                type: 'POST',
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function (_d) {
+                    if (_d['code'] == 1) {
+                        $.toast("更新成功", "text");
+                        getUserInfo(function () {
+                            $("#touxiang").attr("src", localStorage.user_logo);
+                        });
+                    } else {
+                        $.alert(_d["msg"]);
+                    }
+                },
+                error: function (_d) {
+                    $.alert(_d['msg']);
+                }
+            });
+        });
+
+        //建立一個可存取到該file的url
+        $.getObjectURL = function (file) {
+            var url = null;
+            if (window.createObjectURL != undefined) { // basic
+                url = window.createObjectURL(file);
+            }
+            else if (window.URL != undefined) {
+                // mozilla(firefox)
+                url = window.URL.createObjectURL(file);
+            }
+            else if (window.webkitURL != undefined) {
+                // webkit or chrome
+                url = window.webkitURL.createObjectURL(file);
+            }
+            return url;
+        }
+    });
+
+</script> {/block}

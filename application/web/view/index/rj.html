@@ -1,0 +1,453 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="generator" content="">
+    <title>我要入金</title>
+
+    <link href="/web/style.css" rel="stylesheet" type="text/css">
+    <link href="/web/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="/web/css.css" rel="stylesheet" type="text/css">
+
+    <link href="/web/lrtk.css" rel="stylesheet" type="text/css">
+    <link href="/web/user.css" rel="stylesheet" type="text/css">
+    <link href="/web/jtw.css" rel="stylesheet" type="text/css">
+    <link href="/web/grid.css" rel="stylesheet" type="text/css">
+
+    <script type="text/javascript" src="/web/jquery.min.js"></script>
+    <script type="text/javascript" src="/web/cookie.js"></script>
+    <script type="text/javascript" src="/web/global.js"></script>
+    <script type="text/javascript" src="/web/slide_show.js"></script>
+    <script src="/web/lrtk.js" type="text/javascript"></script>
+    <script src="/web/js.js" type="text/javascript"></script>
+    <script src="/web/md5.js" type="text/javascript"></script>
+    <script src="/web/enc-base64-min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        var tradeids = localStorage.zid
+        //if (!tradeids) { top.location.href = "uc"; }
+        if (!localStorage.id) {
+            location.href = "login";
+        }
+        function cashinuuo_callback() { }
+        $(function () {
+            $("#submitbtn").click(function (e) {
+                var tradeid = localStorage.zid
+                if (!tradeid) { alert("交易账号不存在，不能入金"); top.location.href = "uc"; return false; }
+                var Amount = $("#Amount").val();
+                if (!Amount || Amount < 1) { alert("请正确输入金额，最少1元"); return false; }
+                var BankType = $("#BankType").val();
+                if (BankType == 0) { alert("请选择入金银行"); return false; }
+                var ChoosePayType = $("#ChoosePayType").val();
+
+                var title = "订单支付";
+                window.open("about:blank", title);
+                $.ajax({
+                    url: "",
+                    type: "get",
+                    dataType: "jsonp",
+                    jsonpCallback: "cashinuuo_callback",
+                    async: false,
+                    success: function (data) {
+                        if (data.StatusCode != 0) {
+                            alert(data.StatusDesc);
+                            return false;
+                        } else {
+                            //var postd={pGateWayReq:data.pGateWayReq,TradeId:data.TradeId};
+                            var postd = data.pGateWayReq;
+                            jsPost(data.url, postd, title);
+
+                        }
+                    }
+                });
+
+            });
+        })
+
+        function jsPost(URL, PARAMS, TARGET) {
+            var temp = document.createElement("form");
+            temp.action = URL;
+            temp.method = "post";
+            temp.style.display = "none";
+            if (!TARGET) {
+                TARGET = "_self";
+            }
+            temp.target = TARGET;
+            var opt = document.createElement("textarea");
+            opt.name = "pGateWayReq";  //alert(opt.name);
+            opt.value = PARAMS;  //alert(opt.value);
+            temp.appendChild(opt);
+            /*
+            for (var x in PARAMS) {  
+              var opt = document.createElement("textarea");  
+              opt.name = x;  //alert(opt.name);
+              opt.value = PARAMS[x];  //alert(opt.value);
+              temp.appendChild(opt);  
+          	
+            }  
+            */
+            document.body.appendChild(temp);
+            temp.submit();
+            return temp;
+        } 
+    </script>
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="top">
+            <div class="wrap">
+                <ul class="userTop">
+                    <!--a>客服热线：$site.tel}</a-->
+                </ul>
+                <ul class="topNav">
+                    <li>
+                        <a href="uc">18673170179</a>
+                        <a href="quit">退出</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="header">
+            <div class="wrap">
+                <ul class="logo">
+                    <a href="index">
+                        <img style="width:270px; margin-top:10px; margin-bottom:10px;margin-left:30px;" src="/web/logo.png">
+                    </a>
+                </ul>
+                <div class="nav-bar"></div>
+                <ul style="margin-top:5px;" class="p_nav">
+                    <li class="cur">
+                        <a href="index" class="first">首页</a>
+                    </li>
+                    <li>
+                        <a href="futures">国内期货</a>
+                    </li>
+                    <li>
+                        <a href="rules">交易规则</a>
+                    </li>
+                    <li>
+                        <a href="about">关于我们</a>
+                    </li>
+                    <li>
+                        <a href="download">软件下载</a>
+                    </li>
+                    <li>
+                        <a href="service">客戶服务</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div align="center" style="font-size:18px">提示：富期通是一家可提供给操盘手优质服务的平台，并非属于任何一家期货公司的子公司，请各操盘手在进行操盘之前仔细阅读本平台的风险揭示书及交易规则，任何操盘以本平台信息为准！</div>
+        <div class=" mb">
+            <div id="user">
+                <div class="lp_wrap">
+                    <div class="jtw-left">
+                        <ul class="jtw-leftnav">
+                            <li>
+                                <h4>
+                                    <img style="margin-top:-5px;" src="/web/user.png">&nbsp;
+                                    <a href="uc">账户中心</a>
+                                </h4>
+                            </li>
+                            <li>
+                                <h4>
+                                    <img style="margin-top:-5px;" src="/web/qian.png">&nbsp;资金管理</h4>
+                            </li>
+                            <div class="ernav">
+                                <a href="crj">出入金记录</a>
+                            </div>
+                            <li>
+                                <h4>
+                                    <img style="margin-top:-2px;" src="/web/anquan.png">&nbsp;
+                                    <a href="pwd">密码修改</a>
+                                </h4>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="jtw-right">
+                        <!-- include file="inc/ur_here.tpl"} -->
+                        <div class="jtw-main">
+                            <h4 class="jtw-main-title">
+                                <span>鑫管家入金账号：
+                                    <script>document.write(localStorage.zid);</script>
+                                </span>
+                            </h4>
+                            <form id="payform" method="post" action="http://pay.uuopay.com/pay.php" target="_blank">
+                                <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="2">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="80" align="right">充值金额</td>
+                                            <td>
+                                                <input name="Amount" type="text" class="textInput" size="20" id="Amount">元
+                                                <i>*</i>
+                                                <span class="price">请在申请入金后30分钟内完成支付！</span>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td width="80" align="right">银行</td>
+                                            <td>
+                                                <select id="BankType" name="bank">
+                                                    <option value="0">选择银行</option>
+                                                    <option value="1100">工商银行</option>
+                                                    <option value="1101">农业银行</option>
+                                                    <option value="1102">招商银行</option>
+                                                    <option value="1103">兴业银行</option>
+                                                    <option value="1107">中国银行</option>
+                                                    <option value="1110">民生银行</option>
+                                                    <option value="1116">上海银行</option>
+                                                    <option value="1119">邮储银行</option>
+                                                    <option value="1120">浙商银行</option>
+                                                    <option value="1121">平安银行</option>
+                                                    <option value="1106">中国建设银行</option>
+                                                    <!--
+														<option value="1108">交通银行</option>
+														<option value="1104">中信银行</option>
+														<option value="1109">浦发银行</option>
+														<option value="1111">华夏银行</option>
+														<option value="1112">光大银行</option>
+														<option value="1113">北京银行</option>
+														<option value="1114">广发银行</option>
+														<option value="1115">南京银行</option>
+														<option value="1117">杭州银行</option>
+														<option value="1118">宁波银行</option>
+														<option value="1122">东亚银行</option>
+														<option value="1123">渤海银行</option>
+														<option value="1124">北京农商行</option>
+														<option value="1127">浙江泰隆商业银行</option>
+														-->
+                                                </select>
+                                                <i>*</i>
+                                            </td>
+                                        </tr>
+                                        <tr style="display:none;">
+                                            <td width="80" align="right">ChoosePayType</td>
+                                            <td>
+                                                <div class="col-md-8">
+                                                    <select id="ChoosePayType">
+                                                        <option value="YOUBAO">YOUBAO</option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <input type="hidden" name="amt" id="amt" value="">
+                                                <input type="hidden" name="apiName" id="apiName" value="">
+                                                <input type="hidden" name="apiVersion" id="apiVersion" value="">
+                                                <input type="hidden" name="platformID" id="platformID" value="">
+                                                <input type="hidden" name="merchNo" id="merchNo" value="">
+                                                <input type="hidden" name="tradeDate" id="tradeDate" value="">
+                                                <input type="hidden" name="orderNo" id="orderNo" value="">
+                                                <input type="hidden" name="tradeSummary" id="tradeSummary" value="">
+                                                <input type="hidden" name="returnUrl" id="returnUrl" value="http://www.pay.com/RFUpay/callback.html">
+                                                <input type="hidden" name="notifyUrl" id="notifyUrl" value="www.adi.com">
+                                                <input type="hidden" name="merchParam" id="merchParam" value="">
+                                                <input type="hidden" name="choosePayType" id="choosePayType" value="">
+                                                <input type="hidden" name="bankCode" id="bankCode" value="">
+                                                <input type="hidden" name="signMsg" id="signMsg" value="">
+                                            </td>
+                                            <td>
+                                                <input type="button" id="submitbtn" name="submitbtn" class="btn" value="入金">
+                                                <input type="button" id="sbtn" name="submit" onClick="ToPay()" style="display:none;">
+                                                <a href="crj">
+                                                    <span class="btn">用户出入金记录</span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        .rtype {
+            width: 86px;
+            height: 40px;
+            display: inline-block;
+            background: #fff;
+            border-radius: 3px;
+        }
+
+        .rtype.ctx {
+            background: #fff url(http://hk.ytgjqh.com/theme/default/images/cjtx2.png) no-repeat;
+        }
+
+        .rtype.cpz {
+            background: #fff url(http://hk.ytgjqh.com/theme/default/images/jspz2.png) no-repeat;
+        }
+
+        .rtype-active {
+            background: #f00;
+        }
+
+        .rtype-active:after {
+            content: "";
+            display: block;
+            width: 100%;
+            height: 36px;
+            border-radius: 3px;
+            border: 2px solid #0096db;
+            background: url(http://hk.ytgjqh.com/theme/default/images/checked1.png) no-repeat 0 -3px;
+            box-sizing: border-box;
+        }
+    </style>
+
+    <script>
+        $(".rtype").on('click', function () {
+            $('.rtype').removeClass('rtype-active');
+            $(this).addClass('rtype-active');
+            var val = $(this).attr("data-val");
+            $('[name="rtype"]').val(val);
+        })
+    </script>
+    <!-- 首页 bottom start -->
+    <div class="bottom">
+        <div class="bottom_a">
+            <div class="bottom_a_left">
+                <ul>
+                    <li>
+                        <p class="bottom_a_left_font">
+                            <a>期貨交易</a>
+                        </p>
+                        <a href="tencent://message/?uid=2066604037&amp;Site=&amp;Menu=yes" target="_blank" class="down-load">线上咨询</a>
+                        <br>
+                        <a href="download">软件下載</a>
+                        <br>
+                        <a href="futures">期货品种</a>
+
+                    </li>
+                    <li>
+                        <p class="bottom_a_left_font">
+                            <a>了解我们</a>
+                        </p>
+                        <a href="about">关于我们</a>
+                        <br>
+                        <a href="service">联系我们</a>
+                        <br>
+                        <a href="news">最新公告</a>
+
+                    </li>
+                    <li>
+                        <p class="bottom_a_left_font">
+                            <a>条款声明</a>
+                        </p>
+                        <a href="important">特别声明</a>
+                        <br>
+                        <a href="kehu.html">服务条款</a>
+                        <br>
+                        <a href="disclaimer">免则声明</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="bottom_a_xian"></div>
+            <div class="bottom_a_nav">
+                <img style="margin-top:-20px;" src="/web/erweima.png">
+            </div>
+
+            <div class="bottom_a_right">
+                <div class="bottom_btn">
+                    <a href="http://wpa.qq.com/msgrd?v=3&uin=2066604037&site=qq&menu=yes" target="_blank" class="down-load">线上咨询服务</a>
+                </div>
+                <div class="bottom_a_right_font">交易日（周一至周五）08:30-23:30</div>
+                <div <div class="bottom_a_right_font">我们提醒您：期货有风险，投资需谨慎！市场风险莫测，务请谨慎行事！</div>
+            </div>
+        </div>
+
+        <style>
+            .youqing_bg {
+                width: 100%;
+                margin: 0 auto;
+                background-color: #333333;
+                padding-bottom: 20px;
+            }
+
+            .youqing_bg .youqing {
+                width: 1000px;
+                margin: 0 auto;
+            }
+
+            .youqing_bg .youqing li {
+                color: #ccc;
+                float: left;
+                margin-left: 3%;
+                ;
+                font-size: 14px;
+                line-height: 25px;
+            }
+
+            .youqing_bg .youqing a {
+                color: #ccc;
+                font-size: 14px;
+                line-height: 25px;
+            }
+
+            .youqing_bg .youqing a:hover {
+                color: white;
+            }
+        </style>
+        <div class="youqing_bg">
+            <ul class="youqing">
+                <li style="margin-left:0">友情链接：</li>
+                <li style="margin-left:0">
+                    <a href="http://www.ine.com.cn/" target="_blank">上海国际能源交易中心</a>
+                </li>
+                <li>
+                    <a href="http://www.shfe.com.cn/" target="_blank">上海期货交易所</a>
+                </li>
+                <li>
+                    <a href="http://www.czce.com.cn/portal/index.htm" target="_blank">郑州商品交易所</a>
+                </li>
+                <li>
+                    <a href="http://www.dce.com.cn/" target="_blank">大连商品交易所</a>
+                </li>
+                <li>
+                    <a href="http://www.cffex.com.cn/" target="_blank">中国金融期货交易所</a>
+                </li>
+                <li>
+                    <a href="http://www.hkex.com.hk/?sc_lang=en" target="_blank">香港交易所</a>
+                </li>
+                <li>
+                    <a href="http://www.sse.com.cn/" target="_blank">上海证券交易所</a>
+                </li>
+                <li style="margin-left:0">
+                    <a href="http://www.szse.cn/" target="_blank">期货日报</a>
+                </li>
+                <li>
+                    <a href="http://www.10jqka.com.cn/" target="_blank">同花顺</a>
+                </li>
+                <li>
+                    <a href="http://www.cfachina.org/" target="_blank">中国期货业协会</a>
+                </li>
+                <li>
+                    <a href="http://www.xfn.com/en/home/index.htm" target="_blank">新华财经</a>
+                </li>
+                <li>
+                    <a href="http://www.amm.com/" target="_blank">美国金属市场</a>
+                </li>
+                <li>
+                    <a href="https://www.smm.cn/" target="_blank">上海有色网</a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="footer ">
+            <div class="footer_a">
+                <span>　　　　　　　　　　　　　　　　　　　　湖南正奇万合资产管理有限公司 -- Copyright &copy; 2018 All Rights Reserved </span>
+            </div>
+        </div>
+        <script src="/web/app.js?v=1.1"></script>
+</body>
+
+</html>

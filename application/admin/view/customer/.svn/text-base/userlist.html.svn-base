@@ -1,0 +1,481 @@
+{include file="common/head"/}
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+  <div class="layui-padded-15">
+    <blockquote class="layui-elem-quote layui-text">
+      <h4 class="layui-pull-left">当前位置：{:lang('customerManage')}<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>{:lang('customerList')}</h4>
+      <button id="user_reg" class="layui-btn layui-btn-normal layui-pull-right">注册新用户</button>
+    </blockquote>
+    <div class="layui-form">
+      <div class="layui-form-item" style="margin-bottom: 5px;">
+        <div class="layui-inline">
+          <label class="layui-form-label" style="padding:9px 0;">注册时间：</label>
+          <div class="layui-input-inline" style="margin-right:0;width: 150px;">
+            <input type="text" class="layui-input" id="reg_start_time" placeholder="yyyy-MM-dd">
+          </div>
+          <label class="layui-form-label" style="width:auto;display:inline-block;padding:9px 5px;color:#ccc;">-</label>
+          <div class="layui-input-inline" style="margin-right:20px;width: 150px;">
+            <input type="text" class="layui-input" id="reg_end_time" placeholder="yyyy-MM-dd">
+          </div>
+          <label class="layui-form-label" style="padding:9px 0;">所属机构：</label>
+          <div class="layui-input-inline" style="margin-right:0;width: 150px;">
+            <input type="text" name="ins_name" id="ins_name"  placeholder="请输入所属机构"  class="layui-input">
+          </div>
+          <label class="layui-form-label" style="padding:9px 0;">关键词：</label>
+          <div class="layui-input-inline" style="margin-right:30px;width: 200px;">
+            <input type="text" id="keywords" name="keywords" required  placeholder="关键词：姓名或手机号"  class="layui-input">
+          </div>
+          <button class="layui-btn" id="layui-search-btn" data-type="reload" style="width:100px;"><i class="layui-icon">&#xe615;</i> 搜索 </button>
+          <button class="layui-btn layui-btn-warm" id="layui-reset-btn" style="width:100px;"> 重置 </button>
+		  <button class="layui-btn layui-btn-danger" id="layui-export-btn" style="width:100px;"> 导出 </button>
+        </div>
+      </div>
+    </div>
+    <div class="layui-form">
+      <table class="layui-table layui-hide" id="list" lay-filter="list" style="margin-top:0;"></table>
+    </div>
+
+  </div>
+</div>
+{include file="common/foot"/}
+<script type="text/html" id="action">
+  <a class="layui-btn layui-btn-sm" lay-event="detail">查看</a>
+  <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">加入黑名单</a>
+  <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="msg">单日交易报表</a>
+</script>
+<script>
+    var message;
+    layui.config({
+        base: ADMIN+'build/js/',
+        version: '1.0.1'
+    }).use(['app','form','table','layer','laydate','message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            table = layui.table,
+            laydate = layui.laydate,
+            form = layui.form,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+    //列表数据
+    var tableIn = table.render({
+        elem: '#list',
+        url: '{:url("customer/userList")}',
+        method: 'post',
+        page: true,
+        cols: [[
+            {type:'numbers',title:'序号',width:60,fixed: true},
+            {field:'true_name',align:'center',title:'姓名', width:100},
+			{field:'zid',align:'center',title:'账号', width:100},
+            {field:'mobile',align:'center',title:'手机号',width:100},
+          <!--  {field:'code', align:'center',title:'邀请码',width:100},  -->
+            {field:'ins_name',align:'center',title:'所属机构', width:100},
+            {field:'p_name',align:'center', title:'上级代理',width:100},
+            <!-- {field:'total_money',align:'center', title:'账户余额',width:140}, -->
+			{field:'id_card', align:'center',title:'身份证号',width:150},
+            {field:'bank_name', align:'center',title:'开户银行',width:150},
+            {field:'bank_addr', align:'center',title:'开户支行',width:150},
+            {field:'bank_card', align:'center',title:'银行卡号',width:150},
+			{field:'mzh', align:'center',title:'母账号',width:100},
+            {field:'add_time',align:'center',title:'注册时间', width:170, sort: true},
+            {field:'status', align:'center', title:'状态',width:120},
+            {width: 320, align: 'center', toolbar: '#action',title:'操作'}
+        ]],
+		id:'user_list',
+        height: 550 //固定值
+    });
+
+
+
+
+
+
+    //时间控件渲染
+    laydate.render({
+      elem: '#reg_start_time'
+    });
+    laydate.render({
+      elem: '#reg_end_time'
+    });
+
+	//搜索
+	var $ = layui.$, active = {
+		reload: function(){
+			var start_time = $('#reg_start_time');
+			var end_time = $('#reg_end_time');
+			var keywords=$('#keywords');
+			var ins_name=$('#ins_name');
+			//执行重载
+			table.reload('user_list', {
+				page: {
+					curr: 1 //重新从第 1 页开始
+				}
+				,url:"{:url('customer/user_search')}"
+				,where: {
+					keywords:keywords.val(),
+					start_time:start_time.val(),
+					end_time:end_time.val(),
+					ins_name:ins_name.val()
+				}
+			});
+		}
+	};
+	//提交
+	$('#layui-search-btn').on('click', function(){
+		var type = $(this).data('type');
+		active[type] ? active[type].call(this) : '';
+//		$('#ins_name').val('');
+	});
+	//重置
+	$('#layui-reset-btn').click(function(){
+		$('input[type="text"]').val('');
+		tableIn.reload();
+	});
+	//导出
+	$('#layui-export-btn').click(function(){
+        var keywords=$("#keywords").val();
+        var update_time_start1=$("#reg_start_time").val();
+        var update_time_end1=$("#reg_end_time").val();
+        var ins_name=$("#ins_name").val();
+
+        window.location.href="/admin/Customer/userlist.html?export=1&keywords="+keywords+"&start_time="+update_time_start1+"&end_time="+update_time_end1+"&ins_name="+ins_name;
+//		window.location.href="{:url('customer/export',['num'=>1])}";
+	});
+    //机构弹窗
+	$('#ins_name').click(function(){
+		$('#ins_name').val('');
+		sessionStorage.removeItem('nodes');
+		layer.open({
+			type: 2,
+			title:'选择代理',
+			area: ['650px', '500px'],
+			content: "{:url('agent/agentInfo')}"
+			,closeBtn:2
+			,btnAlign: 'c'
+			,cancel: function(index, layero){ 
+				//右上角关闭回调
+				var nodes=sessionStorage.getItem('nodes');
+				if(sessionStorage.getItem('nodes')==''||sessionStorage.getItem('nodes')==null){
+					$('#ins_name').val('');
+					layer.close(index);
+				}else{
+					var new_nodes=nodes.split(',');
+					var new_str=[];
+					for(var i=0;i<new_nodes.length;i++){
+						if(new_nodes[i].indexOf('-')>0){
+						  var arr=new_nodes[i].split('-');
+						  new_str.push(arr[1]);
+						}
+					}
+					$('#ins_name').val(new_str);
+					layer.close(index);
+				}
+			}
+		}); 
+	});
+    //监听工具条
+    table.on('tool(list)', function(obj){
+      var data = obj.data;
+      if(obj.event === 'detail'){
+        var id=data.id;
+        var url="{:url('customer/userInfo',['id'=>'userId'])}";
+            url=url.replace(/userId/,id);
+        window.location.href=url;
+        //layer.msg('ID：'+ data.id + ' 的查看操作');
+      } else if(obj.event === 'del'){
+        layer.confirm('真的要添加该用户为黑名单吗？', function(index){
+          $.post("{:url('customer/userDel')}",{'id':data.id},function(res){
+            if(res.code==1){
+              layer.msg(res.msg,{icon: 1, time: 500},function(){
+                obj.del();
+                layer.close(index);
+              });
+            }else{
+              layer.msg(res.msg,{icon: 2, time: 500},function(){
+                layer.close(index);
+              });
+            }
+          });
+        });
+      } else if(obj.event === 'edit'){
+        $.post("{:url('customer/getData')}", {}, function(res){
+          var str='';
+              str+='<div class="layui-user">';
+              str+='<form class="layui-form">';
+              str+='<div class="layui-form-item">';
+              str+='<label class="layui-form-label">姓名</label>';
+              str+='<div class="layui-input-block">';
+              str+='<input type="text" name="true_name" placeholder="请输入姓名" autocomplete="off" value="'+data.true_name+'"  class="layui-input">';
+              str+='</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item">';
+              str+='<label class="layui-form-label">账号</label>';
+              str+='<div class="layui-input-block">';
+              str+='<input type="text" name="zid" placeholder="请输入账号" value="'+data.zid+'" disabled class="layui-input">';
+              str+='</div>';
+              str+='</div>';
+             /* str+='<div class="layui-form-item">';
+              str+='<label class="layui-form-label">密码</label>';
+              str+='<div class="layui-input-block">';
+              str+='<input type="password" name="zpwd" placeholder="请输入密码" value="'+data.zpwd+'" class="layui-input">';
+              str+='</div>';
+              str+='</div>';*/
+         /*     str+='<div class="layui-form-item">';
+			  str+='<label class="layui-form-label">资管名称</label>';
+			  str+='<div class="layui-input-block">';
+			  str+='<select id="zg" name="zg" lay-verify="required">';
+			  for(var i=0;i<res.zg.length;i++){
+					if(res.zg[i]['id']==data.zg_id){
+						str+='<option value="'+res.zg[i]['id']+'" selected>'+res.zg[i]['name']+'</option>';
+					}else{
+						str+='<option value="'+res.zg[i]['id']+'">'+res.zg[i]['name']+'</option>';
+					}
+				
+				}*/
+			/*  str+='</select>';
+			  str+='</div>';
+			  str+='</div>';
+              str+='<div class="layui-form-item">';
+			  str+='<label class="layui-form-label">风控编号</label>';
+			  str+='<div class="layui-input-block">';
+			  str+='<select id="fk" name="fk" lay-verify="required">';
+			  for(var i=0;i<res.fk.length;i++){
+				if(res.fk[i]['id']==data.fk_id){
+					str+='<option value="'+res.fk[i]['id']+'" selected>'+res.fk[i]['account']+'</option>';
+				}else{
+					str+='<option value="'+res.fk[i]['id']+'">'+res.fk[i]['account']+'</option>';
+				}
+			
+			}*/
+			/*  str+='</select>';
+			  str+='</div>';
+			  str+='</div>';
+			  str+='<div class="layui-form-item">';
+			  str+='<label class="layui-form-label">手续费模板</label>';
+			  str+='<div class="layui-input-block">';
+			  str+='<select id="sxf_mb" name="sxf_mb" lay-verify="required">';
+			  for(var i=0;i<res.sxf_mb.length;i++){
+				if(res.sxf_mb[i]['id']==data.sxf_id){
+					str+='<option value="'+res.sxf_mb[i]['id']+'" selected>'+res.sxf_mb[i]['bh']+'</option>';
+				}else{
+					str+='<option value="'+res.sxf_mb[i]['id']+'">'+res.sxf_mb[i]['bh']+'</option>';
+				}
+			
+			}
+			  str+='</select>';
+			  str+='</div>';
+			  str+='</div>';
+             */
+			  str+='<div class="layui-form-item">';
+			  str+='<label class="layui-form-label">母账号</label>';
+			  str+='<div class="layui-input-block">';
+			  str+='<select id="mzh" name="mzh" lay-verify="required">';
+			  for(var i=0;i<res.mzh.length;i++){
+					if(res.mzh[i]['id']==data.mzh_id){
+						str+='<option value="'+res.mzh[i]['id']+'" selected>'+res.mzh[i]['account']+'</option>';
+					}else{
+						str+='<option value="'+res.mzh[i]['id']+'">'+res.mzh[i]['account']+'</option>';
+					}
+				
+				}
+			  str+='</select>';
+			  str+='</div>';
+			  str+='</div>';
+              str+='<div class="layui-form-item">';
+              str+='<label class="layui-form-label">手机号</label>';
+              str+='<div class="layui-input-block">';
+              str+='<input type="number" name="mobile" placeholder="请输入手机号" value="'+data.mobile+'" disabled class="layui-input">';
+              str+='</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item">';
+              str+='<label class="layui-form-label">身份证号</label>';
+              str+='<div class="layui-input-block">';
+              str+='<input type="number" name="id_card" placeholder="请输入身份证号" value="'+data.id_card+'"  class="layui-input">';
+              str+='</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item">';
+              str+='<label class="layui-form-label">开户银行</label>';
+              str+='<div class="layui-input-block">';
+              str+='<input type="text" name="bank_name" placeholder="请输入开户行名称" value="'+data.bank_name+'"  class="layui-input">';
+              str+='</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item">';
+              str+='<label class="layui-form-label">开户支行</label>';
+              str+='<div class="layui-input-block">';
+              str+='<input type="text" name="bank_addr" placeholder="请输入具体支行" value="'+data.bank_addr+'"  class="layui-input">';
+              str+='</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item">';
+              str+='<label class="layui-form-label">银行卡号</label>';
+              str+='<div class="layui-input-block">';
+              str+='<input type="number" name="bank_card" placeholder="请输入银行卡号" value="'+data.bank_card+'"  class="layui-input">';
+              str+='</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item">';
+              str+='<label class="layui-form-label">重置密码</label>';
+              str+='<div class="layui-input-block">';
+              str+='<input type="password" name="user_pwd" placeholder="请输入新密码" class="layui-input">';
+              str+='</div>';
+              str+='</div>';
+			  str+='<div class="layui-form-item">';
+			  str+='<label class="layui-form-label">状态</label>';
+			  str+='<div class="layui-input-block">';
+			  if(data.status=='正常'){
+				str+='<input type="radio" name="status" value="0" title="开启" checked>';
+				str+='<input type="radio" name="status" value="1" title="关闭">';
+			  }else{
+				str+='<input type="radio" name="status" value="0" title="开启">';
+				str+='<input type="radio" name="status" value="1" title="关闭" checked>';
+			  }
+			  str+='</div>';
+			  str+='</div>';
+		      str+='</form>';
+		      str+='</div>';
+            layer.open({
+            type: 1, 
+            skin: 'layui-user-reg',
+            title:'编辑用户资料',
+            area:['650px','500px'],
+            content:str,
+            btn: ['提交', '放弃'],
+            btnAlign: 'c',
+            yes: function(index, layero){
+              var pwd=$('input[name="user_pwd"]').val();
+              var zid=$('input[name="zid"]').val();
+             /* var zpwd=$('input[name="zpwd"]').val();*/
+			  var zg_id=$('#zg option:selected').val();
+			  var mzh_id=$('#mzh option:selected').val();
+			  var sxf_id=$('#sxf_mb option:selected').val();
+			  var fk_id=$('#fk option:selected').val();
+			  var status=$('input[name="status"]:checked').val();
+              var true_name=$('input[name="true_name"]').val();
+              var id_card=$('input[name="id_card"]').val();
+              var bank_name=$('input[name="bank_name"]').val();
+              var bank_addr=$('input[name="bank_addr"]').val();
+              var bank_card=$('input[name="bank_card"]').val();
+
+              $.post("{:url('customer/alterInfo')}",{'id':data.id,'password':pwd,'zid':zid,'zg_id':zg_id,'mzh_id':mzh_id,
+                  'sxf_id':sxf_id,'fk_id':fk_id,'status':status,'true_name':true_name,'bank_card':bank_card,'id_card':id_card,'bank_addr':bank_addr,'bank_name':bank_name},function(res){
+                if(res.code==1){
+                  layer.msg(res.msg,{icon:1,time:500},function(){
+					tableIn.reload();
+                    layer.close(index);
+                  });
+                }else if(res.code==0){
+                  layer.msg(res.msg,{icon:2,time:500},function(){
+                    layer.close(index);
+                  });
+                }else{
+                  layer.msg(res.msg,{icon:2,time:500},function(){
+                    layer.close(index);
+                  });
+                }
+              });
+            },
+            btn2: function(index, layero){
+              layer.close(index);
+              //return false 开启该代码可禁止点击该按钮关闭
+            },
+            cancel: function(index){ 
+              layer.close(index);
+              //return false 开启该代码可禁止点击该按钮关闭
+            }
+          });
+          form.render();
+        });
+      }else if(obj.event === 'msg'){
+          var id=data.id;
+          var url="{:url('customer/baobiao',['id'=>'userId'])}";
+          url=url.replace(/userId/,id);
+          window.location.href=url;
+      }
+    });
+
+    //注册新用户
+    $('#user_reg').click(function(){
+      $.post("{:url('customer/getAgentId')}", {}, function(data){
+        //alert(JSON.stringify(data));
+        var str='';
+            str+='<div class="layui-user">';
+            str+='<form class="layui-form">';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">姓名</label>';
+            str+='<div class="layui-input-block">';
+            str+='<input type="text" name="true_name" placeholder="请输入姓名" autocomplete="off" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">手机号</label>';
+            str+='<div class="layui-input-block">';
+            str+='<input type="number" name="mobile" placeholder="请输入手机号" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">密码</label>';
+            str+='<div class="layui-input-block">';
+            str+='<input type="password" name="user_pwd" placeholder="请输入密码" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">代理商</label>';
+            str+='<div class="layui-input-block">';
+            str+='<select id="agentId" name="modules" lay-verify="required" lay-search="">';
+            str+='<option value="">直接选择或搜索代理商名称</option>';
+            for(var i=0;i<data.length;i++){
+              str+='<option value="'+data[i].id+'">'+data[i].true_name+'</option>';
+            }
+            str+='</select>';
+            str+='</div>';
+            str+='</div>';
+            str+='</form>';
+            str+='</div>';
+        layer.open({
+          type: 1, 
+          skin: 'layui-user',
+          title:'注册新用户',
+          area:['600px','450px'],
+          content:str,
+          btn: ['提交', '放弃'],
+          btnAlign: 'c',
+          yes: function(index, layero){
+            var true_name=$('input[name="true_name"]').val();
+            var mobile=$('input[name="mobile"]').val();
+            var password=$('input[name="user_pwd"]').val();
+            var id=$('#agentId option:selected').val();
+            $.post("{:url('customer/register')}",{'true_name':true_name,'mobile':mobile,'user_pwd':password,'id':id},function(res){
+              if(res.code==1){
+                layer.msg(res.msg, {icon: 1, time: 500}, function(){
+                    layer.close(index);
+                    tableIn.reload();
+                });
+              }else{
+                layer.msg(res.msg, {icon: 2, time: 500});
+              }
+            });
+          },
+          btn2: function(index, layero){
+            layer.close(index);
+            //return false 开启该代码可禁止点击该按钮关闭
+          },
+          cancel: function(index){ 
+            layer.close(index);
+            //return false; 
+            //return false 开启该代码可禁止点击该按钮关闭
+          }
+        });
+      form.render();
+      });
+    
+    });
+        
+  });
+</script>
+</body>
+</html>

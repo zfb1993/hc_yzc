@@ -1,0 +1,233 @@
+{include file="common/head"/}
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+  <div class="layui-padded-15">
+    <div class="layui-form">
+      <button id="add" class="layui-btn layui-btn-normal layui-btn-sm">新增</button>
+      <table class="layui-table" id="list" lay-filter="list"></table>
+    </div>
+  </div>
+</div>
+{include file="common/foot"/}
+<script type="text/html" id="action">
+  <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+</script>
+<script>
+    var message;
+    layui.config({
+        base: ADMIN+'build/js/',
+        version: '1.0.1'
+    }).use(['app','table','form','laydate','message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            table = layui.table,
+            laydate = layui.laydate,
+            form = layui.form,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+    //列表数据
+    var cid={:input('cid')};
+    var tableIn = table.render({
+        elem: '#list',
+        url: "{:url('risk/gearSetting')}",
+        where:{cid:cid},
+        method: 'post',
+        page: true,
+        cols: [[
+            {type:'numbers',title:'序号',width:60,fixed: true},
+            {field:'bzj_gear',align:'center',title:'保证金挡位', width:180, sort: true},
+            {field:'stop_jump_num',align:'center',title:'止盈跳数', width:180, sort: true},
+            {field:'stop_loss_num',align:'center',title:'止损跳数',width:150},
+            {width: 150, align: 'center', toolbar: '#action',title:'操作'}
+        ]],
+        limit: 10,
+        height: 400 //固定值
+    });
+    //监听工具条
+    table.on('tool(list)', function(obj){
+      var data = obj.data;
+      if(obj.event === 'detail'){
+        //layer.msg('ID：'+ data.id + ' 的查看操作');
+      } else if(obj.event === 'del'){
+        layer.confirm('真的要删除么？', function(index){
+          $.post("{:url('risk/del_gearSetting')}",{'id':data.id},function(res){
+            if(res.code==1){
+              layer.msg(res.msg,{icon: 1, time: 1000},function(){
+                obj.del();
+                layer.close(index);
+              });
+            }else{
+              layer.msg(res.msg,{icon: 2, time: 1000},function(){
+                layer.close(index);
+              });
+            }
+          });
+
+        });
+      } else if(obj.event === 'edit'){
+        //layer.alert('编辑行：<br>'+ JSON.stringify(data));
+        var id=data.id;
+        $.post("{:url('risk/getContractData')}",{'id':data.cid},function(res){
+        var str='';
+            str+='<div class="layui-product">';
+            str+='<form class="layui-form">';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">合约名</label>';
+            str+='<div class="layui-form-mid layui-word-aux">'+res.c_name+'</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">最小变动单位</label>';
+            str+='<div class="layui-input-inline">';
+            str+='<input type="number" name="min_rate" value="'+res.min_rate+'" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">合约保证金</label>';
+            str+='<div class="layui-input-inline">';
+            str+='<input type="number" id="bzj_gear" name="bzj_gear" placeholder="请输入合约保证金" value="'+data.bzj_gear+'" class="layui-input">';
+            str+='</div>';
+            str+='<div class="layui-form-mid layui-word-aux">元</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">止盈跳数</label>';
+            str+='<div class="layui-input-inline">';
+            str+='<input type="number" id="stop_jump_num" name="stop_jump_num" placeholder="请输入止盈跳数" value="'+data.stop_jump_num+'" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">止损跳数</label>';
+            str+='<div class="layui-input-inline">';
+            str+='<input type="number" id="stop_loss_num" name="stop_loss_num" placeholder="请输入止损跳数" value="'+data.stop_loss_num+'" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='</form>';
+            str+='</div>';
+          layer.open({
+            type: 1, 
+            skin: 'layui-product',
+            title:'编辑 | 合约档位',
+            area:['600px','450px'],
+            content:str,
+            btn: ['保存', '取消'],
+            btnAlign: 'c',
+            yes: function(index, layero){
+              var bzj_gear=$('input[name="bzj_gear"]').val();
+              var stop_jump_num=$('input[name="stop_jump_num"]').val();
+              var stop_loss_num=$('input[name="stop_loss_num"]').val();
+              $.post("{:url('risk/edit_gearSetting')}",
+                {'id':id,'bzj_gear':bzj_gear,'stop_jump_num':stop_jump_num,'stop_loss_num':stop_loss_num},
+                function(res){
+                if(res.code==1){
+                  layer.msg(res.msg, {icon: 1, time: 1000}, function(){
+                      layer.close(index);
+                      tableIn.reload();
+                  });
+                }else{
+                  layer.msg(res.msg, {icon: 2, time: 1000});
+                }
+              });
+            },
+            btn2: function(index, layero){
+              layer.close(index);
+              //return false 开启该代码可禁止点击该按钮关闭
+            },
+            cancel: function(index){ 
+              layer.close(index);
+              //return false; 
+              //return false 开启该代码可禁止点击该按钮关闭
+            }
+          });
+        
+        form.render();
+        });
+      }
+    });
+    //添加合约档位
+    $('#add').click(function(){
+        var cid={:input('cid')};
+        $.post("{:url('risk/getContractData')}",{'id':cid},function(res){
+        var str='';
+            str+='<div class="layui-product">';
+            str+='<form class="layui-form">';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">合约名</label>';
+            str+='<div class="layui-form-mid layui-word-aux">'+res.c_name+'</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">最小变动单位</label>';
+            str+='<div class="layui-input-inline">';
+            str+='<input type="number" name="min_rate" value="'+res.min_rate+'" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">合约保证金</label>';
+            str+='<div class="layui-input-inline">';
+            str+='<input type="number" id="bzj_gear" name="bzj_gear" placeholder="请输入合约保证金" class="layui-input">';
+            str+='</div>';
+            str+='<div class="layui-form-mid layui-word-aux">元</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">止盈跳数</label>';
+            str+='<div class="layui-input-inline">';
+            str+='<input type="number" id="stop_jump_num" name="stop_jump_num" placeholder="请输入止盈跳数" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">止损跳数</label>';
+            str+='<div class="layui-input-inline">';
+            str+='<input type="number" id="stop_loss_num" name="stop_loss_num" placeholder="请输入止损跳数" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='</form>';
+            str+='</div>';
+        layer.open({
+            type: 1, 
+            skin: 'layui-product',
+            title:'新增 | 合约档位',
+            area:['600px','450px'],
+            content:str,
+            btn: ['提交', '放弃'],
+            btnAlign: 'c',
+            yes: function(index, layero){
+              var bzj_gear=$('input[name="bzj_gear"]').val();
+              var stop_jump_num=$('input[name="stop_jump_num"]').val();
+              var stop_loss_num=$('input[name="stop_loss_num"]').val();
+              $.post("{:url('risk/add_gearSetting')}",
+                {'cid':cid,'bzj_gear':bzj_gear,'stop_jump_num':stop_jump_num,'stop_loss_num':stop_loss_num},
+                function(res){
+                if(res.code==1){
+                  layer.msg(res.msg, {icon: 1, time: 1000}, function(){
+                      layer.close(index);
+                      tableIn.reload();
+                  });
+                }else{
+                  layer.msg(res.msg, {icon: 2, time: 1000});
+                }
+              });
+            },
+            btn2: function(index, layero){
+              layer.close(index);
+              //return false 开启该代码可禁止点击该按钮关闭
+            },
+            cancel: function(index){ 
+              layer.close(index);
+              //return false; 
+              //return false 开启该代码可禁止点击该按钮关闭
+            }
+          });
+        form.render();
+      });
+    });
+        
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,424 @@
+{extend name="static/assets/base.html" /} {block name="title"}
+<title>我的组合持仓</title>{/block} {block name="style"}
+<style>
+    .weui-tab__bd-item {
+        padding-bottom: 105px;
+    }
+</style>
+{/block} {block name="back"}{/block}{block name="body"}
+<div class="weui-content">
+    <div class="weui-buttons">
+        <a href="/index/index/position" data-tab="all" class="weui-grid weui-grid-2">
+            <h2 id="total">
+                <i class="iconfont icon-81"></i>
+            </h2>
+            <p class="weui-grid__label">
+                持仓
+            </p>
+        </a>
+        <a href="/index/index/inquiry_position" data-tab="all" class="weui-grid weui-grid-2 active">
+            <h2>
+                <i class="iconfont icon-27"></i>
+            </h2>
+            <p class="weui-grid__label">
+                组合持仓
+            </p>
+        </a>
+    </div>
+    <!-- 容器 -->
+    <div class="weui-tab">
+        <div class="weui-navbar">
+            <a class="weui-navbar__item" href="#tab1">
+                当前操盘
+            </a>
+            <a class="weui-navbar__item weui-bar__item--on" href="#tab2">
+                未成交
+            </a>
+            <a class="weui-navbar__item" href="#tab3">
+                历史操盘
+            </a>
+        </div>
+        <div class="weui-tab__bd">
+            <div id="tab1" class="weui-tab__bd-item">
+
+            </div>
+            <div id="tab2" class="weui-tab__bd-item  weui-tab__bd-item--active">
+
+            </div>
+            <div id="tab3" class="weui-tab__bd-item">
+
+            </div>
+        </div>
+    </div>
+    {/block} {block name="script"}
+    <script>
+        $(function () {
+            var si;
+            //页面缓存数据
+            var getDatas = {};
+
+            $(".weui-navbar a").on("click", function (e) {
+                $.tab($(this).index());
+            });
+
+
+
+            $.tab = function (_index) {
+                console.log(_index);
+                if (getDatas[_index]) {
+                    //$.render(_index);
+                    //return;
+                }
+                //$.showLoading();
+                var url = ["/index/Combinationapi/purchaseInfo", "/index/Combinationapi/purchaseInfo", "/index/Combinationapi/enchashmentHistory"];
+                var p = [{ userid: localStorage.id, type: 2 }, { userid: localStorage.id, type: 1 }, { userid: localStorage.id }];
+                $.get(url[_index], p[_index], function (_d) {
+                    //$.hideLoading();
+                    console.log(_d);
+                    getDatas[_index] = _d;
+                    $.render(_index);
+                }, "JSON");
+                //if (_index == 1) {
+                console.log('定时刷新');
+                clearInterval(si);
+                si = setTimeout(function () { $.tab(_index) }, 10000);
+                //}
+            }
+
+            $.render = function (_index) {
+                var html = '';
+                getDatas[_index].forEach(function (element) {
+                    html += $.htmls['h' + (_index + 1)](element);
+                });
+                $("#tab" + (_index + 1)).html(html);
+                $.events(_index);
+                $.sinaapi(_index);
+                //clearInterval(si);
+                /* if (_index == 0) {
+                    console.log('二条定时刷新');
+                    si = setInterval(function () { $.sinaapi(_index); }, 10000);
+                } */
+            }
+
+            $.events = function (_index) {
+                $("#tab" + (_index + 1) + " .lists").on('click', function (e) {
+                    console.log('down');
+                    if ($(e.currentTarget).data("status") != 0 && _index == 1) {
+                        $(e.currentTarget).find("a").addClass("weui-gray");
+                    }
+                    if (_index == 0) {
+                        $(e.currentTarget).find("a").fadeToggle("fast");
+                    } else if (_index == 1) {
+                        $(e.currentTarget).find("a").fadeToggle("fast");
+                    }
+                });
+            }
+
+            $.exercisebtn = function (_this) {
+                event.stopPropagation();
+                if ($(_this).hasClass("weui-gray")) {
+                    return;
+                }
+                $.showLoading();
+                $.post("/index/Combinationapi/enchashmentApply", {
+                    xq_type: 1,
+                    stock_price: 1,
+                    purchase_id: $(_this).data("id"),
+                    userid: localStorage.id
+                }, function (_d) {
+                    $.hideLoading();
+                    if (_d['code'] != 1) {
+                        $.alert(_d['msg']);
+                        return;
+                    }
+                    $(_this).addClass("gray");
+                    $.alert(_d['msg'], function () {
+                        console.log('getDatas', getDatas);
+                        getDatas[0] = null;
+                        $.tab(0);
+                    });
+                }, "JSON");
+            };
+
+            $.changebtn = function (_this) {
+                event.stopPropagation();
+                if ($(_this).hasClass("weui-gray")) {
+                    return;
+                }
+                $.prompt({
+                    title: '修改名义本金',
+                    text: '请输入要修改的数额（万元）',
+                    input: '',
+                    empty: false, // 是否允许为空
+                    onOK: function (input) {
+                        //点击确认
+                        $.showLoading();
+                        $.post("/index/Combinationapi/changePurchaseOrder", {
+                            purchase_id: $(_this).data("id"),
+                            userid: localStorage.id,
+                            type: 1,
+                            purchase_money: input
+
+                        }, function (_d) {
+                            $.hideLoading();
+                            if (_d['code'] != 1) {
+                                $.alert(_d['msg']);
+                                return;
+                            }
+                            $.alert(_d['msg'], function () {
+                                console.log('getDatas', getDatas);
+                                getDatas[1] = null;
+                                $.tab(1);
+                            });
+                        }, "JSON");
+                    }
+                });
+
+                $("input.weui-input").focus(function () {
+                    $("input.weui-input").css("border", "1px solid #535353");
+                });
+
+                $("input.weui-input").blur(function () {
+                    $("input.weui-input").css("border", "none");
+                    var value = $(this).val(); if (value == null || value == '') { value = 10; } var num = parseInt(value); num = isNaN(num) ? 10 : (num - num % 10); $(this).val(num);
+                });
+
+
+
+            };
+
+            $.cancelbtn = function (_this) {
+                event.stopPropagation();
+                if ($(_this).hasClass("weui-gray")) {
+                    return;
+                }
+                $.confirm("确定要撤单吗", "撤单", function () {
+                    //点击确认后的回调函数
+                    $.showLoading();
+                    $.post("/index/Combinationapi/changePurchaseOrder", {
+                        userid: localStorage.id,
+                        purchase_id: $(_this).data("id"),
+                        type: 2
+                    }, function (_d) {
+                        $.hideLoading();
+                        if (_d['code'] != 1) {
+                            $.alert(_d['msg']);
+                            return;
+                        }
+                        $.alert(_d['msg'], function () {
+                            getDatas[1] = null;
+                            $.tab(1);
+                        });
+                    }, "JSON");
+                });
+            };
+
+            $.htmls = {
+                h1: function (_d) {
+                    var btnlabel = '立即行权';
+                    if (_d['status'] == -1) {
+                        btnlabel = "已作废";
+                    } else if (_d['status'] == 0) {
+                        btnlabel = "预审核中";
+                    } else if (_d['status'] == 1) {
+                        btnlabel = "审核中";
+                    } else if (_d['status'] == 2) {
+                    } else if (_d['status'] == 3) {
+                        btnlabel = "行权申请中";
+                    }
+                    return `
+                        <div class="lists">
+                            <div class="list">
+                                <div class="ll">
+                                    <div class="tl">
+                                        <p>${_d['stock']}：</p>
+                                        <p>最新价：</p>
+                                        <p>名义本金：</p>
+                                        <p>盈亏金额：</p>
+                                    </div>
+                                    <div class="tr">
+                                        <p> ${_d['stockID']}</p>
+                                        <p id="_pcj">--</p>
+                                        <p>${_d['action_money']}万</p>
+                                        <p id="_ykje">--</p>
+                                    </div>
+                                </div>
+                                <div class="lr">
+                                    <div class="tl">
+                                        <p>买入价：</p>
+                                        <p>权利金：</p>
+                                        <p>保证金：</p>
+                                        <p>行权时间：</p>
+                                    </div>
+                                    <div class="tr">
+                                        <p>${_d['xq_money']}元</p>
+                                        <p>${$.formatNumber(_d['action_qy_rate'])}元</p>
+                                        <p>${$.formatNumber(_d['bz_money'])}元</p>
+                                        <p>${_d['logtime'].split(" ")[0]}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <a id="_btn" onclick="$.exercisebtn(this);" data-id="${_d['id']}" class="weui-btn weui-btn_  ${_d['status'] != 2 ? "weui-gray" : ""} " style="display:none;">${btnlabel}</a>
+                        </div>
+                    `;
+                },
+                h2: function (_d) {
+                    /* var qlj = $.formatNumber(_d['blocked_money']);
+                    if(_d['status']=="1"){
+
+                    } */
+                    return `
+                    <div data-status="${_d['status']}" class= "lists" >
+                        <div class="list">
+                            <div class="ll">
+                                <div class="tl">
+                                    <p>${_d['stock']}：</p>
+                                    <p>期权类型：</p>
+                                    <p>名义本金：</p>
+                                </div >
+                                <div class="tr">
+                                    <p>${_d['stockID']}</p>
+                                    <p>看涨${_d['type']}周</p>
+                                    <p>${_d['purchase_money']}万</p>
+                                </div>
+                            </div >
+                            <div class="lr">
+                                <div class="ll">
+                                    <div class="tl">
+                                        <p>状态：</p>
+                                        <p>权利金：</p>
+                                        <p>保证金：</p>
+                                    </div>
+                                    <div class="tr">
+                                        <p>${_d['status'] == "0" ? "未审批" : "已通过"}</p>
+                                        <p>${$.formatNumber(_d['blocked_money'])}元</p>
+                                        <p>${$.formatNumber(_d['bz_money'])}元</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div >
+                        <a onclick="$.changebtn(this);" data-id="${_d['id']}" class="weui-btn weui-btn_ weui_btn_mini" style="display:none;">改单</a>
+                        <a onclick="$.cancelbtn(this);" data-id="${_d['id']}" class="weui-btn weui-btn_ weui_btn_mini" style="display:none;">撤单</a>
+                        </div >
+                    `;
+                },
+                h3: function (_d) {
+                    return `
+                    <div class= "lists" >
+                        <div class="list">
+                            <div class="ll">
+                                <div class="tl">
+                                    <p>${_d['stock']}：</p>
+                                    <p>平仓价：</p>
+                                    <p>名义本金：</p>
+                                    <p>盈亏金额：</p>
+                                </div>
+                                <div class="tr">
+                                    <p>${_d['stockID']}</p>
+                                    <p>${$.formatNumber(_d['stock_pc'], 2)}元</p>
+                                    <p>${_d['action_money']}万</p>
+                                    <p class="red">${parseFloat(_d['profit']).toFixed(2)}元</p>
+                                </div>
+                            </div>
+                            <div class="lr">
+                                <div class="ll">
+                                    <div class="tl">
+                                        <p>行权价：</p>
+                                        <p>权利金：</p>
+                                        <p>保证金：</p>
+                                        <p>行权时间：</p>
+                                    </div>
+                                    <div class="tr">
+                                        <p>${$.formatNumber(_d['xq_money'], 2)}元</p>
+                                        <p>${$.formatNumber(_d['action_qy_rate'])}元</p>
+                                        <p>${_d['logtime'].split(" ")[0]}</p>
+                                        <p>${$.formatNumber(_d['bz_money'])}元</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                }
+            };
+
+            $.sinaapi = function (_index) {
+                if (_index != 0) {
+                    return;
+                }
+                var codes = '';
+                var action_moneys = [];
+                var xq_moneys = [];
+                var stock_pcs = [];
+                getDatas[_index].forEach(function (element) {
+                    codes += ocr_stock(element['stockID']) + ",";
+                    action_moneys.push(parseFloat(element['action_money']));
+                    xq_moneys.push(parseFloat(element['xq_money']));
+                    stock_pcs.push(parseFloat(element['stock_pc']));
+                });
+                codes = codes.substring(0, codes.length - 1);
+                console.log('codes', codes);
+                if (codes == "") {
+                    return;
+                }
+                //${_d['action_money'] * 10000 / _d['xq_money'] * 6}
+                jQuery.getScript("https://hq.sinajs.cn/list=" + codes, function (data, status, jqxhr) {
+                    var data = codes.split(',');
+                    console.log(data);
+                    data.forEach(function (ele, index) {
+                        var apidata = eval("hq_str_" + ele);
+                        if (apidata == "") {
+                            $("#" + ele).html('查无数据');
+                            console.log('apidata 为空');
+                            return;
+                        }
+                        var n = apidata.split(",")[3];
+                        if (_index == 0) {
+                            $("#tab1 #_pcj").eq(index).html($.formatNumber(n, 2) + "元");
+                            if (n <= xq_moneys[index]) {
+                                //$("#" + ele + '_ykje').html("0元");
+                                $("#tab1 #_ykje").eq(index).html("0元");
+                                //$("#" + ele + '_ykje').removeClass("red");
+                                $("#tab1 #_ykje").eq(index).removeClass("red");
+                                //$("#" + ele + '_btn').html("立即行权");
+                                $('#tab1 #_btn').html("立即行权");
+                            } else {
+                                $("#tab1 #_ykje").eq(index).addClass("red");
+                                var num1 = (n - xq_moneys[index]);
+                                var num2 = (parseInt(action_moneys[index]) * 10000 / xq_moneys[index]);
+                                var num3 = num1 * num2;
+                                console.log(num3);
+                                $("#tab1 #_ykje").eq(index).html($.formatNumber(parseInt(num3), 2) + "元");
+                                $('#tab1 #_btn').html("申请行权");
+                            }
+                            //$("#" + ele + '_ykje').html($.formatNumber(action_moneys[index] * 10000 / xq_moneys[index] * n, 2));
+                        } else if (_index == 2) {
+                            //$("#" + ele).html(action_moneys[index] * 10000 / xq_moneys[index] * n);
+                        }
+                        //${ _d['action_money'] * 10000 / _d['xq_money'] * 6 }
+                        console.log('apidata', apidata);
+                    });
+                    //
+                    //var apidata = eval("hq_str_" + ocr_stock(value.stockID) + value.stockID);
+                    // var arr = new Array();
+                    // arr = apidata.split(",");
+                    // var price = arr[3];
+
+                });
+            }
+
+            $.tab(1);
+
+
+        });
+        var ocr_stock = function (stock) {
+            var top = stock.substring(0, 1);
+            if (top == '0' || top == '2' || top == '4' || top == '8' || top == '3') {
+                return 'sz' + stock;
+            }
+            if (top == '6' || top == '9' || top == '5' || top == '7') {
+                return 'sh' + stock;
+            }
+            return 'error';
+        }
+    </script> {/block}

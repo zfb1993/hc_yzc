@@ -1,0 +1,71 @@
+{include file="common/head"/}
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div class="layui-padded-15">
+        <blockquote class="layui-elem-quote layui-text">
+            <h3>当前位置：用户管理 > 用户信息</h3>
+        </blockquote>
+        <div class="layui-form">
+            
+        </div>
+    </div>
+</div>
+{include file="common/foot"/}
+<script>
+    var message;
+    layui.config({
+        base: ADMIN+'build/js/',
+        version: '1.0.1'
+    }).use(['app', 'message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+    //恢复密码
+    $('.repwd').click(function(){
+        var j = $(this).data("uid");
+        layer.confirm('您确定要重置密码吗？',{icon:3},function(data){
+            var loading = layer.load(1, {shade: [0.1, '#fff']});
+            $.post('{:url("user/resetPwd")}', {id:j}, function (res) {
+                layer.close(loading);
+                if (res.code > 0) {
+                    layer.msg(res.msg, {time: 1800, icon: 1}, function () {
+                        location.href = res.url;
+                    });
+                } else {
+                    layer.msg(res.msg, {time: 1800, icon: 2});
+                }
+            });
+
+        });
+    });
+    //删除用户
+    $('.del').click(function(){
+        var j = $(this).data("uid");
+        layer.confirm('您确定要删除该用户吗？',{icon:3},function(data){
+            var loading = layer.load(1, {shade: [0.1, '#fff']});
+            $.post('{:url("user/userDel")}', {id:j}, function (res) {
+                layer.close(loading);
+                if (res.code > 0) {
+                    layer.msg(res.msg, {time: 1800, icon: 1}, function () {
+                        location.href = res.url;
+                    });
+                } else {
+                    layer.msg(res.msg, {time: 1800, icon: 2});
+                }
+            });
+
+        });
+    });  
+        
+  });
+</script>
+</body>
+</html>

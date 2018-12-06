@@ -1,0 +1,66 @@
+{extend name="static/assets/base.html" /}{block name="title"}
+<title>公告提示</title>{/block} {block name="style"}
+
+<link href="/static/css/mui.min.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="/static/css/app.css" />
+<style type="text/css">
+	html,
+	body {
+		background-color: #eee;
+	}
+
+	.mui-content {
+		padding: 15px 30px;
+		color: #303849;
+		margin-top: 48px;
+		font-size: 15px;
+		background-color: #fff;
+                margin-top:48px;
+	}
+
+	header.bar .tools {
+		float: right;
+		padding-top: 5px;
+	}
+
+	header.bar .weui-back {
+		padding-top: 10px;
+	}
+</style>
+{/block} {block name="body"}
+    <header class="bar bar-nav">
+        <a href="javascript:history.go(-1);" class="weui-back">
+            <i class="iconfont icon-fanhui"></i>
+        </a>
+        <h1 class="title">公告</h1>
+    </header>
+<div id="about" class="mui-content">
+	<!--<p>湖南诺海商务咨询有限公司是成立于2012年3月。是一家大型金融投资公司。公司长期从事投资管理、金融租赁、贸易等。</p>
+			<p>湖南诺海凭借国资背景和强大的实力与国内的方正、华泰、光大等多家证券公司以及股票融资机构、私募机构、上市公司结成战略合作伙伴。</p>
+			<p>公司整体规划未来发展成国内最大的个股期权交易商，建立一支完善的期权对冲团队，联合多家期权机构，建立一支专家股票分析团队并与大型公募基金联合为平台散户提供优质股票。联合多家期权对冲机构，建立一支专家股票分析团队并与大型公募基金联合为平台客户提供服务</p>
+			<p>随着期权管家软件的成功上线，我们相信湖南诺海的发展将要迎来一个新时代。我们也相信在座的各路英豪慧眼如炬，选择加盟晋功，一起见证和分享这一伟大的事业。</p>
+			<p>我司之愿景：专业服务中国金融、创造优良投资环境、网络公开价格透明、用广大投资建议人的投资策略返利于民。 我们广征天下英豪与我们一起发展、壮大。</p>-->
+</div>
+{/block} {block name="tabbar"}{/block} {block name="script"}
+<script src="/static/assets/js/mui.min.js"></script>
+<script type="text/javascript">
+	mui.init();
+	$.ajax({
+		type: 'POST',
+		url: "/index/otherapi/getActivityContent?type=1",
+		dataType: 'json',
+		data: {
+			userid: localStorage.id,
+			type: 1
+		},
+		async: false,
+		success: function (data) {
+			if (data.code == 1) { //插入记录到列表
+				$("#about").html(data.data.content);
+			}
+		},
+		error: function () {
+			mui.toast('请求超时');
+		}
+	});
+</script> {/block}

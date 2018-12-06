@@ -1,0 +1,112 @@
+{include file="common/head"/}
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div class="layui-padded-15">
+        <blockquote class="layui-elem-quote layui-text">
+          <h3>当前位置：{:lang('userManage')}<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>{:lang('userAdd')}</h3>
+        </blockquote>
+        <fieldset class="layui-elem-field layui-field-title layui-margin-t-20">
+          <legend>{:lang('userAdd')}</legend>
+        </fieldset>
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户账号</label>
+                <div class="layui-input-inline layui-width-280">
+                    <input type="text" name="username" lay-verify="username" placeholder="请输入用户登录账号" autocomplete="off" class="layui-input" value="">
+                </div>
+                <div class="layui-form-mid layui-word-aux">* 必填项，账号不小于5个字符</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">初始密码</label>
+                <div class="layui-input-inline layui-width-280">
+                    <input type="password" name="pwd" lay-verify="pass" placeholder="请输入用户密码" autocomplete="off" class="layui-input" value="111111">
+                </div>
+                <div class="layui-form-mid layui-word-aux">* 初始密码为：111111</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">真实姓名</label>
+                <div class="layui-input-block layui-width-280">
+                    <input type="text" name="realname" lay-verify="" placeholder="请输入用户真实姓名" autocomplete="off" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">电话号码</label>
+                <div class="layui-input-block layui-width-280">
+                    <input type="tel" name="tel" lay-verify="" placeholder="请输入用户电话号码" autocomplete="off" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">电子邮箱</label>
+                <div class="layui-input-block layui-width-280">
+                    <input type="text" name="email" lay-verify="" placeholder="请输入用户电子邮箱" autocomplete="off" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item" pane="">
+                <label class="layui-form-label">编辑顺序</label>
+                <div class="layui-input-block layui-width-360">
+                    <input type="text" name="edit_order" lay-verify="" placeholder="请输入编辑任务优先顺序" autocomplete="off" class="layui-input" value="QXB_1,QXB_2,QXB_3,QXB_4,CET4hx,CET6hx">
+                </div>
+            </div>
+            <div class="layui-form-item" pane="">
+                <label class="layui-form-label">审核顺序</label>
+                <div class="layui-input-block layui-width-360">
+                    <input type="text" name="judge_order" lay-verify="" placeholder="请输入审核任务优先顺序" autocomplete="off" class="layui-input" value="QXB_1,QXB_2,QXB_3,QXB_4,CET4hx,CET6hx">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">初始等级</label>
+                <div class="layui-input-block">
+                  <input type="radio" name="level" value="D" title="D级" checked="">
+                  <input type="radio" name="level" value="C" title="C级">
+                  <input type="radio" name="level" value="B" title="B级">
+                  <input type="radio" name="level" value="A" title="A级">
+                  <input type="radio" name="level" value="Z" title="Z级">
+                </div>
+            </div>
+            <div class="layui-form-item layui-margin-t-50">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="add-btn">立即添加</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+</div>   
+{include file="common/foot"/}
+<script>
+layui.use(['form'], function(){
+  var form = layui.form
+  ,layer = layui.layer
+  ,$ = layui.jquery;
+  //自定义验证规则
+  form.verify({
+    username: function(value){
+      if(value.length < 5){
+        return '登录账号不少于5个字符';
+      }
+    }
+    ,pass: [/(.+){6,12}$/, '密码长度必须6到12位']
+  });
+ 
+  //监听提交
+  form.on('submit(add-btn)', function(data){
+    var loading = layer.load(1, {shade: [0.1, '#fff']});
+      $.post("{:url('userAdd')}", data.field, function (res) {
+          layer.close(loading);
+          if (res.code > 0) {
+              layer.msg(res.msg, {time: 1800, icon: 1}, function () {
+                  location.href = res.url;
+              });
+          } else {
+              layer.msg(res.msg, {time: 1800, icon: 2});
+          }
+      });
+    return false;
+  });
+  
+  
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,566 @@
+{include file="common/head"/}
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+  <div class="layui-padded-15">
+    <blockquote class="layui-elem-quote layui-text">
+        <h4 class="layui-pull-left">当前位置：{:lang('vipManage')}<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>{:lang('agentManage')}</h4>
+        <button id="agent_reg" class="layui-btn layui-btn-normal layui-pull-right">代理注册</button>
+    </blockquote>
+    <div class="layui-form">
+      <div class="layui-form-item" style="margin-bottom: 5px;">
+        <div class="layui-inline">
+          <label class="layui-form-label" style="padding:9px 0;">注册时间：</label>
+          <div class="layui-input-inline" style="margin-right:0;width: 150px;">
+            <input type="text" class="layui-input" id="reg_start_time" placeholder="yyyy-MM-dd">
+          </div>
+          <label class="layui-form-label" style="width:auto;display:inline-block;padding:9px 5px;color:#ccc;">-</label>
+          <div class="layui-input-inline" style="margin-right:20px;width: 150px;">
+            <input type="text" class="layui-input" id="reg_end_time" placeholder="yyyy-MM-dd">
+          </div>
+          <label class="layui-form-label" style="padding:9px 0;">所属机构：</label>
+          <div class="layui-input-inline" style="margin-right:0;width: 150px;">
+            <input type="text" name="ins_name" id="ins_name"  placeholder="请输入所属机构"  class="layui-input">
+          </div>
+          <label class="layui-form-label" style="padding:9px 0;">关键词：</label>
+          <div class="layui-input-inline" style="margin-right:30px;width: 200px;">
+            <input type="text" id="keywords" name="keywords" required  placeholder="关键词：姓名或手机号"  class="layui-input">
+          </div>
+          <button class="layui-btn" id="layui-search-btn" data-type="reload" style="width:100px;"><i class="layui-icon">&#xe615;</i> 搜索 </button>
+          <button class="layui-btn layui-btn-warm" id="layui-reset-btn" style="width:100px;"> 重置 </button>
+        </div>
+      </div>
+    </div>
+    <div class="layui-form">
+      <table class="layui-table" id="list" lay-filter="list"></table>
+    </div>
+  </div>
+</div>
+{include file="common/foot"/}
+<script type="text/html" id="action">
+  <a class="layui-btn layui-btn-sm" lay-event="detail">查看</a>
+  <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-sm" lay-event="contactset">合约返佣</a>
+  <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+</script>
+<script>
+    var message;
+    layui.config({
+        base: ADMIN+'build/js/',
+        version: '1.0.1'
+    }).use(['app','table','form','laydate','message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            table = layui.table,
+            laydate = layui.laydate,
+            form = layui.form,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+    //列表数据
+    var tableIn = table.render({
+        elem: '#list',
+        url: '{:url("agent/agentManage")}',
+        method: 'post',
+        page: true,
+        cols: [[
+            {type:'numbers',title:'序号',fixed: true},
+            {field:'true_name',align:'center',title:'姓名', width:80},
+            {field:'mobile',align:'center',title:'手机号',width:110},
+            {field:'code', align:'center',title:'邀请码',width:80},
+            {field:'sxf', align:'center',title:'返佣比例',width:100},
+			<!--{field:'jszq', align:'center',title:'返佣周期',width:100},-->
+			/*{field:'zname', align:'center',title:'资管名称',width:100},
+			{field:'bh', align:'center',title:'风控编号',width:100},
+			{field:'zsxf', align:'center',title:'手续费',width:80},*/
+			{field:'mzh', align:'center',title:'母账号',width:80},
+            {field:'ins_name',align:'center',title:'所属机构', width:100},
+            {field:'p_name',align:'center', title:'上级代理',width:100},
+            {field:'total_money',align:'center', title:'账户余额',width:100},
+            {field:'add_time',align:'center',title:'注册时间', width:170},
+            {field:'status', align:'center', title:'状态',width:80},
+            {width: 260, align: 'center', toolbar: '#action',title:'操作'}
+        ]],
+        limit: 10,
+		id:'agent_list',
+        height: 600 //固定值
+    });
+    
+    //监听工具条
+    table.on('tool(list)', function(obj){
+      var data = obj.data;
+      if(obj.event === 'detail'){
+        //layer.msg('ID：'+ data.id + ' 的查看操作');
+        var id=data.id;
+        var url="{:url('agent/userInfo',['id'=>'userId'])}";
+            url=url.replace(/userId/,id);
+        window.location.href=url;
+      }else if(obj.event === 'contactset'){
+          var id = data.mobile;
+          var url="{:url('agent/insSetting',['cid'=>'w'])}";
+          url=url.replace(/w/,id);
+          var str='';
+          layer.open({
+              type: 2,
+              title:'合约档位设置',
+              area:['900px','550px'],
+              content: [''+url, 'no']
+          });
+      }  else if(obj.event === 'del'){
+        layer.confirm('真的要删除该代理吗？', function(index){
+          $.post("{:url('agent/del_agentor')}",{'id':data.id},function(res){
+            if(res.code==1){
+              layer.msg(res.msg,{icon:1,time:1000},function(){
+                //obj.del();
+                layer.close(index);
+                tableIn.reload();
+              });
+            }else{
+              layer.msg(res.msg,{icon:2,time:1000},function(){
+                layer.close(index);
+              });
+            }
+          });
+          
+        });
+      } else if(obj.event === 'set'){
+          var pid=data.pid;
+          $.post("{:url('agent/getPrefAgentor')}",{id:data.id,pid:pid},function (res) {
+              var str='';
+              str+='<div class="layui-user" style="width:90%;padding:10px 20px;">';
+              str+='<fieldset class="layui-elem-field">';
+              str+='<legend style="font-size:14px;">上级机构</legend>';
+              str+='<div class="layui-field-box">';
+              str+='<form class="layui-form">';
+              str+='<div class="layui-form-item" style="margin-bottom:0;border-bottom:1px solid #eee;">';
+              str+= '<label class="layui-form-label" style="width:120px;">名称：</label>';
+              str+='<div class="layui-form-mid layui-word-aux">'+res.p_name+'</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item" style="margin-bottom:0">';
+              str+='<label class="layui-form-label" style="width:120px;">平台管理费：</label>';
+              str+='<div class="layui-form-mid layui-word-aux">'+res.ptglf+'</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item" style="margin-bottom:0">';
+              str+='<label class="layui-form-label" style="width:120px;">用户利润分成：</label>';
+              str+='<div class="layui-form-mid layui-word-aux">'+res.lrfc+'</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item" style="margin-bottom:0">';
+              str+='<label class="layui-form-label" style="width:120px;">手续费：</label>';
+              str+='<div class="layui-form-mid layui-word-aux">'+res.sxf+'</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item" style="margin-bottom:0">';
+              str+='<label class="layui-form-label" style="width:120px;">技术服务费：</label>';
+              str+='<div class="layui-form-mid layui-word-aux">'+res.jsfwf+'</div>';
+              str+='</div>';
+              str+='</form>';
+              str+='</div>';
+              str+='</fieldset>';
+              str+='<fieldset class="layui-elem-field">';
+              str+='<legend style="font-size:14px;">经纪人</legend>';
+              str+='<div class="layui-field-box">';
+              str+='<form class="layui-form">';
+              str+='<div class="layui-form-item" style="margin-bottom:5px">';
+              str+='<label class="layui-form-label" style="width:120px;">结算周期：</label>';
+              str+='<div class="layui-input-inline" style="width:100px;">';
+              str+='<select id="jszq" name="jszq" lay-verify="required">';
+              str+='<option value="日" selected>日</option>';
+              str+='<option value="周">周</option>';
+              str+='<option value="月">月</option>';
+              str+='</select>';
+              str+='</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item" style="margin-bottom:5px">';
+              str+='<label class="layui-form-label" style="width:120px;">平台管理费：</label>';
+              str+='<div class="layui-input-inline" style="width:100px;">';
+              str+='<input type="number" id="ptglf" name="ptglf" placeholder="" value="'+data.ptglf+'" class="layui-input">';
+              str+='</div>';
+              str+='<div class="layui-form-mid layui-word-aux">%</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item" style="margin-bottom:5px">';
+              str+='<label class="layui-form-label" style="width:120px;">用户利润分成：</label>';
+              str+='<div class="layui-input-inline" style="width:100px;">';
+              str+='<input type="number" id="lrfc" name="lrfc" placeholder="" value="'+data.lrfc+'" class="layui-input">';
+              str+='</div>';
+              str+='<div class="layui-form-mid layui-word-aux">%</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item" style="margin-bottom:5px">';
+              str+='<label class="layui-form-label" style="width:120px;">手续费：</label>';
+              str+='<div class="layui-input-inline" style="width:100px;">';
+              str+='<input type="number" id="sxf" name="sxf" placeholder="" value="'+data.sxf+'" class="layui-input">';
+              str+='</div>';
+              str+='<div class="layui-form-mid layui-word-aux">%</div>';
+              str+='</div>';
+              str+='<div class="layui-form-item" style="margin-bottom:5px">';
+              str+='<label class="layui-form-label" style="width:120px;">技术服务费：</label>';
+              str+='<div class="layui-input-inline" style="width:100px;">';
+              str+='<input type="number" id="jsfwf" name="jsfwf" placeholder="" value="'+data.jsfwf+'" class="layui-input">';
+              str+='</div>';
+              str+='<div class="layui-form-mid layui-word-aux">%</div>';
+              str+='</div>';
+              str+='</form>';
+              str+='</div>';
+              str+='</fieldset>';
+              str+='<p style="color:#c00;">注：返佣设置不能超过上级机构，修改后下个交易日生效</p>';
+              str+='</div>';
+              layer.open({
+                  type: 1,
+                  skin: 'layui-user',
+                  title:['返佣设置', 'font-size:18px;'],
+                  area:['600px','660px'],
+                  content:str,
+                  btn: ['保存', '取消'],
+                  btnAlign: 'c',
+                  yes: function(index, layero){
+                      var id=data.id;
+                      var jszq=$('#jszq option:selected').val();
+                      var ptglf=$('#ptglf').val();
+                      var lrfc=$('#lrfc').val();
+                      var sxf=$('#sxf').val();
+                      var jsfwf=$('#jsfwf').val();
+                      $.post("{:url('agent/set_insManage')}",{'id':id,'jszq':jszq,'ptglf':ptglf,'lrfc':lrfc,'sxf':sxf,'jsfwf':jsfwf},function(res){
+                          if(res.code==1){
+                              layer.msg(res.msg,{icon:1,time:1000},function(){
+                                  layer.close(index);
+                                  tableIn.reload();
+                              });
+                          }else{
+                              layer.msg(res.msg,{icon:2,time:1000},function(){
+                                  layer.close(index);
+                              });
+                          }
+                      });
+                  },
+                  btn2: function(index, layero){
+                      layer.close(index);
+                      //return false 开启该代码可禁止点击该按钮关闭
+                  },
+                  cancel: function(index){
+                      layer.close(index);
+                      //return false;
+                      //return false 开启该代码可禁止点击该按钮关闭
+                  }
+              });
+              form.render();
+          });
+
+      } else if(obj.event === 'edit'){
+        //layer.alert('编辑行：<br>'+ JSON.stringify(data))
+		$.post("{:url('agent/getData')}",{},function(res){
+			var str='';
+				str+='<div class="layui-user">';
+				str+='<form class="layui-form">';
+				str+='<div class="layui-form-item">';
+				str+='<label class="layui-form-label">姓名</label>';
+				str+='<div class="layui-input-block">';
+				str+='<input type="text" name="true_name" placeholder="请输入姓名" autocomplete="off" value="'+data.true_name+'" disabled class="layui-input">';
+				str+='</div>';
+				str+='</div>';
+			/*	str+='<div class="layui-form-item">';
+				str+='<label class="layui-form-label">资管名称</label>';
+				str+='<div class="layui-input-block">';
+				str+='<select id="zg" name="zg" lay-verify="required">';
+				for(var i=0;i<res.zg.length;i++){
+					if(res.zg[i]['id']==data.zg_id){
+						str+='<option value="'+res.zg[i]['id']+'" selected>'+res.zg[i]['name']+'</option>';
+					}else{
+						str+='<option value="'+res.zg[i]['id']+'">'+res.zg[i]['name']+'</option>';
+					}
+				}
+				str+='</select>';
+				str+='</div>';
+				str+='</div>';*/
+				/*str+='<div class="layui-form-item">';
+				str+='<label class="layui-form-label">风控编号</label>';
+				str+='<div class="layui-input-block">';
+				str+='<select id="fk" name="fk" lay-verify="required">';
+				for(var i=0;i<res.fk.length;i++){
+					if(res.fk[i]['id']==data.fk_id){
+						str+='<option value="'+res.fk[i]['id']+'" selected>'+res.fk[i]['account']+'</option>';
+					}else{
+						str+='<option value="'+res.fk[i]['id']+'">'+res.fk[i]['account']+'</option>';
+					}
+				}
+				str+='</select>';
+				str+='</div>';
+				str+='</div>';*/
+				/*str+='<div class="layui-form-item">';
+				str+='<label class="layui-form-label">手续费模板</label>';
+				str+='<div class="layui-input-block">';
+				str+='<select id="sxf_mb" name="sxf_mb" lay-verify="required">';
+				for(var i=0;i<res.sxf_mb.length;i++){
+					if(res.sxf_mb[i]['id']==data.sxf_id){
+						str+='<option value="'+res.sxf_mb[i]['id']+'" selected>'+res.sxf_mb[i]['bh']+'</option>';
+					}else{
+						str+='<option value="'+res.sxf_mb[i]['id']+'">'+res.sxf_mb[i]['bh']+'</option>';
+					}
+					
+				}
+				str+='</select>';
+				str+='</div>';
+				str+='</div>';*/
+				str+='<div class="layui-form-item">';
+				str+='<label class="layui-form-label">母账号</label>';
+				str+='<div class="layui-input-block">';
+				str+='<select id="mzh" name="mzh" lay-verify="required">';
+				for(var i=0;i<res.mzh.length;i++){
+					if(res.mzh[i]['id']==data.mzh_id){
+						str+='<option value="'+res.mzh[i]['id']+'" selected>'+res.mzh[i]['account']+'</option>';
+					}else{
+						str+='<option value="'+res.mzh[i]['id']+'">'+res.mzh[i]['account']+'</option>';
+					}
+					
+				}
+				str+='</select>';
+				str+='</div>';
+				str+='</div>';
+				str+='<div class="layui-form-item">';
+				str+='<label class="layui-form-label">手机号</label>';
+				str+='<div class="layui-input-block">';
+				str+='<input type="number" name="mobile" placeholder="请输入手机号" value="'+data.mobile+'" disabled class="layui-input">';
+				str+='</div>';
+				str+='</div>';
+				str+='<div class="layui-form-item">';
+				str+='<label class="layui-form-label">身份证号</label>';
+				str+='<div class="layui-input-block">';
+				str+='<input type="number" name="id_card" placeholder="请输入身份证号" value="'+data.id_card+'"  class="layui-input">';
+				str+='</div>';
+				str+='</div>';
+				str+='<div class="layui-form-item">';
+				str+='<label class="layui-form-label">开户银行</label>';
+				str+='<div class="layui-input-block">';
+				str+='<input type="text" name="bank_name" placeholder="请输入开户行名称" value="'+data.bank_name+'"  class="layui-input">';
+				str+='</div>';
+				str+='</div>';
+				str+='<div class="layui-form-item">';
+				str+='<label class="layui-form-label">银行卡号</label>';
+				str+='<div class="layui-input-block">';
+				str+='<input type="number" name="bank_card" placeholder="请输入银行卡号" value="'+data.bank_card+'"  class="layui-input">';
+				str+='</div>';
+				str+='</div>';
+				str+='<div class="layui-form-item">';
+				str+='<label class="layui-form-label">重置密码</label>';
+				str+='<div class="layui-input-block">';
+				str+='<input type="password" id="user_pwd" name="user_pwd" placeholder="请输入新密码" class="layui-input">';
+				str+='</div>';
+				str+='</div>';
+				str+='<div class="layui-form-item">';
+				str+='<label class="layui-form-label">状态</label>';
+				str+='<div class="layui-input-block">';
+				if(data.status=='正常'){
+					str+='<input type="radio" name="status" value="0" title="开启" checked>';
+					str+='<input type="radio" name="status" value="1" title="关闭">';
+				}else{
+					str+='<input type="radio" name="status" value="0" title="开启">';
+					str+='<input type="radio" name="status" value="1" title="关闭" checked>';
+				}
+				str+='</div>';
+				str+='</div>';
+				str+='</form>';
+				str+='</div>';
+        layer.open({
+        type: 1, 
+        skin: 'layui-user',
+        title:'编辑用户资料',
+        area:['650px','500px'],
+        content:str,
+        btn: ['保存', '取消'],
+        btnAlign: 'c',
+        yes: function(index, layero){
+          var user_pwd=$.trim($('#user_pwd').val());
+          var id=data.id;
+		  var zg_id=$('#zg option:selected').val();
+		  var mzh_id=$('#mzh option:selected').val();
+		  var sxf_id=$('#sxf_mb option:selected').val();
+		  var fk_id=$('#fk option:selected').val();
+          var bank_card = $('input[name="bank_card"]').val();
+          var bank_name = $('input[name="bank_name"]').val();
+          var id_card = $('input[name="id_card"]').val();
+		  var status=$('input[name="status"]:checked').val();
+          $.post("{:url('agent/edit_insManage')}",{'id':id,'user_pwd':user_pwd,'bank_card':bank_card,'bank_name':bank_name,'id_card':id_card,'zg_id':zg_id,'mzh_id':mzh_id,'sxf_id':sxf_id,'fk_id':fk_id,'status':status},function(res){
+            if(res.code==1){
+              layer.msg(res.msg,{icon:1,time:1000},function(){
+                layer.close(index);
+                tableIn.reload();
+              });
+            }else{
+              layer.msg(res.msg,{icon:2,time:1000},function(){
+                layer.close(index);
+              });
+            }
+          });
+        },
+        btn2: function(index, layero){
+          layer.close(index);
+          //return false 开启该代码可禁止点击该按钮关闭
+        },
+        cancel: function(index){ 
+          layer.close(index);
+          //return false; 
+          //return false 开启该代码可禁止点击该按钮关闭
+        }
+      });
+
+		 form.render();
+		});
+      }
+    });
+    
+    //代理注册
+    $('#agent_reg').click(function(){
+      $.post("{:url('agent/getAgentId')}", {}, function(data){
+        //alert(JSON.stringify(data));
+        var str='';
+            str+='<div class="layui-user">';
+            str+='<form class="layui-form">';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">姓名</label>';
+            str+='<div class="layui-input-block">';
+            str+='<input type="text" name="true_name" placeholder="请输入姓名" autocomplete="off" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">手机号</label>';
+            str+='<div class="layui-input-block">';
+            str+='<input type="number" name="mobile" placeholder="请输入手机号" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">密码</label>';
+            str+='<div class="layui-input-block">';
+            str+='<input type="password" name="user_pwd" placeholder="请输入密码" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">代理商</label>';
+            str+='<div class="layui-input-block">';
+            str+='<select id="agentId" name="modules" lay-verify="required" lay-search="">';
+            str+='<option value="">直接选择或搜索代理商名称</option>';
+            for(var i=0;i<data.length;i++){
+              str+='<option value="'+data[i].id+'">'+data[i].true_name+'</option>';
+            }
+            str+='</select>';
+            str+='</div>';
+            str+='</div>';
+            str+='</form>';
+            str+='</div>';
+        layer.open({
+          type: 1, 
+          skin: 'layui-user',
+          title:'注册新代理',
+          area:['600px','450px'],
+          content:str,
+          btn: ['提交', '放弃'],
+          btnAlign: 'c',
+          yes: function(index, layero){
+            var true_name=$('input[name="true_name"]').val();
+            var mobile=$('input[name="mobile"]').val();
+            var password=$('input[name="user_pwd"]').val();
+            var pid=$('#agentId option:selected').val();
+            $.post("{:url('agent/register')}",{'true_name':true_name,'mobile':mobile,'user_pwd':password,'pid':pid,},function(res){
+              if(res.code==1){
+                layer.msg(res.msg, {icon: 1, time: 1000}, function(){
+                    layer.close(index);
+                    tableIn.reload();
+                });
+              }else{
+                layer.msg(res.msg, {icon: 2, time: 1000});
+              }
+            });
+          },
+          btn2: function(index, layero){
+            layer.close(index);
+            //return false 开启该代码可禁止点击该按钮关闭
+          },
+          cancel: function(index){ 
+            layer.close(index);
+            //return false; 
+            //return false 开启该代码可禁止点击该按钮关闭
+          }
+        });
+        form.render();
+      });
+      
+    });
+    //时间控件渲染
+    laydate.render({
+      elem: '#reg_start_time'
+    });
+    laydate.render({
+      elem: '#reg_end_time'
+    });
+
+	//搜索
+	var $ = layui.$, active = {
+		reload: function(){
+			var start_time = $('#reg_start_time');
+			var end_time = $('#reg_end_time');
+			var keywords=$('#keywords');
+			var ins_name=$('#ins_name');
+			//执行重载
+			table.reload('agent_list', {
+				page: {
+					curr: 1 //重新从第 1 页开始
+				}
+				,url:"{:url('agent/search_ins')}"
+				,where: {
+					keywords:keywords.val(),
+					start_time:start_time.val(),
+					end_time:end_time.val(),
+					ins_name:ins_name.val()
+				}
+			});
+		}
+	};
+	//提交
+	$('#layui-search-btn').on('click', function(){
+		var type = $(this).data('type');
+		active[type] ? active[type].call(this) : '';
+		$('#ins_name').val('');
+	});
+	//重置
+	$('#layui-reset-btn').click(function(){
+		$('input[type="text"]').val('');
+		tableIn.reload();
+	});
+    //机构弹窗
+	$('#ins_name').click(function(){
+		$('#ins_name').val('');
+		sessionStorage.removeItem('nodes');
+		layer.open({
+			type: 2,
+			title:'选择代理',
+			area: ['650px', '500px'],
+			content: "{:url('agent/agentInfo')}"
+			,closeBtn:2
+			,btnAlign: 'c'
+			,cancel: function(index, layero){ 
+				//右上角关闭回调
+				var nodes=sessionStorage.getItem('nodes');
+				if(sessionStorage.getItem('nodes')==''||sessionStorage.getItem('nodes')==null){
+					$('#ins_name').val('');
+					layer.close(index);
+				}else{
+					var new_nodes=nodes.split(',');
+					var new_str=[];
+					for(var i=0;i<new_nodes.length;i++){
+						if(new_nodes[i].indexOf('-')>0){
+						  var arr=new_nodes[i].split('-');
+						  new_str.push(arr[1]);
+						}
+					}
+					$('#ins_name').val(new_str);
+					layer.close(index);
+				}
+			}
+		}); 
+	});
+        
+  });
+</script>
+</body>
+</html>

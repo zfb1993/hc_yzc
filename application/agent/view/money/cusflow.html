@@ -1,0 +1,165 @@
+{include file="common/head"/}
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+  <div class="layui-padded-15">
+    <blockquote class="layui-elem-quote layui-text">
+        <h4>当前位置：{:lang('moneyManage')}<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>{:lang('cusFlow')}</h4>
+    </blockquote>
+    <div class="layui-form">
+      <div class="layui-form-item" style="margin-bottom: 5px;">
+        <div class="layui-inline">
+          <label class="layui-form-label" style="padding:9px 0;">申请时间：</label>
+          <div class="layui-input-inline" style="margin-right:0;width: 150px;">
+            <input type="text" class="layui-input" id="reg_start_time" placeholder="yyyy-MM-dd">
+          </div>
+          <label class="layui-form-label" style="width:auto;display:inline-block;padding:9px 5px;color:#ccc;">-</label>
+          <div class="layui-input-inline" style="margin-right:20px;width: 150px;">
+            <input type="text" class="layui-input" id="reg_end_time" placeholder="yyyy-MM-dd">
+          </div>
+          <label class="layui-form-label" style="padding:9px 0;">所属机构：</label>
+          <div class="layui-input-inline" style="margin-right:0;width: 150px;">
+            <input type="text" name="ins_name" id="ins_name"  placeholder="请输入所属机构"  class="layui-input">
+          </div>
+		  <label class="layui-form-label" style="padding:9px 0;">类型：</label>
+			<div class="layui-input-inline" style="margin-right:0;width: 120px;">
+			  <select id="type" name="type">
+				<option value="-1" selected>请选择类型</option>
+				<option value="0">提现</option>
+				<option value="1">充值</option>
+			  </select>
+			</div>
+          <label class="layui-form-label" style="padding:9px 0;">关键词：</label>
+          <div class="layui-input-inline" style="margin-right:30px;width: 200px;">
+            <input type="text" id="keywords" name="keywords" required  placeholder="关键词：姓名或手机号"  class="layui-input">
+          </div>
+          <button class="layui-btn" id="layui-search-btn" data-type="reload" style="width:100px;"><i class="layui-icon">&#xe615;</i> 搜索 </button>
+          <button class="layui-btn layui-btn-warm" id="layui-reset-btn" style="width:100px;"> 重置 </button>
+        </div>
+      </div>
+    </div>
+    <div class="layui-form">
+      <table class="layui-table" id="list" lay-filter="list"></table>
+    </div>
+
+  </div>
+</div>
+{include file="common/foot"/}
+<script>
+    var message;
+    layui.config({
+        base: ADMIN+'build/js/',
+        version: '1.0.1'
+    }).use(['app','table','laydate','message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            table = layui.table,
+            laydate = layui.laydate,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+    //列表数据
+    var tableIn = table.render({
+        elem: '#list',
+        url: '{:url("money/cusFlow")}',
+        method: 'post',
+        page: true,
+        cols: [[
+            {type:'numbers',title:'序号',width:60,fixed: true},
+            {field:'user_name',align:'center',title:'账号', width:120, sort: true},
+            {field:'true_name',align:'center',title:'姓名', width:120, sort: true},
+            {field:'p_name',align:'center',title:'上级代理',width:150},
+            {field:'type', align:'center',title:'类型',width:100},
+            {field:'money',align:'center',title:'金额', width:160, sort: true},
+            {field:'add_time',align:'center',title:'申请时间', width:200, sort: true},
+            {field:'check_time',align:'center',title:'处理时间', width:200, sort: true},
+            {field:'memo', align:'center', title:'备注',width:120},
+        ]],
+		id:'flow_list',
+        height: 550 //固定值
+    });
+    //时间控件渲染
+    laydate.render({
+      elem: '#reg_start_time'
+    });
+    laydate.render({
+      elem: '#reg_end_time'
+    });
+    
+    //搜索
+	var $ = layui.$, active = {
+		reload: function(){
+			var start_time = $('#reg_start_time');
+			var end_time = $('#reg_end_time');
+			var keywords=$('#keywords');
+			var ins_name=$('#ins_name');
+			var type=$('#type option:selected');
+			//执行重载
+			table.reload('flow_list', {
+				page: {
+					curr: 1 //重新从第 1 页开始
+				}
+				,url:"{:url('money/search_flow')}"
+				,where: {
+					keywords:keywords.val(),
+					start_time:start_time.val(),
+					end_time:end_time.val(),
+					ins_name:ins_name.val(),
+					type:type.val()
+				}
+			});
+		}
+	};
+	//提交
+	$('#layui-search-btn').on('click', function(){
+		var type = $(this).data('type');
+		active[type] ? active[type].call(this) : '';
+		$('#ins_name').val('');
+	});
+	//重置
+	$('#layui-reset-btn').click(function(){
+		$('input[type="text"]').val('');
+		tableIn.reload();
+	});
+    //机构弹窗
+	$('#ins_name').click(function(){
+		$('#ins_name').val('');
+		sessionStorage.removeItem('nodes');
+		layer.open({
+			type: 2,
+			title:'选择代理',
+			area: ['650px', '500px'],
+			content: "{:url('agent/agentInfo')}"
+			,closeBtn:2
+			,btnAlign: 'c'
+			,cancel: function(index, layero){ 
+				//右上角关闭回调
+				var nodes=sessionStorage.getItem('nodes');
+				if(sessionStorage.getItem('nodes')==''||sessionStorage.getItem('nodes')==null){
+					$('#ins_name').val('');
+					layer.close(index);
+				}else{
+					var new_nodes=nodes.split(',');
+					var new_str=[];
+					for(var i=0;i<new_nodes.length;i++){
+						if(new_nodes[i].indexOf('-')>0){
+						  var arr=new_nodes[i].split('-');
+						  new_str.push(arr[1]);
+						}
+					}
+					$('#ins_name').val(new_str);
+					layer.close(index);
+				}
+			}
+		}); 
+	});
+        
+  });
+</script>
+</body>
+</html>

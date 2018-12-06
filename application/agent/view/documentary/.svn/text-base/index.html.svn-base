@@ -1,0 +1,526 @@
+{include file="common/head"/}
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+  <div class="layui-padded-15">
+    <blockquote class="layui-elem-quote layui-text" style="margin-bottom: 10px;">
+      <h4 class="layui-pull-left">当前位置：跟单设置<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>跟单列表</h4>
+        <button id="add_follow" class="layui-btn layui-btn-normal layui-pull-right">添加跟单</button>
+    </blockquote>
+
+          <div class="layui-form">
+            <table class="layui-table" id="list1" lay-filter="list1" style="margin-top:0px;"></table>
+          </div>
+      <div class="layui-form">
+          <table class="layui-table" id="list2" lay-filter="list2" style="margin-top:0px;"></table>
+      </div>
+
+  </div>
+</div>
+{include file="common/foot"/}
+
+<script type="text/html" id="action">
+  <a class="layui-btn layui-btn-sm" lay-event="detail">查看跟随者</a>
+  <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="edit">启用/暂停</a>
+</script>
+<script type="text/html" id="action1">
+    <a class="layui-btn" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-warm" lay-event="supp">启用/暂停</a>
+    <a class="layui-btn layui-btn-normal" lay-event="add">新增</a>
+</script>
+<script>
+    var message;
+    layui.config({
+        base: ADMIN+'build/js/',
+        version: '1.0.1'
+    }).use(['app', 'table','form','laydate','message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            table = layui.table,
+            form = layui.form,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+    //列表数据
+    var tableIn = table.render({
+        elem: '#list1',
+        url: '{:url("documentary/follow")}',
+        method: 'post',
+        page: true,
+        cols: [[
+//            {checkbox: true,fixed: 'left'},
+            {type:'numbers',title:'序号',width:50},
+            {field:'id',align:'center',title:'资管ID', width:100, sort: true},
+            {field:'true_name',align:'center',title:'姓名', width:100, sort: true},
+            {field:'account',align:'center',title:'手机号',width:150},
+            {field:'motherid', align:'center',title:'母账户ID',width:100},
+            {field:'cash',align:'center',title:'余额', width:160, sort: true},
+            {field:'enablefollow',align:'center',title:'状态', width:100, sort: true,templet:'<div>{{ status(d.enablefollow)}}</div>'},
+            {width: 250, align: 'center', toolbar: '#action',title:'操作'}
+        ]],
+        limit: 10,
+        height: 500 //固定值
+    });
+    //列表数据
+
+        $('#add_follow').click(function() {
+            $.post("{:url('documentary/getcusId')}", {}, function(data){
+              gen = data.gen;
+              yang = data.yang;
+            var str = '';
+            str += '<div class="layui-user">';
+            str += '<form class="layui-form">';
+            str += '<div class="layui-form-item">';
+            str += '<label class="layui-form-label">跟单账号</label>';
+            str += '<div class="layui-input-block">';
+                str+='<select id="cusId" name="modules" lay-verify="required" lay-search="">';
+                str+='<option value="">直接选择或搜索账号</option>';
+                for(var i=0;i<gen.length;i++){
+                    str+='<option value="'+gen[i].zid+'">'+gen[i].user_name+'-'+gen[i].true_name+'</option>';
+                }
+                str+='</select>';
+            str += '</div>';
+            str += '</div>';
+                str += '<div class="layui-form-item">';
+                str += '<label class="layui-form-label">样板账号</label>';
+                str += '<div class="layui-input-block">';
+                str+='<select id="docId" name="modules" lay-verify="required" lay-search="">';
+                str+='<option value="">直接选择或搜索账号</option>';
+                for(var i=0;i<yang.length;i++){
+                    str+='<option value="'+yang[i].zid+'">'+yang[i].user_name+'-'+yang[i].true_name+'</option>';
+                }
+                str+='</select>';
+                str += '</div>';
+                str += '</div>';
+            str += '<div class="layui-form-item">';
+            str += '<label class="layui-form-label">跟单方向</label>';
+            str += '<div class="layui-input-block">';
+                str+='<input type="radio" name="direct" value="0" title="正向" checked>';
+                str+='<input type="radio" name="direct" value="1" title="反向">';
+            str += '</div>';
+            str += '</div>';
+                str+='<div class="layui-form-item">';
+                str+='<label class="layui-form-label">是否启用</label>';
+                str+='<div class="layui-input-block">';
+                str+='<input type="radio" name="enable" value="0" title="暂停" >';
+                str+='<input type="radio" name="enable" value="1" title="启用" checked>';
+                str+='</div>';
+                str+='</div>';
+            str += '<div class="layui-form-item">';
+            str += '<label class="layui-form-label">倍速</label>';
+            str += '<div class="layui-input-block">';
+            str += '<input type="text" name="multiple" placeholder="请输入倍速" value="1" class="layui-input">';
+            str += '</div>';
+            str += '</div>';
+            str += '</form>';
+            str += '</div>';
+            layer.open({
+                type: 1,
+                skin: 'layui-user',
+                title: '添加跟单',
+                area: ['600px', '500px'],
+                content: str,
+                btn: ['提交', '放弃'],
+                btnAlign: 'c',
+                yes: function(index, layero) {
+                    var childid = $('#cusId').val();
+                    var followed = $('#docId').val();
+                    var direct = $('input[name="direct"]:checked').val();
+                    var enable = $('input[name="enable"]:checked').val();
+                    var multiple = $('input[name="multiple"]').val();
+                    $.post("{:url('documentary/add_follow')}", {
+                        'childid': childid,
+                        'followed': followed,
+                        'direct': direct,
+                        'multiple': multiple,
+                        'enable': enable
+                    }, function(res) {
+                        if (res.code == 1) {
+                            layer.msg(res.msg, {
+                                icon: 1,
+                                time: 1000
+                            }, function() {
+                                layer.close(index);
+                                tableIn.reload();
+                            });
+                        } else {
+                            layer.msg(res.msg, {
+                                icon: 2,
+                                time: 1000
+                            });
+                        }
+                    });
+                },
+                btn2: function(index, layero) {
+                    layer.close(index);
+                },
+                cancel: function(index) {
+                    layer.close(index);
+                }
+            });
+            form.render();
+            });
+        });
+
+
+        //监听工具条
+    table.on('tool(list1)', function(obj){
+      var data = obj.data;
+      if(obj.event === 'detail'){
+           table.render({
+              elem: '#list2',
+              url: '{:url("documentary/followed")}',
+              method: 'post',
+              where:{id:data.id},
+              page: true,
+              cols: [[
+                  {type:'numbers',title:'序号',width:50},
+                  {field:'Followed',align:'center',title:'资管ID', width:100, sort: true},
+                  {field:'mobile',align:'center',title:'手机号',width:120},
+                  {field:'Direct', align:'center',title:'方向',width:100,templet:'<div>{{ fangx(d.Direct)}}</div>'},
+                  {field:'Multiple', align:'center',title:'倍速',width:80},
+                  {field:'Enable', align:'center',title:'状态',width:80,templet:'<div>{{ status(d.Enable)}}</div>'},
+                  {width: 350, align: 'center', toolbar: '#action1',title:'操作'}
+              ]],
+              limit: 10,
+              height: 500 //固定值
+          });
+      } else if(obj.event === 'edit'){
+          $.post("{:url('documentary/suspend')}", {
+              'childid': data.id,
+              'enablefollow': data.enablefollow
+          }, function(res) {
+              if (res.code == 1) {
+                  layer.msg(res.msg, {
+                      icon: 1,
+                      time: 1000
+                  }, function() {
+                      tableIn.reload();
+                  });
+              } else {
+                  layer.msg(res.msg, {
+                      icon: 2,
+                      time: 1000
+                  });
+              }
+          });
+      } 
+    });
+        table.on('tool(list2)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'del'){
+                $.post("{:url('documentary/delfollow')}", {
+                    'childid': data.Account,
+                    'followed': data.Followed,
+                },function(res){
+                    if (res.code == 1) {
+                        layer.msg(res.msg, {
+                            icon: 1,
+                            time: 1000
+                        }, function() {
+                            tableIn.reload();
+                            table.render({
+                                elem: '#list2',
+                                url: '{:url("documentary/followed")}',
+                                method: 'post',
+                                where:{id:data.Account},
+                                page: true,
+                                cols: [[
+                                    {type:'numbers',title:'序号',width:50},
+                                    {field:'Followed',align:'center',title:'资管ID', width:100, sort: true},
+                                    {field:'mobile',align:'center',title:'手机号',width:120},
+                                    {field:'Direct', align:'center',title:'方向',width:100,templet:'<div>{{ fangx(d.Direct)}}</div>'},
+                                    {field:'Multiple', align:'center',title:'倍速',width:80},
+                                    {field:'Enable', align:'center',title:'状态',width:80,templet:'<div>{{ status(d.Enable)}}</div>'},
+                                    {width: 350, align: 'center', toolbar: '#action1',title:'操作'}
+                                ]],
+                                limit: 10,
+                                height: 500 //固定值
+                            });
+                        });
+                    } else {
+                        layer.msg(res.msg, {
+                            icon: 2,
+                            time: 1000
+                        });
+                    }
+                });
+            }else if(obj.event === 'edit')
+            {
+                var str = '';
+                str += '<div class="layui-user">';
+                str += '<form class="layui-form">';
+                str+='<div class="layui-form-item">';
+                str += '<label class="layui-form-label">跟单方向</label>';
+                str += '<div class="layui-input-block">';
+
+                if(data.Direct == '0'){
+                    str+='<input type="radio" name="direct" value="0" title="正向" checked>';
+                    str+='<input type="radio" name="direct" value="1" title="反向">';
+                }else{
+                    str+='<input type="radio" name="direct" value="0" title="正向">';
+                    str+='<input type="radio" name="direct" value="1" title="反向" checked>';
+                }
+
+                str += '</div>';
+                str += '</div>';
+                str+='<div class="layui-form-item">';
+                str+='<label class="layui-form-label">是否启用</label>';
+                str+='<div class="layui-input-block">';
+
+                if(data.Enable == '0'){
+                    str+='<input type="radio" name="enable" value="0" title="暂停" checked>';
+                    str+='<input type="radio" name="enable" value="1" title="启用">';
+                }else{
+                    str+='<input type="radio" name="enable" value="0" title="暂停" >';
+                    str+='<input type="radio" name="enable" value="1" title="启用" checked>';
+                }
+
+                str+='</div>';
+                str+='</div>';
+                str += '<div class="layui-form-item">';
+                str += '<label class="layui-form-label">倍速</label>';
+                str += '<div class="layui-input-block">';
+                str += '<input type="text" name="multiple" placeholder="请输入倍速" value="'+data.Multiple+'" class="layui-input">';
+                str += '</div>';
+                str += '</div>';
+                str += '</form>';
+                str += '</div>';
+                layer.open({
+                    type: 1,
+                    skin: 'layui-user',
+                    title: '添加跟单',
+                    area: ['600px', '500px'],
+                    content: str,
+                    btn: ['提交', '放弃'],
+                    btnAlign: 'c',
+                    yes: function(index, layero) {
+                        var childid = data.Account;
+                        var followed = data.Followed;
+                        var direct = $('input[name="direct"]:checked').val();
+                        var enable = $('input[name="enable"]:checked').val();
+                        var multiple = $('input[name="multiple"]').val();
+                        $.post("{:url('documentary/add_follow')}", {
+                            'childid': childid,
+                            'followed': followed,
+                            'direct': direct,
+                            'multiple': multiple,
+                            'enable': enable
+                        }, function(res) {
+                            if (res.code == 1) {
+                                layer.msg(res.msg, {
+                                    icon: 1,
+                                    time: 1000
+                                }, function() {
+                                    layer.close(index);
+//                                    tableIn.reload();
+                                    table.render({
+                                        elem: '#list2',
+                                        url: '{:url("documentary/followed")}',
+                                        method: 'post',
+                                        where:{id:data.Account},
+                                        page: true,
+                                        cols: [[
+                                            {type:'numbers',title:'序号',width:50},
+                                            {field:'Followed',align:'center',title:'资管ID', width:100, sort: true},
+                                            {field:'mobile',align:'center',title:'手机号',width:120},
+                                            {field:'Direct', align:'center',title:'方向',width:100,templet:'<div>{{ fangx(d.Direct)}}</div>'},
+                                            {field:'Multiple', align:'center',title:'倍速',width:80},
+                                            {field:'Enable', align:'center',title:'状态',width:80,templet:'<div>{{ status(d.Enable)}}</div>'},
+                                            {width: 350, align: 'center', toolbar: '#action1',title:'操作'}
+                                        ]],
+                                        limit: 10,
+                                        height: 500 //固定值
+                                    });
+                                });
+                            } else {
+                                layer.msg(res.msg, {
+                                    icon: 2,
+                                    time: 1000
+                                });
+                            }
+                        });
+                    },
+                    btn2: function(index, layero) {
+                        layer.close(index);
+                    },
+                    cancel: function(index) {
+                        layer.close(index);
+                    }
+                });
+                form.render();
+            }else if(obj.event === 'supp')
+            {
+                $.post("{:url('documentary/suppfoll')}", {
+                    'childid': data.Account,
+                    'followed': data.Followed,
+                    'enable': data.Enable
+                }, function(res) {
+                    if (res.code == 1) {
+                        layer.msg(res.msg, {
+                            icon: 1,
+                            time: 1000
+                        }, function() {
+//                            layer.close(index);
+//                            tableIn.reload();
+                            table.render({
+                                elem: '#list2',
+                                url: '{:url("documentary/followed")}',
+                                method: 'post',
+                                where:{id:data.Account},
+                                page: true,
+                                cols: [[
+                                    {type:'numbers',title:'序号',width:50},
+                                    {field:'Followed',align:'center',title:'资管ID', width:100, sort: true},
+                                    {field:'mobile',align:'center',title:'手机号',width:120},
+                                    {field:'Direct', align:'center',title:'方向',width:100,templet:'<div>{{ fangx(d.Direct)}}</div>'},
+                                    {field:'Multiple', align:'center',title:'倍速',width:80},
+                                    {field:'Enable', align:'center',title:'状态',width:80,templet:'<div>{{ status(d.Enable)}}</div>'},
+                                    {width: 350, align: 'center', toolbar: '#action1',title:'操作'}
+                                ]],
+                                limit: 10,
+                                height: 500 //固定值
+                            });
+                        });
+                    } else {
+                        layer.msg(res.msg, {
+                            icon: 2,
+                            time: 1000
+                        });
+                    }
+                });
+            }else if(obj.event === 'add'){
+                $.post("{:url('documentary/getcusId')}", {
+                    id:data.Account
+                }, function(data1){
+                  yang = data1.yang;
+                    var str = '';
+                    str += '<div class="layui-user">';
+                    str += '<form class="layui-form">';
+                    str += '<div class="layui-form-item">';
+                    str += '<label class="layui-form-label">样板账号</label>';
+                    str += '<div class="layui-input-block">';
+                    str+='<select id="doId" name="modules" lay-verify="required" lay-search="">';
+                    str+='<option value="">直接选择或搜索账号</option>';
+                    for(var i=0;i<yang.length;i++){
+                        str+='<option value="'+yang[i].zid+'">'+yang[i].user_name+'-'+yang[i].true_name+'</option>';
+                    }
+                    str+='</select>';
+                    str += '</div>';
+                    str += '</div>';
+                    str += '<div class="layui-form-item">';
+                    str += '<label class="layui-form-label">跟单方向</label>';
+                    str += '<div class="layui-input-block">';
+                    str+='<input type="radio" name="direct" value="0" title="正向" checked>';
+                    str+='<input type="radio" name="direct" value="1" title="反向">';
+                    str += '</div>';
+                    str += '</div>';
+                    str+='<div class="layui-form-item">';
+                    str+='<label class="layui-form-label">是否启用</label>';
+                    str+='<div class="layui-input-block">';
+                    str+='<input type="radio" name="enable" value="0" title="暂停" >';
+                    str+='<input type="radio" name="enable" value="1" title="启用" checked>';
+                    str+='</div>';
+                    str+='</div>';
+                    str += '<div class="layui-form-item">';
+                    str += '<label class="layui-form-label">倍速</label>';
+                    str += '<div class="layui-input-block">';
+                    str += '<input type="text" name="multiple" placeholder="请输入倍速" value="1" class="layui-input">';
+                    str += '</div>';
+                    str += '</div>';
+                    str += '</form>';
+                    str += '</div>';
+                    layer.open({
+                        type: 1,
+                        skin: 'layui-user',
+                        title: '添加跟单',
+                        area: ['600px', '500px'],
+                        content: str,
+                        btn: ['提交', '放弃'],
+                        btnAlign: 'c',
+                        yes: function(index, layero) {
+                            var childid = data.Account;
+                            var followed = $('#doId').val();
+                            var direct = $('input[name="direct"]:checked').val();
+                            var enable = $('input[name="enable"]:checked').val();
+                            var multiple = $('input[name="multiple"]').val();
+                            $.post("{:url('documentary/add_follow')}", {
+                                'childid': childid,
+                                'followed': followed,
+                                'direct': direct,
+                                'multiple': multiple,
+                                'enable': enable
+                            }, function(res) {
+                                if (res.code == 1) {
+                                    layer.msg(res.msg, {
+                                        icon: 1,
+                                        time: 1000
+                                    }, function() {
+                                        layer.close(index);
+//                                        tableIn.reload();
+                                        table.render({
+                                            elem: '#list2',
+                                            url: '{:url("documentary/followed")}',
+                                            method: 'post',
+                                            where:{id:data.Account},
+                                            page: true,
+                                            cols: [[
+                                                {type:'numbers',title:'序号',width:50},
+                                                {field:'Followed',align:'center',title:'资管ID', width:100, sort: true},
+                                                {field:'mobile',align:'center',title:'手机号',width:120},
+                                                {field:'Direct', align:'center',title:'方向',width:100,templet:'<div>{{ fangx(d.Direct)}}</div>'},
+                                                {field:'Multiple', align:'center',title:'倍速',width:80},
+                                                {field:'Enable', align:'center',title:'状态',width:80,templet:'<div>{{ status(d.Enable)}}</div>'},
+                                                {width: 350, align: 'center', toolbar: '#action1',title:'操作'}
+                                            ]],
+                                            limit: 10,
+                                            height: 500 //固定值
+                                        });
+                                    });
+                                } else {
+                                    layer.msg(res.msg, {
+                                        icon: 2,
+                                        time: 1000
+                                    });
+                                }
+                            });
+                        },
+                        btn2: function(index, layero) {
+                            layer.close(index);
+                        },
+                        cancel: function(index) {
+                            layer.close(index);
+                        }
+                    });
+                    form.render();
+                });
+            }
+         });
+
+  });
+
+    function status(v){
+        if(v==1){
+            return '启用';
+        }else{
+            return '暂停';
+        }
+    }
+
+    function fangx(a){
+        if(a==1){
+            return '反向下单';
+        }else{
+            return '正向下单';
+        }
+    }
+
+</script>
+</body>
+</html>

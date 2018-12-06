@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>websocket调试工具</title>
+    <link href="jsoneditor/dist/jsoneditor.css" rel="stylesheet" type="text/css">
+    <script src="jsoneditor/dist/jsoneditor.js"></script>
+
+    <style type="text/css">
+        #jsoneditor {
+            width: 50%;
+            height: 350px;
+            float: left;
+        }
+        #submit_log {
+            width: 50%;
+            height: 350px;
+            float: left;
+            overflow: scroll;
+            /*border: 1px solid #3883fa;*/
+        }
+        #jsoneditor_receive {
+            width: 100%;
+            height: 500px;
+            overflow: scroll;
+            clear: both;
+        }
+        #receive_log {
+            width: 100%;
+            height: 500px;
+            overflow: scroll;
+            border: 1px solid #3883fa;
+        }
+    </style>
+</head>
+<body>
+
+<div id="jsoneditor"></div>
+<div id="submit_log">
+    <b>发送日志</b>
+</div>
+<hr style="clear: both" />
+<button id="submit" disabled> 未连接 </button>
+<input type="text" id="connect_input" value="ws://47.104.140.190:9507"/>
+<input type="text" id="char_id" placeholder="玩家id"/>
+<button id="connect"> 重新连接 </button>
+
+<div id="jsoneditor_receive">
+
+</div>
+
+<div id="receive_log">
+    <b>接收日志</b>
+</div>
+<script>
+    var container = document.getElementById('jsoneditor');
+    var options = {
+        mode: 'code',
+        modes: ['code','form', 'text', 'tree', 'view'], // allowed modes :
+        onError: function (err) {
+            alert(err.toString());
+        },
+        onModeChange: function (newMode, oldMode) {
+            console.log('Mode switched from', oldMode, 'to', newMode);
+        }
+    };
+    var json = {"a":"getUserClubList"};
+    var editor = new JSONEditor(container, options, json);
+
+    var container_receive = document.getElementById('jsoneditor_receive');
+    var options_receive = {
+        mode: 'code',
+        modes: ['code','form', 'text', 'tree', 'view'], // allowed modes :
+        onError: function (err) {
+            alert(err.toString());
+        }
+    };
+    var editor_receive = new JSONEditor(container_receive, options_receive, {});
+
+
+    var connect_input = document.getElementById('connect_input');
+    if(window.location.hash != ''){
+        connect_input.value = window.location.hash.substr(1);
+    }
+    var socket = new WebSocket(connect_input.value);
+    open_websocket(socket);
+    function open_websocket(socket) {
+        //    socket.binaryType = 'arraybuffer';
+        socket.onopen = function (event) {
+            document.getElementById('submit').disabled =false;
+            document.getElementById('submit').innerHTML='发送WebSocket';
+            document.getElementById('submit_log').innerHTML+= get_time()+'服务器已经连接<br />';
+            var char_id = document.getElementById('char_id').value;
+            if(!char_id) {
+                char_id  = document.getElementById('char_id').value = '1013';
+            }
+            var login_info = {"c":"server","a":"login","char_id":char_id};
+            socket.send(JSON.stringify(login_info));
+        };
+        socket.onmessage = function(event){
+            document.getElementById('receive_log').innerHTML= get_time()+event.data + '<br />';
+            var data = JSON.parse( event.data);
+            console.log(data);
+            if(data && data['a'] !='player_status') {
+                editor_receive.set(data);
+            }
+
+        };
+        socket.onclose = function(){
+            document.getElementById('submit_log').innerHTML+= get_time()+'连接已断开...<br />';
+        };
+
+        socket.onerror = function(event){
+            document.getElementById('submit_log').innerHTML+= get_time()+'socket 发生错误...<br />'+event;
+        };
+    }
+
+    document.getElementById('submit').onclick = function () {
+        var json = editor.getText();
+        document.getElementById('submit_log').innerHTML+= get_time()+ json + '<br />';
+        editor_receive.set({});
+        socket.send(json);
+    };
+    document.getElementById('connect').onclick = function () {
+        document.getElementById('submit').disabled =true;
+        document.getElementById('submit').innerHTML='未连接';
+        editor_receive.set({});
+        socket.close();
+
+        socket = new WebSocket(connect_input.value);
+        open_websocket(socket)
+    };
+
+    function get_time(){
+        var t = new Date();
+        return '['+t.getHours()+':'+t.getMinutes()+':'+t.getSeconds()+']' ;
+    }
+
+</script>
+</body>
+</html>

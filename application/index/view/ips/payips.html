@@ -1,0 +1,255 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>余额充值</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <link href="/static/css/mui.min.css" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="/static/css/common.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/font_awe.css"><!--特殊字体处理包-->
+        <style type="text/css">
+            .page__title {
+                text-align: left;
+                font-size: 20px;
+                font-weight: 400;
+            }
+            .page__hd {
+                padding: 40px;
+                background-color: #f8f8f8;
+            }
+            .pay_detail{min-height:65px;}
+            .Menubox ul li {width: 33.3%;}
+            .Menubox ul li.hover {width: 100%; background: #F4C20C; color: #000;}
+            .figure{  border-radius:5px;  background:#fff;  border:1px solid #d7d7d7; position:relative;  margin:10px;  height:40px;  padding-left:80px;}.figure span{  position:absolute;  line-height:40px; font-size:15px; color:#333; padding:0 10px; left:0px;}.figure input{  line-height:40px; width:100%; background:none;  font-size:16px; color:#b6b6b6;}.bank_list{  background:#fff;  border:1px solid #d7d7d7; }.bank_list li{ margin-left:10px; padding-right:50px;     border-bottom:1px solid #d7d7d7;  position:relative;}.bank_list li:last-child{  border:none;}.pay_detail h5{  font-size:15px; line-height:25px; }.pay_detail{ color:#333; }.pay_detail .info .peoplo{ padding-right:10px;}.pay_detail .info{  font-size:12px; line-height:20px;}.pay_detail p{  font-size:12px; line-height:20px;}.inline_pay_img_show{ float:left; overflow:hidden; height:35px;max-width:50%;margin:15px 0  0 0px;}.inline_pay_name{  line-height:65px; font-size:18px; padding-left:10px;  float:left;}/**/
+            .mt{  position:absolute;  right:10px; top:30px;}
+            .lookdetail .but_sure{color: #000; background: #F4C20C;}
+        </style>
+    </head>
+
+    <body>
+    <header class="mui-bar mui-bar-nav my-header">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title">余额充值</h1>
+    </header>
+    <div class="mui-content">
+
+        <div class="mui-content-padded">
+            <div class="detail_foot">
+                <div class="lookdetail" style=" width:100%;">
+                    <a onclick="zhifu()" class="but_sure" style="background: #ff724e; color:#fff; font-size:14px; border-radius: 5px;">请选择支付通道</a>
+                </div>
+            </div>
+
+            <div id="con_one_1" class="uc_incharge" style="display: block;"><!--线上支付-->
+                <div class="figure">
+                    <span>输入金额</span>
+                    <input id="money1" class="" type="text" placeholder="输入金额">
+                </div>
+
+                <div class="bank_list in_line" id="guofubao" style="display:none; border-radius: 5px;">
+                    <ul>
+<!--                         <li> -->
+<!--                             <div class="pay_detail clearfix"> -->
+<!--                                 <div class="inline_pay_img_show"> -->
+<!--  -->
+<!--                                 </div> -->
+<!--                                 <div class="inline_pay_name">HX支付</div> -->
+<!--                             </div> -->
+<!--  -->
+<!--                             <input class="mt" type="radio" value="26" name="paypath1" checked  style="border: 1px solid #000;"> -->
+<!--                         </li> -->
+
+<!-- 						<li> -->
+<!--                             <div class="pay_detail clearfix"> -->
+<!--                                 <div class="inline_pay_img_show"> -->
+<!--  -->
+<!--                                 </div> -->
+<!--                                 <div class="inline_pay_name">GFB支付</div> -->
+<!--                             </div> -->
+<!--  -->
+<!--                             <input class="mt" type="radio" value="27" name="paypath1"  style="border: 1px solid #000;"> -->
+<!--                         </li> -->
+
+
+                    </ul>
+                </div>
+
+                <div class="detail_foot">
+                    <div class="lookdetail" style=" width:100%;"><button id="on_incharge_done" class="but_sure">确认</button> </div>
+                </div>
+            </div>
+
+            <div class="detail_foot">
+                <a onclick="xiane()"><p style="font-weight: bold; color:#DE4848;">银行卡限额</p></a>
+
+            </div>
+
+
+            <div class="detail_foot">
+                <p style="font-weight: bold; color:#fff;">充值说明</p>
+                <p>1、您充值后未进行实际操盘便提现，第三方支付公司会收取您提现金额的0.4%作为转账费用</p>
+                <p>2、请使用储蓄卡进行充值，并确认您的银行卡开通了网上银行业务</p>
+                <p>3、暂不支持信用卡支付</p>
+                <p>4、24小时内如提示“卡内余额不足”达两次以上将不能再次支付，需要24小时后才能重新支付</p>
+
+            </div>
+
+        </div>
+
+        <div class="detail_foot" id="xe" style="position:fixed; bottom:0; width:100%; height:93%; display:none;" >
+            <a><img src="/static/images/xiane.png" alt="" width="100%" id="hide"></a>
+        </div>
+
+    </body>
+    <script src="/static/js/mui.min.js"></script>
+    <script src="/static/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+	
+        function zhifu(){
+            $("#guofubao").show();
+        }
+
+        function xiane(){
+            $("#xe").show();
+        }
+
+        $("#hide").click(function(){
+            $("#xe").hide();
+        });
+
+    </script>
+    <script type="text/javascript">
+        mui.init();
+		function check_auth(){
+			$.ajax({
+				url: "/index/Api/is_relogin",
+				type: 'post',
+				data: {
+					userid: localStorage.id,
+					auth:localStorage.auth
+				},
+				cache: false,
+				dataType: 'json',
+				success: function(data) {
+					if(null == data || "undefined" == typeof(data) || "" == data){
+						mui.toast('登陆已过期，重新登陆！');
+						window.location="{:url('/index/Qiquanb/login')}";
+						return false;
+						exit;
+					}else{
+						if(data.code==1){
+							window.location="{:url('/index/Qiquanb/login')}";
+							mui.toast('登陆已过期，重新登陆！');
+							return false;
+							exit;
+						}else{
+							return true;
+						}
+					}
+
+				},
+				error: function() {
+					window.location="{:url('/index/Qiquanb/login')}";
+					mui.toast('登陆已过期，重新登陆！');
+					return false;
+					exit;
+				}
+			});
+		}
+        $(function () {
+			if(!localStorage.id) {
+				window.location.href = "/index/Qiquanb/login.html"
+			}
+			check_auth();
+            $("#on_incharge_done").click(function(){
+                if(!$.trim($("#money1").val()))
+                {
+                    mui.alert('请输入充值金额');
+                    return;
+
+                }else{
+
+					var payid = $("input[name='paypath1']:checked").val();
+
+					
+
+					if(payid==26)
+						var url = "/index/Ips/create_order";
+					else
+						var url = "/index/Guofoo/create_order";
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        dataType: 'json',
+                        data: {
+                            userid: localStorage.id,
+                            auth: localStorage.auth,
+                            paytype: 'W01',
+                            money: $.trim($("#money1").val())
+                        },
+                        async: false,
+                        success:function(data){
+                            if(data.pay_wap!='undefine'){
+								
+                                window.location.href =data.pay_wap;
+                            }
+                        }
+                    });
+
+                }
+            });
+            $("#wechat").click(function () {
+                if($("#money").val()==''){
+                    mui.alert('金额不能为空');
+                    return;
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: "/index/Api/pay",
+                    dataType: 'json',
+                    data: {
+                        userid: localStorage.id,
+                        auth: localStorage.auth,
+                        paytype: 'W01',
+                        money: $("#money").val()
+                    },
+                    async: false,
+                    success: function(data) {
+                        console.log(data);
+                        // mui.alert(JSON.stringify(data));
+                        if(data.code==1){
+                            window.location=data.pay_url;
+                        }
+                    },
+                    error: function() {
+                        mui.toast('请求超时');
+                    }
+                });
+            });
+            $("#alipay").click(function () {
+                $.ajax({
+                    type: 'POST',
+                    url: "/index/Api/pay",
+                    dataType: 'json',
+                    data: {
+                        userid: localStorage.id,
+                        auth: localStorage.auth,
+                        paytype: 'A01',
+                        money: $("#money").val()
+                    },
+                    async: false,
+                    success: function(data) {
+                        console.log(data);
+                        if(data.code==1){
+                            window.location=data.pay_url;
+                        }
+                    },
+                    error: function() {
+                        mui.toast('处理中');
+                    }
+                });
+            });
+        });
+    </script>
+
+    </html>

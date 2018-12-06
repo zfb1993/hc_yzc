@@ -1,0 +1,217 @@
+{include file="common/head"/}
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+  <div class="layui-padded-15">
+    <div class="layui-form">
+      <button id="add" class="layui-btn layui-btn-normal layui-btn-sm">新增</button>
+      <table class="layui-table" id="list" lay-filter="list"></table>
+    </div>
+  </div>
+</div>
+{include file="common/foot"/}
+<script type="text/html" id="action">
+  <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+</script>
+<script>
+    var message;
+    layui.config({
+        base: ADMIN+'build/js/',
+        version: '1.0.1'
+    }).use(['app','table','form','laydate','message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            table = layui.table,
+            laydate = layui.laydate,
+            form = layui.form,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+    //列表数据
+    var cid={:input('cid')};
+    var tableIn = table.render({
+        elem: '#list',
+        url: "{:url('agent/insSetting')}",
+        where:{user_name:cid,action:'list'},
+        method: 'post',
+        page: true,
+        cols: [[
+            {field:'id',title:'序号',width:60,fixed: true},
+            {field:'cid',align:'center',title:'合约ID', width:180, sort: true},
+            {field:'rate',align:'center',title:'返佣比例', width:180, sort: true},
+            {field:'remark',align:'center',title:'备注',width:150},
+            {width: 150, align: 'center', toolbar: '#action',title:'操作'}
+        ]],
+        limit: 10,
+        height: 400 //固定值
+    });
+    //监听工具条
+    table.on('tool(list)', function(obj){
+      var data = obj.data;
+      if(obj.event === 'detail'){
+        //layer.msg('ID：'+ data.id + ' 的查看操作');
+      } else if(obj.event === 'del'){
+        layer.confirm('真的要删除么？', function(index){
+          $.post("{:url('agent/insSetting')}",{'id':data.id,'action':'del'},function(res){
+            if(res.code==1){
+              layer.msg(res.msg,{icon: 1, time: 1000},function(){
+                obj.del();
+                layer.close(index);
+              });
+            }else{
+              layer.msg(res.msg,{icon: 2, time: 1000},function(){
+                layer.close(index);
+              });
+            }
+          });
+
+        });
+      } else if(obj.event === 'edit'){
+        //layer.alert('编辑行：<br>'+ JSON.stringify(data));
+        var id=data.id;
+        $.post("{:url('agent/insSetting')}",{'id':data.cid,'action':'list'},function(res){
+        var str='';
+            str+='<div class="layui-product">';
+            str+='<form class="layui-form">';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">合约ID</label>';
+            str+='<div class="layui-form-mid layui-word-aux">'+data.cid+'</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">返佣比例</label>';
+            str+='<div class="layui-input-inline">';
+            str+='<input type="number" name="rate" value="'+data.rate+'" class="layui-input">';
+            str+='</div>';
+            str+='<div class="layui-form-mid layui-word-aux">%</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">备注</label>';
+            str+='<div class="layui-input-inline">';
+            str+='<input type="text" id="remark" name="remark" placeholder="请输入备注" value="'+data.remark+'" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+
+            str+='</form>';
+            str+='</div>';
+          layer.open({
+            type: 1, 
+            skin: 'layui-product',
+            title:'编辑 | 合约档位',
+            area:['600px','450px'],
+            content:str,
+            btn: ['保存', '取消'],
+            btnAlign: 'c',
+            yes: function(index, layero){
+              var cid=$('input[name="cid"]').val();
+              var rate=$('input[name="rate"]').val();
+              var remark=$('input[name="remark"]').val();
+              $.post("{:url('agent/insSetting')}",
+                {'id':id,'cid':cid,'rate':rate,'remark':remark,'action':'edit'},
+                function(res){
+                if(res.code==1){
+                  layer.msg(res.msg, {icon: 1, time: 1000}, function(){
+                      layer.close(index);
+                      tableIn.reload();
+                  });
+                }else{
+                  layer.msg(res.msg, {icon: 2, time: 1000});
+                }
+              });
+            },
+            btn2: function(index, layero){
+              layer.close(index);
+              //return false 开启该代码可禁止点击该按钮关闭
+            },
+            cancel: function(index){ 
+              layer.close(index);
+              //return false; 
+              //return false 开启该代码可禁止点击该按钮关闭
+            }
+          });
+        
+        form.render();
+        });
+      }
+    });
+    //添加合约档位
+    $('#add').click(function(){
+        var user_name={:input('cid')};
+        $.post("{:url('agent/insSetting')}",{user_name:user_name,action:'list'},function(res){
+        var str='';
+            str+='<div class="layui-product">';
+            str+='<form class="layui-form">';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">账号</label>';
+            str+='<div class="layui-form-mid layui-word-aux">'+res.user_name+'</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">合约</label>';
+            str+='<div class="layui-input-inline">';
+            str+='<input type="text" name="cid" value="" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">合约返佣比例</label>';
+            str+='<div class="layui-input-inline">';
+            str+='<input type="number" id="rate" name="rate" placeholder="合约返佣比例" class="layui-input">';
+            str+='</div>';
+            str+='<div class="layui-form-mid layui-word-aux">%</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">备注</label>';
+            str+='<div class="layui-input-inline">';
+            str+='<input type="text" id="remark" name="remark" placeholder="备注" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+
+            str+='</form>';
+            str+='</div>';
+        layer.open({
+            type: 1, 
+            skin: 'layui-product',
+            title:'新增 | 合约档位',
+            area:['600px','450px'],
+            content:str,
+            btn: ['提交', '放弃'],
+            btnAlign: 'c',
+            yes: function(index, layero){
+              var cid=$('input[name="cid"]').val();
+              var rate=$('input[name="rate"]').val();
+              var remark=$('input[name="remark"]').val();
+              $.post("{:url('agent/insSetting')}",
+                {'cid':cid,'rate':rate,'remark':remark,'action':'edit','user_name':user_name},
+                function(res){
+                if(res.code==1){
+                  layer.msg(res.msg, {icon: 1, time: 1000}, function(){
+                      layer.close(index);
+                      tableIn.reload();
+                  });
+                }else{
+                  layer.msg(res.msg, {icon: 2, time: 1000});
+                }
+              });
+            },
+            btn2: function(index, layero){
+              layer.close(index);
+              //return false 开启该代码可禁止点击该按钮关闭
+            },
+            cancel: function(index){ 
+              layer.close(index);
+              //return false; 
+              //return false 开启该代码可禁止点击该按钮关闭
+            }
+          });
+        form.render();
+      });
+    });
+        
+  });
+</script>
+</body>
+</html>

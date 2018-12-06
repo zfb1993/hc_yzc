@@ -1,0 +1,283 @@
+{extend name="static/assets/base.html" /}{block name="title"}
+<title>实名认证</title>{/block} {block name="style"}
+<link href="/static/assets/css/mui.min.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="/static/assets/css/a9ca0f193a3e2a7bff359f21a865e718.css">
+<link rel="stylesheet" type="text/css" href="/static/assets/css/1ab2dffd67a47b19fc56a2b674fbecbd.css">
+<link rel="stylesheet" href="/static/assets/css/dropify.min.css">
+<style type="text/css">
+    html,
+    body {
+        background-color: #eee;
+    }
+
+
+
+    header.bar .tools {
+        float: right;
+        padding-top: 5px;
+    }
+
+    header.bar .weui-back {
+        padding-top: 10px;
+    }
+
+    .login {
+        text-align: center;
+        padding: 10px;
+        font-size: 15px;
+        background: white;
+    }
+
+    .register_top {
+        margin-top:48px;
+        background: white;
+        margin-bottom: 10px;
+    }
+</style>
+{/block} {block name="body"}
+	<!--<div class="weui-title_" style="margin-bottom: 10px;text-align:center;">
+        <a href="javascript:history.go(-1);" class="weui-back" style="color:#fff;float:left;">
+            <i class="iconfont icon-fanhui"></i>
+        </a>
+                实名认证
+	</div>-->
+    <header class="bar bar-nav">
+        <a href="javascript:history.go(-1);" class="weui-back">
+            <i class="iconfont icon-fanhui"></i>
+        </a>
+        <h1 class="title">实名认证</h1>
+    </header>
+<div class="register_top clearfix">
+    <ul class="info">
+        <li class="current">
+            <span>1&nbsp;输入验证&nbsp;</span>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li class="">
+            <span>2&nbsp;审核中&nbsp;</span>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <span>3&nbsp;认证成功&nbsp;</span>
+            <i class="fa fa-angle-right"></i>
+        </li>
+    </ul>
+</div>
+<!--公共头部-->
+
+<div class="page_total"></div>
+<!--分页总数-->
+<style>
+</style>
+
+
+<div class="login">
+    <div id="mb_register" class="mb_register1"  style="position:relative;">
+        <input class="logininput mainborder" id="true_name" name="real_name" value="" type="text" placeholder="输入真实姓名">
+        <input class="logininput mainborder" id="card_id" name="idno" value="" type="text" placeholder="输入身份证号码">
+        <input class="logininput mainborder" id="bank_card_id" name="idno" value="" type="text" placeholder="请输入您的银行卡号码">
+        <input class="logininput mainborder" id="bank_name" name="idno" value="" type="text" placeholder="请输入您的银行卡开户行">
+        <input class="logininput mainborder" id="province" name="province" value="" type="text" placeholder="请输入您的开户省份">
+        <input class="logininput mainborder" id="city" name="city" value="" type="text" placeholder="请输入您的开户所在城市">
+        <input class="logininput mainborder" id="subbranch" name="subbranch" value="" type="text" placeholder="请输入您的开户支行">
+        <input class="logininput mainborder dropify" id="card_id_img_top" name="idno" value="选择" type="file" placeholder="身份证正面">
+        <input class="logininput mainborder dropify" id="card_id_img_bot" name="idno" value="选择" type="file" placeholder="身份证反面">
+
+        <div style=" line-height:20px; font-size:13px; padding:5px 0;">(请输入正确信息以免影响资金托管账户申请等功能..)</div>
+        <div class="blank"></div>
+
+        <input class="ui-button_login Headerbackground_dark" type="submit" name="commit" id="btn" value="提交">
+
+
+    </div>
+</div>
+{/block} {block name="tabbar"}{/block} {block name="script"}
+<script src="/static/assets/js/mui.min.js"></script>
+<script src="/static/assets/js/dropify.min.js"></script>
+<script type="text/javascript">
+    mui.init();
+    $(function () {
+        //$(".weui-back").prop("href", "/index/index/index");
+        $.ajax({
+            url: "/index/api/viewCertState",
+            type: 'post',
+            data: {
+                uid: localStorage.id,
+                auth: localStorage.auth,
+                type: localStorage.type
+            },
+            cache: false,
+            dataType: 'json',
+            success: function (data) {
+                console.log(data.code);
+                if (data.code == 0) {
+                    $('.info li').eq(0).addClass('current').siblings().removeClass('current');
+                } else if (data.code == 1) {
+                    
+                    if (data.data.status != -1) {
+                        $('#btn').css("display", "none");
+                         $('.logininput').attr("disabled", "disabled").css("background-color", "#CCC");
+                        $('.info li').eq(1).addClass('current').siblings().removeClass('current');
+                    }else{
+                         mui.alert(data.data.memo);
+                        $('.info li').eq(1).addClass('current').siblings().removeClass('current');
+                    }
+
+                } else if (data.code == 2) {
+                    $('#btn').css("display", "none");
+                         $('.logininput').attr("disabled", "disabled").css("background-color", "#CCC");
+                    $('.info li').eq(2).addClass('current').siblings().removeClass('current');
+                } else {
+                    $('.logininput').attr("disabled", "disabled").css("background-color", "#CCC");
+                    $('#btn').css("display", "none");
+                    $('.info li').eq(0).addClass('current').siblings().removeClass('current');
+                }
+                /*
+                            uid:用户ID
+                   auth:身份验证
+                   type:身份标识，0-客户，1-代理
+                   true_name: 真实姓名
+                   id_card：身份证
+                   bank_name：开户行名称
+                   bank_card：银行卡号
+                   bank_addr：开户行地址
+                   card_id_img_top：身份证正面图
+                   card_id_img_bot：身份证背面图
+                            */
+                getUserInfo(function () {
+                    $("#card_id_img_top").dropify({
+                        messages: {
+                            default: "请上传身份证正面图片",
+                            replace: "点击更换身份证正面图片",
+                            remove: "删除",
+                            error: "上传文件错误"
+                        }
+                    });
+                    $("#card_id_img_bot").dropify({
+                        messages: {
+                            default: "请上传身份证反面图片",
+                            replace: "点击更换身份证反面图片",
+                            remove: "删除",
+                            error: "上传文件错误"
+                        }
+                    });
+                });
+                // $("#true_name").val(data.true_name);
+                // $("#card_id").val(data.id_card);
+                // $("#bank_card_id").val(data.bank_card);
+                // $("#bank_name").val(data.bank_name);
+                // $("#bank_address").val(data.bank_address);
+                // $("#card_id_img_top").data('default-file', data.card_id_img_top);
+                // $("#card_id_img_bot").data('default-file', data.card_id_img_bot);
+
+
+                if (data.code != 0) {
+                    mui.alert(data.memo);
+                }
+            },
+            error: function () {
+                mui.toast('请求超时', {
+                    duration: 'long',
+                    type: 'div'
+                });
+            }
+        });
+        $("#btn").click(function () {
+            if ($("#true_name").val() == '') {
+                mui.alert('请填写真实姓名');
+                return;
+            }
+            if ($("#card_id").val() == '') {
+                mui.alert('请填写身份证号码');
+                return;
+            }
+            if ($("#bank_card_id").val() == '') {
+                mui.alert('请填写银行卡号');
+                return;
+            }
+            if ($("#bank_name").val() == '') {
+                mui.alert('请填写开户行');
+                return;
+            }
+            if ($("#subbranch").val() == '') {
+                mui.alert('请填写开户支行');
+                return;
+            }
+			 if ($("#province").val() == '') {
+                mui.alert('请填写开户省份');
+                return;
+            }
+			 if ($("#city").val() == '') {
+                mui.alert('请填写开户城市');
+                return;
+            }
+			var bank_address=$("#province").val()+$("#city").val();
+            if ($("#card_id_img_top").val() == '') {
+                mui.alert('请上传身份证正面照');
+                return;
+            }
+            if ($("#card_id_img_bot").val() == '') {
+                mui.alert('请上传身份证反面照');
+                return;
+            }
+            /*
+            uid:用户ID
+   auth:身份验证
+   type:身份标识，0-客户，1-代理
+   true_name: 真实姓名
+   id_card：身份证
+   bank_name：开户行名称
+   bank_card：银行卡号
+   bank_addr：开户行地址
+   card_id_img_top：身份证正面图
+   card_id_img_bot：身份证背面图
+            */
+            $("#btn").html('<span class="mui-spinner"></span>提交中');
+            var formData = new FormData();
+            formData.append("uid", localStorage.id);
+            formData.append("auth", localStorage.auth);
+            formData.append("type", localStorage.type);
+            formData.append("true_name", $("#true_name").val());
+            formData.append("id_card", $("#card_id").val());
+            formData.append("bank_card", $("#bank_card_id").val());
+            formData.append("bank_name", $("#bank_name").val());
+            formData.append("subbranch", $("#subbranch").val());
+            formData.append("bank_addr", bank_address);
+            formData.append("province", $("#province").val());
+            formData.append("city", $("#city").val());
+            formData.append("card_id_img_top", $("#card_id_img_top")[0].files[0]);
+            formData.append("card_id_img_bot", $("#card_id_img_bot")[0].files[0]);
+            $.ajax({
+                type: 'POST',
+                url: "/index/api/setUserInfo",
+                dataType: 'json',
+                processData: false, //告诉jQuery不要去处理发送的数据
+                contentType: false, //告诉jQuery不要去设置Content-Type请求头
+                data: formData,
+                async: false,
+                success: function (data) {
+                    if (data.code == 1) {
+                        mui.alert(data.msg, '提示', function () {
+                            //window.location = "{:url('index/index/index')}";
+                             window.location.reload();
+                             
+                        });
+                      
+                    } else {
+                        mui.alert(data.msg, '提示', function () {
+                            //window.location = "{:url('index/index/userinfo')}";
+                            window.location.reload();
+                        });
+                    }
+                },
+                error: function () {
+                    mui.toast('请求超时', {
+                        duration: 'long',
+                        type: 'div'
+                    });
+                }
+            });
+        });
+
+    })
+</script> {/block}

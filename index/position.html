@@ -1,0 +1,362 @@
+{extend name="static/assets/base.html" /} {block name="title"}
+<title>我的持仓</title>
+<link rel="stylesheet" href="https://at.alicdn.com/t/font_659316_tvkjqfyrwyrdx6r.css">{/block} {block name="style"}
+<style>
+    .weui-tab__bd-item {
+        padding-bottom: 105px;
+    }
+
+    #btns {
+        display: none;
+    }
+
+    header {
+        display: none;
+    }
+
+    .weui-cells__title {
+        background: white;
+        color: #2c3341;
+        border-bottom: 1px solid #efefef;
+        font-size: 17px;
+    }
+
+    .weui-navbar__item {
+        padding: 8px 0 !important;
+    }
+
+    .ggdr>.active {
+        border: none;
+        background: #fff;
+    }
+
+    .chengjiao-1 {
+        padding: 12px 8px 8px;
+        overflow: auto;
+        border-bottom: 1px solid #f2f2f2;
+    }
+
+    .chengjiao_1-1 {
+        display: flex;
+    }
+
+    .chengjiao_1-p-1 {
+        letter-spacing: 1px;
+        color: #333;
+        flex: 1;
+    }
+
+    .chengjiao_1-p-span {
+        dislay: inline-block;
+        background: #e64340;
+        color: #fff;
+        padding: 0 6px;
+        border-radius: 8px;
+    }
+
+    .chengjiao_1-p-2 {
+        color: #8d8d8d;
+        flex: 1;
+        text-align: right;
+    }
+
+    .chengjiao_1-2 {
+        color: #8d8d8d;
+    }
+
+    .chengjiao_1-div-1 {
+        float: left;
+    }
+
+    .chengjiao_1-div-2 {
+        float: left;
+        padding: 3px 20%;
+    }
+
+    .chengjiao_1-div-3 {
+        float: right;
+        text-align: right;
+    }
+
+    .chengjiao_1-div-p-1 {
+        display: inline-block;
+    }
+
+    .chengjiao_1-div-p-2 {
+        text-align: center;
+    }
+
+    .chengjiao_1-div-2-p {
+        color: #e64340;
+    }
+
+    .chengjiao_1-div-3-p {
+        color: #54b972;
+        font-size: 16px;
+    }
+</style>
+<style>
+    .topd {
+        display: flex;
+        color: #fff;
+        background: #e64340;
+        padding: 24px 0 12px 0;
+        text-align: center;
+    }
+
+    .topd>div {
+        flex: 1;
+    }
+
+    .topspa {
+        display: inline-block;
+        color: #f2f2f2;
+        background: #f2f2f2;
+        width: 1px;
+        height: 18px;
+        margin: 10px 0;
+    }
+
+    .tab1-ad {
+        border-bottom: 1px solid #f2f2f2;
+    }
+
+    .tab-afir {
+        padding: 12px 8px 8px 10px;
+        overflow: auto;
+    }
+
+    .titp {
+        color: #333;
+        margin-bottom: 3px;
+        text-align: left;
+    }
+
+    .titp>span {
+        display: inline-block;
+        padding: 0 6px;
+        border-radius: 8px;
+        color: #fff;
+    }
+
+    .titspa {
+        background: #e64340;
+    }
+
+    .titspb {
+        background: #54b972;
+    }
+
+    .taba-he {
+        display: flex;
+        color: #8d8d8d;
+        text-align: center;
+    }
+
+    .taba-he>div {
+        flex: 1;
+        padding-top: 6px;
+    }
+
+    .exy {
+        text-align: right;
+        padding-top: 0px !important;
+    }
+
+    .exb {
+        text-align: left;
+    }
+
+    .huos {
+        color: #e64340;
+        font-size: 16px;
+    }
+
+    .huosb {
+        color: #54b972;
+        font-size: 16px;
+    }
+
+    .maa {
+        padding: 3px 0 5px;
+        display: none;
+        text-align: center;
+    }
+
+    .maa>a {
+        background: #ff8c19;
+        padding: 5px 33px;
+        border-radius: 8px;
+    }
+
+    .item>p>input {
+        width: 60px;
+        outline: none;
+        text-align: center;
+    }
+
+    .min {
+        width: 20px !important;
+    }
+
+    .add {
+        width: 20px !important;
+    }
+
+    .tfre {
+        display: flex;
+        color: #8d8d8d;
+        text-align: center;
+    }
+
+    .tfre>div {
+        flex: 1;
+    }
+
+    .exx {
+        text-align: right;
+    }
+
+    .baa {
+        padding: 3px 0 5px;
+        display: none;
+        text-align: center;
+    }
+
+    .baa>a {
+        background: #ff8c19;
+        padding: 5px 20%;
+        border-radius: 8px;
+    }
+
+    .topfix {
+        text-align: center;
+        background: #e64340;
+        padding-top: 21px;
+        font-size: 13px;
+    }
+
+    .ggdr>a {
+        padding: 1px 30px;
+        display: inline-block;
+        border-radius: 11px;
+        border: 1px solid #fff;
+    }
+</style>
+{/block} {block name="back"}{/block}{block name="body"}
+<div class="weui-content" style="top:0;">
+    <div>
+        <div class="topfix">
+            <p class="ggdr">
+                <!--<a class="active" style="padding:1px 30px;display:inline-block;border-radius:11px;border:1px solid #fff;">行情</a>-->
+                <a>我的持仓</a>
+            </p>
+        </div>
+        <div class="topd">
+            <div>
+                <p>¥0.00</p>
+
+                <p>权益</p>
+            </div>
+            <span class="topspa"></span>
+
+            <div>
+                <p>¥0.00</p>
+
+                <p>可用</p>
+            </div>
+            <span class="topspa"></span>
+
+            <div>
+                <p>¥0.00</p>
+
+                <p>盈亏</p>
+            </div>
+        </div>
+    </div>
+    <!-- 容器 -->
+    <div class="weui-tab">
+        <div class="weui-navbar">
+            <a class="weui-navbar__item weui-bar__item--on" href="#tab1">
+                当前持仓
+            </a>
+            <a class="weui-navbar__item" href="#tab2">
+                委托记录
+            </a>
+            <a class="weui-navbar__item" href="#tab3">
+                成交记录
+            </a>
+        </div>
+        <div id="lists" class="weui-tab__bd">
+            <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+
+            </div>
+            <div id="tab2" class="weui-tab__bd-item">
+
+            </div>
+
+            <div id="tab3" class="weui-tab__bd-item">
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ui-dialog">
+    <div class="weui-cells__title">止损止盈设置</div>
+    <div class='numboxs'>
+        <ul class="btn-numbox">
+            <li>
+                <span class="number">盈利金额</span>
+            </li>
+            <li>
+                <ul class="count">
+                    <li>
+                        <span id="num-jian" class="num-jian">-</span>
+                    </li>
+                    <li>
+                        <input type="text" class="input-num" id="input-num" value="6" />
+                    </li>
+                    <li>
+                        <span id="num-jia" class="num-jia">+</span>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <span class="kucun">元时，触发卖出</span>
+            </li>
+        </ul>
+        <ul class="btn-numbox">
+            <li>
+                <span class="number">亏损金额</span>
+            </li>
+            <li>
+                <ul class="count">
+                    <li>
+                        <span id="num-jian" class="num-jian">-</span>
+                    </li>
+                    <li>
+                        <input type="text" class="input-num" id="input-num" value="5" />
+                    </li>
+                    <li>
+                        <span id="num-jia" class="num-jia">+</span>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <span class="kucun">元时，触发卖出</span>
+            </li>
+        </ul>
+    </div>
+    <div class="weui-dialog__ft">
+        <a href="javascript:;" id="cancel" class="weui-dialog__btn default">取消</a>
+        <a href="javascript:;" class="weui-dialog__btn primary">确定</a>
+    </div>
+
+
+</div>
+<!--  -->
+</div>
+{/block} {block name="script"}
+<script src="/static/assets/jscode/position.bundle.js"></script>{/block}

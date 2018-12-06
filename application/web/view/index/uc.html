@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="generator" content="">
+    <title>管理中心</title>
+
+    <link href="/web/style.css" rel="stylesheet" type="text/css">
+    <link href="/web/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="/web/css.css" rel="stylesheet" type="text/css">
+
+    <link href="/web/lrtk.css" rel="stylesheet" type="text/css">
+    <link href="/web/user.css" rel="stylesheet" type="text/css">
+    <link href="/web/jtw.css" rel="stylesheet" type="text/css">
+    <link href="/web/grid.css" rel="stylesheet" type="text/css">
+
+    <script type="text/javascript" src="/web/jquery.min.js"></script>
+    <style>
+        .preview {
+            width: 160px;
+            height: 100px;
+            display: block;
+            overflow: hidden;
+            background: #eee;
+            border: solid 1px #ccc;
+            text-align: center;
+        }
+
+        .preview img {
+            max-width: 160px;
+            max-height: 100px;
+        }
+    </style>
+    <script type="text/javascript">
+
+        var tel = localStorage.mobile;
+        var pwd = localStorage.user_pwd;
+        var tradeid = "";
+
+        $(function () {
+
+            if (!localStorage.id) {
+                location.href = "login";
+            }
+            idloadinfo(tradeid);
+
+            $("input#tel").val(tel);
+            $("input#tradeId").val(tradeid);
+
+
+        })
+        function check() {
+
+            var aid = $("#AgentId").val();
+            var type = $("#BankType").val();
+            var bid = $("#BankId").val();
+            var bname = $("#BankName").val();
+            var pid = $("#PersonId").val();
+            var BankPic = $("#BankCard").val();
+            var PersonPic = $("#IDCard").val();
+
+            /*  if (aid == "") {
+                 $("#error").text("邀请码不得为空");
+                 //			$("#AgentId").focus();
+                 return false;
+             } */
+            if (type == 0) {
+                $("#error").text("请选择开户行");
+                //			$("#BankType").focus();
+                return false;
+            }
+            if (bid == "") {
+                $("#error").text("银行卡号不得为空");
+                //			$("#BankId").focus();
+                return false;
+            }
+            if (bname == "") {
+                $("#error").text("请填写支行");
+                //			$("#BankName").focus();
+                return false;
+            }
+            if (pid == "") {
+                $("#error").text("请填写身份证号");
+                //			$('#PersonId').focus();
+                return false;
+            } else {
+                if (isCardNo(pid) == false) {
+                    $("#error").text('身份证号不正确');
+                    //               $('#PersonId').focus();
+                    return false;
+                } else {
+                    $("#error").text("");
+                }
+            }
+            if (BankPic == "") {
+                $("#error").text('请选择并上传银行卡照片');
+                return false;
+            }
+            if (PersonPic == "") {
+                $("#error").text('请选择并上传身份证照片');
+                return false;
+            }
+
+            $("#error").text("");
+            return true;
+        }
+        function getinfo_callback() { }
+
+        function account_c() { }
+
+        // 验证身份证
+        function isCardNo(card) {
+            var pattern = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+            return pattern.test(card);
+        }
+
+        function fileChange(target, n) {
+            var fileSize = 0;
+            if (!target.files) {
+                var filePath = target.value;
+                var fileSystem = new ActiveXObject("Scripting.FileSystemObject");
+                var file = fileSystem.GetFile(filePath);
+                fileSize = file.Size;
+            } else {
+                fileSize = target.files[0].size;
+            }
+            var size = fileSize / 1024;
+            if (size > 2000) {
+                alert("图片不能大于2M");
+                target.value = "";
+                return
+            }
+            var name = target.value;
+            var fileName = name.substring(name.lastIndexOf(".") + 1).toLowerCase();
+            if (fileName != "jpg" && fileName != "jpeg" && fileName != "png") {
+                alert("请选择jpg/jpeg/png格式文件上传！");
+                target.value = "";
+                return
+            }
+
+            var reader = new FileReader();
+            //将文件以Data URL形式读入页面
+            reader.readAsDataURL(target.files[0]);
+            reader.onload = function (e) {
+                var html = '<img src="' + this.result + '" alt="" />';
+                //显示文件
+                $("div.preview").eq(n).html(html);
+            }
+        }
+
+        function idloadinfo(tradeid) {
+
+            var rj = document.getElementById("rj");
+            var rj2 = document.getElementById("rj2");
+            var cj = document.getElementById("cj");
+            var crj = document.getElementById("crj");
+
+            $("#sbtn").hide();
+            if (localStorage.card_id_img_top) {
+                $("#note").hide();
+            }
+            $("#BankCard").hide();
+            $("#IDCard").hide();
+
+            $("#name").val(localStorage.true_name);
+            $("#TradeId").val(localStorage.zid);
+            $("#TradeId").val(localStorage.zid);
+            $("#BankType").val(localStorage.bank_name);
+            $("#BankName").val(localStorage.bank_addr);
+            $("#BankId").val(localStorage.bank_card);
+            $("#PersonId").val(localStorage.id_card);
+
+
+
+            $("#PersonPic").html("<img src='" + localStorage.card_id_img_top + "'>");
+            $("#BankPic").html("<img src='" + localStorage.bank_card_img_top + "'>");
+
+            /*$.ajax({
+                url: "http://www.fuqitong18.com:9880/telgetinfo?WebCallBack=getinfo_callback&Tel=" + tel + "&Pwd=" + pwd + "&TradeId=" + tradeid,
+                type: "get",
+                dataType: "jsonp",
+                jsonpCallback: "getinfo_callback",
+                success: function (data) {
+                    if (data.StatusCode != 0) {
+                        $("#TradeIdNote").text(data.StatusDesc);
+                    }
+                    if (data.StatusCode == 1071 || data.StatusCode == 1080) {//1071是审核被拒绝，1080是还没有交易账号
+                        $("#sbtn").show();
+                        $("#note").show();
+                        $("#BankCard").show();
+                        $("#IDCard").show();
+                    }
+                    //如果没有值，表示没有交易账号，不允许出入金和查询出入金
+                    if (!data.TradeId) {
+                        rj.href = "javascript:volid(0);";
+                        rj2.href = "javascript:volid(0);";
+                        cj.href = "javascript:volid(0);";
+                        crj.href = "javascript:volid(0);";
+                    } else {
+                        rj.href = "uc/wyrj";
+                        rj2.href = "uc/wyrj2";
+                        cj.href = "uc/wycj";
+                        crj.href = "crj";
+                    }
+
+                    $("#BankType").val(data.BankType);
+                    $("#BankId").val(data.BankId);
+                    $("#BankName").val(data.BankName);
+                    $("#PersonId").val(data.PersonId);
+                    $("#AgentId").val(data.AgentId);
+                    $("#TradeId").val(data.TradeId);
+                    //delCookie("tradeid");
+                    if (data.TradeId != "")
+                        //setCookie("tradeid", data.TradeId);
+                        $("#name").val(data.TradeName);
+                    if (data.PersonPic != '') {
+                        $("#PersonPic").html("<img src='" + localStorage.card_id_img_top + "'>");
+                        $("#PersonPic").parent().prev().children().hide();
+                    }
+                    if (data.BankPic != '') {
+                        
+                        $("#BankPic").parent().prev().children().hide();
+                    }
+                    //$("#sbtn").hide();
+
+                }
+        });*/
+        }
+    </script>
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="top">
+            <div class="wrap">
+                <ul class="userTop">
+                    <!--a>客服热线：$site.tel}</a-->
+                </ul>
+                <ul class="topNav">
+                    <li>
+                        <a id="username" href="uc">--</a>
+                        <a onclick="$.quit();" href="">退出</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="header">
+            <div class="wrap">
+                <ul class="logo">
+                    <a href="index">
+                        <img style="width:270px; margin-top:10px; margin-bottom:10px;margin-left:30px;" src="/web/logo.png">
+                    </a>
+                </ul>
+                <div class="nav-bar"></div>
+                <ul style="margin-top:5px;" class="p_nav">
+                    <li class="cur">
+                        <a href="index" class="first">首页</a>
+                    </li>
+                    <li>
+                        <a href="futures">国内期货</a>
+                    </li>
+                    <li>
+                        <a href="rules">交易规则</a>
+                    </li>
+                    <li>
+                        <a href="about">关于我们</a>
+                    </li>
+                    <li>
+                        <a href="download">软件下载</a>
+                    </li>
+                    <li>
+                        <a href="service">客戶服务</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div align="center" style="font-size:18px">提示：富期通是一家可提供给操盘手优质服务的平台，并非属于任何一家期货公司的子公司，请各操盘手在进行操盘之前仔细阅读本平台的风险揭示书及交易规则，任何操盘以本平台信息为准！</div>
+        <div class=" mb">
+            <div id="user">
+                <div class="lp_wrap">
+                    <div class="jtw-left">
+                        <ul class="jtw-leftnav">
+                            <li>
+                                <h4>
+                                    <img style="margin-top:-5px;" src="/web/user.png">&nbsp;
+                                    <a href="uc">账户中心</a>
+                                </h4>
+                            </li>
+                            <li>
+                                <h4>
+                                    <img style="margin-top:-5px;" src="/web/qian.png">&nbsp;资金管理</h4>
+                            </li>
+                            <div class="ernav">
+                                <a id="crj" href="crj">出入金记录</a>
+                            </div>
+                            <li>
+                                <h4>
+                                    <img style="margin-top:-2px;" src="/web/anquan.png">&nbsp;
+                                    <a href="pwd">密码修改</a>
+                                </h4>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="jtw-right">
+                        <div class="jtw-main">
+                            <div class="my-account">
+                                <h4 class="jtw-main-title">
+                                    <span>我的账户</span>
+                                </h4>
+                                <form id="userEdit" action="" onSubmit="return check();" method="post" enctype="multipart/form-data">
+                                    <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+                                        <tbody>
+                                            <tr>
+                                                <th colspan="3">&nbsp;</th>
+                                            </tr>
+                                            <tr>
+                                                <td width="70" align="right">姓名</td>
+                                                <td>
+                                                    <input name="name" id="name" type="text" class="textInput" value="" size="55" disabled="">
+                                                    <input name="shjh" id="tel" type="hidden" class="textInput" value="" size="55" disabled="">
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                            <!--
+											<tr>
+     											<td align="right">手机号码</td>
+     											<td><input name="shjh" id="tel" type="text" class="textInput" value="" size="55" disabled=""></td>
+     											<td></td>
+     										</tr>
+											-->
+
+                                            <tr>
+                                                <td width="100" align="right">交易账户</td>
+                                                <td>
+                                                    <input type="text" id="TradeId" name="TradeId" value="" size="80" disabled="" class="textInput"> &nbsp;
+                                                    <span id="TradeIdNote" class="red"></span>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right">开户行</td>
+                                                <td>
+                                                    <input id="BankType" name="BankType" type="text" class="textInput" value="" size="55">
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right">支行</td>
+                                                <td>
+                                                    <input id="BankName" name="BankName" type="text" class="textInput" value="" size="55">
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right">银行卡号</td>
+                                                <td>
+                                                    <input id="BankId" name="BankId" type="text" class="textInput" value="" size="80">
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right">身份证号</td>
+                                                <td>
+                                                    <input id="PersonId" name="PersonId" type="text" class="textInput" value="" size="80">
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right">邀请码</td>
+                                                <td>
+                                                    <input id="AgentId" name="AgentId" type="text" class="textInput" value="" size="80">
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right">银行卡照片</td>
+                                                <td>
+                                                    <div id="BankPic" class="preview"></div>
+                                                    <input id="BankCard" name="BankCard" type="file" value="" size="80" onChange="fileChange(this,0);">
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right">身份证照片</td>
+                                                <td>
+                                                    <div id="PersonPic" class="preview"></div>
+                                                    <input id="IDCard" name="IDCard" type="file" value="" size="80" onChange="fileChange(this,1);">
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right"></td>
+                                                <td colspan=2>
+                                                    <span id="error" style="color:Red;">
+                                                        <i></i>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td colspan=2>
+                                                    <input id="sbtn" type="submit" name="submit" class="btn" value="提交">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
+
+                                <div class="my-account-bot">
+                                    <span id="note">注意：您的资料不完整，请完善资料并申请交易账号，然后才可以出入金。</span>
+                                    <br />
+                                    <div style="float:left">
+                                        <a id="rj" href="rj">我要入金</a>
+                                        <a id="cj" href="cj">我要出金</a>
+                                    </div>
+                                    <br />
+                                    <br />
+                                    <!-- <div style="float:left">
+                                        <a id="rj2" href="rj2">我要入金(应急通道)</a>
+                                    </div> -->
+                                    <br />
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 首页 bottom start -->
+    <div class="bottom">
+        <div class="bottom_a">
+            <div class="bottom_a_left">
+                <ul>
+                    <li>
+                        <p class="bottom_a_left_font">
+                            <a>期貨交易</a>
+                        </p>
+                        <a href="tencent://message/?uid=2066604037&amp;Site=&amp;Menu=yes" target="_blank" class="down-load">线上咨询</a>
+                        <br>
+                        <a href="download">软件下載</a>
+                        <br>
+                        <a href="futures">期货品种</a>
+
+                    </li>
+                    <li>
+                        <p class="bottom_a_left_font">
+                            <a>了解我们</a>
+                        </p>
+                        <a href="about">关于我们</a>
+                        <br>
+                        <a href="service">联系我们</a>
+                        <br>
+                        <a href="news">最新公告</a>
+
+                    </li>
+                    <li>
+                        <p class="bottom_a_left_font">
+                            <a>条款声明</a>
+                        </p>
+                        <a href="important">特别声明</a>
+                        <br>
+                        <a href="kehu.html">服务条款</a>
+                        <br>
+                        <a href="disclaimer">免则声明</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="bottom_a_xian"></div>
+            <div class="bottom_a_nav">
+                <img style="margin-top:-20px;" src="/web/erweima.png">
+            </div>
+
+            <div class="bottom_a_right">
+                <div class="bottom_btn">
+                    <a href="http://wpa.qq.com/msgrd?v=3&uin=2066604037&site=qq&menu=yes" target="_blank" class="down-load">线上咨询服务</a>
+                </div>
+                <div class="bottom_a_right_font">交易日（周一至周五）08:30-23:30</div>
+                <div <div class="bottom_a_right_font">我们提醒您：期货有风险，投资需谨慎！市场风险莫测，务请谨慎行事！</div>
+            </div>
+        </div>
+
+        <style>
+            .youqing_bg {
+                width: 100%;
+                margin: 0 auto;
+                background-color: #333333;
+                padding-bottom: 20px;
+            }
+
+            .youqing_bg .youqing {
+                width: 1000px;
+                margin: 0 auto;
+            }
+
+            .youqing_bg .youqing li {
+                color: #ccc;
+                float: left;
+                margin-left: 3%;
+                ;
+                font-size: 14px;
+                line-height: 25px;
+            }
+
+            .youqing_bg .youqing a {
+                color: #ccc;
+                font-size: 14px;
+                line-height: 25px;
+            }
+
+            .youqing_bg .youqing a:hover {
+                color: white;
+            }
+        </style>
+        <div class="youqing_bg">
+            <ul class="youqing">
+                <li style="margin-left:0">友情链接：</li>
+                <li style="margin-left:0">
+                    <a href="http://www.ine.com.cn/" target="_blank">上海国际能源交易中心</a>
+                </li>
+                <li>
+                    <a href="http://www.shfe.com.cn/" target="_blank">上海期货交易所</a>
+                </li>
+                <li>
+                    <a href="http://www.czce.com.cn/portal/index.htm" target="_blank">郑州商品交易所</a>
+                </li>
+                <li>
+                    <a href="http://www.dce.com.cn/" target="_blank">大连商品交易所</a>
+                </li>
+                <li>
+                    <a href="http://www.cffex.com.cn/" target="_blank">中国金融期货交易所</a>
+                </li>
+                <li>
+                    <a href="http://www.hkex.com.hk/?sc_lang=en" target="_blank">香港交易所</a>
+                </li>
+                <li>
+                    <a href="http://www.sse.com.cn/" target="_blank">上海证券交易所</a>
+                </li>
+                <li style="margin-left:0">
+                    <a href="http://www.szse.cn/" target="_blank">期货日报</a>
+                </li>
+                <li>
+                    <a href="http://www.10jqka.com.cn/" target="_blank">同花顺</a>
+                </li>
+                <li>
+                    <a href="http://www.cfachina.org/" target="_blank">中国期货业协会</a>
+                </li>
+                <li>
+                    <a href="http://www.xfn.com/en/home/index.htm" target="_blank">新华财经</a>
+                </li>
+                <li>
+                    <a href="http://www.amm.com/" target="_blank">美国金属市场</a>
+                </li>
+                <li>
+                    <a href="https://www.smm.cn/" target="_blank">上海有色网</a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="footer ">
+            <div class="footer_a">
+                <span>　　　　　　　　　　　　　　　　　　　　湖南正奇万合资产管理有限公司 -- Copyright &copy; 2018 All Rights Reserved </span>
+            </div>
+        </div>
+        <script src="/web/app.js?v=1.1"></script>
+</body>
+
+</html>

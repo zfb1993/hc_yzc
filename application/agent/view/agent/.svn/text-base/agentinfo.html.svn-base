@@ -1,0 +1,74 @@
+{include file="common/top"/}
+<div class="content_wrap">
+	<p style="padding:10px 30px 0;color:#aaa;">提示：勾选代理后先点保存，再点右上角关闭按钮返回</p>
+	<ul id="treeDemo" class="ztree"></ul>
+	<div style="position: relative;left:0;bottom: 20px;width: 100%;margin:0 auto;text-align: center;">
+		<button id="btn" class="layui-btn layui-btn-danger" onclick="selectData()" style="text-align: center;">保存</button>
+	</div>
+</div>
+{include file="common/foot"/}
+<script type="text/javascript" src="__STATIC__/plugins/zTree_v3/js/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="__STATIC__/plugins/zTree_v3/js/jquery.ztree.core.js"></script>
+<script type="text/javascript" src="__STATIC__/plugins/zTree_v3/js/jquery.ztree.excheck.js"></script>
+<SCRIPT type="text/javascript">
+	var setting = {
+		check: {
+			enable: true
+		},
+		data: {
+			simpleData: {
+				enable: true
+			}
+		}
+	};
+
+	function selectData()
+	{
+		var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+		var checkedNodes=treeObj.getCheckedNodes();
+		var new_nodes=[];
+		for(var i=0;i<checkedNodes.length;i++){
+			new_nodes.push(checkedNodes[i].name);
+		}
+		//localStorage.setItem('nodes',new_nodes);
+		sessionStorage.setItem('nodes',new_nodes);
+	}
+	var zNodes,code;
+
+	function setCheck() {
+		var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+		//py = $("#py").attr("checked")? "p":"",
+		//sy = $("#sy").attr("checked")? "s":"",
+		//pn = $("#pn").attr("checked")? "p":"",
+		//sn = $("#sn").attr("checked")? "s":"",
+		py = "";
+		sy = "s";
+		pn = "";
+		sn = "s";
+		type = { "Y":py + sy, "N":pn + sn};
+		zTree.setting.check.chkboxType = type;
+		showCode('setting.check.chkboxType = { "Y" : "' + type.Y + '", "N" : "' + type.N + '" };');
+		//showCode('setting.check.chkboxType = { "Y" : "ps", "N" : "" }');
+	}
+	function showCode(str) {
+		if (!code) code = $("#code");
+		code.empty();
+		code.append("<li>"+str+"</li>");
+	}
+	
+	$(document).ready(function(){
+		$.post("{:url('agent/agentInfo')}",{},function(res){
+			zNodes=res;
+			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+			setCheck();
+			$("#py").bind("change", setCheck);
+			$("#sy").bind("change", setCheck);
+			$("#pn").bind("change", setCheck);
+			$("#sn").bind("change", setCheck);
+		});
+		
+	});
+	
+</SCRIPT>
+</body>
+</html>

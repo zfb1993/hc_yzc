@@ -1,0 +1,77 @@
+{include file="common/head"/}
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div class="layui-padded-15">
+        <blockquote class="layui-elem-quote layui-text">
+            <h3>当前位置：管理员管理 > 基本资料</h3>
+        </blockquote>
+        <fieldset class="layui-elem-field layui-field-title layui-margin-t-20">
+            <legend>完善资料</legend>
+        </fieldset>
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">真实姓名</label>
+                <div class="layui-input-block layui-width-280">
+                    <input type="text" name="realname" lay-verify="title" placeholder="请输入真实姓名" autocomplete="off" class="layui-input" value="{$list.realname}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">电话号码</label>
+                <div class="layui-input-block layui-width-280">
+                    <input type="tel" name="tel" lay-verify="phone" placeholder="请输入电话号码" autocomplete="off" class="layui-input" value="{$list.tel}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">电子邮箱</label>
+                <div class="layui-input-block layui-width-280">
+                    <input type="text" name="email" lay-verify="email" placeholder="请输入电子邮箱" autocomplete="off" class="layui-input" value="{$list.email}">
+                </div>
+            </div>
+            <div class="layui-form-item layui-margin-t-50">
+                <div class="layui-input-block">
+                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="add-btn">立即更新</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>   
+{include file="common/foot"/}
+<script>
+layui.use(['form', 'layedit'], function(){
+  var form = layui.form
+  ,layer = layui.layer
+  ,$ = layui.jquery;
+  //自定义验证规则
+  form.verify({
+    // title: function(value){
+    //   if(value.length < 2){
+    //     return '标题至少得5个字符啊';
+    //   }
+    // }
+    pass: [/(.+){6,12}$/, '密码必须6到12位']
+    ,content: function(value){
+      layedit.sync(editIndex);
+    }
+  });
+  
+  //监听提交
+  form.on('submit(add-btn)', function (data) {
+      var loading = layer.load(1, {shade: [0.1, '#fff']});
+      $.post("{:url('updateInfo')}", data.field, function (res) {
+          layer.close(loading);
+          if (res.code > 0) {
+              layer.msg(res.msg, {time: 1800, icon: 1}, function () {
+                  location.href = res.url;
+              });
+          } else {
+              layer.msg(res.msg, {time: 1800, icon: 2});
+          }
+      });
+      return false;
+  });
+
+  
+  
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+{extend name="static/assets/base.html" /}{block name="title"}
+<title>注册</title>{/block} {block name="style"}
+<style>
+    .weui-cell {
+        background: none;
+    }
+
+    .weui-cell__bd {
+        text-align: left;
+    }
+
+    input.weui-input {
+        text-align: left;
+        width: 100%;
+        border: 1px solid #778091;
+        background: white;
+        color: black;
+        line-height: 22px;
+        height: 30px;
+        border-radius: 4px;
+        text-indent: 35px;
+    }
+
+    .weui-content .weui-cells {
+        background: #ffffff;
+    }
+
+    .weui-content .weui-cell {
+        background: #ffffff;
+    }
+
+    label>* {
+        pointer-events: inherit;
+    }
+</style>
+
+{/block} {block name="body"}
+    <header class="bar bar-nav">
+        <a href="javascript:history.go(-1);" class="weui-back">
+            <i class="iconfont icon-fanhui"></i>
+        </a>
+        <h1 class="title">注册</h1>
+    </header>
+<div class="weui-content" style="top:48px;">
+    <!--<div class="weui-cells__title" style="text-align: center;">
+        <a href="javascript:history.go(-1);" class="weui-back" style="color:#333;float:left;">
+            <i class="iconfont icon-fanhui"></i>
+        </a>
+         注册{$Think.config.site_title}
+   </div>-->
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-label-icon">
+                    <i class="iconfont icon-shouji"></i>
+                </label>
+            </div>
+            <div class="weui-cell__bd">
+                <input id='account' class="weui-input" type="tel" pattern="[0-9]*" placeholder="请输入手机号码">
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_vcode">
+            <div class="weui-cell__hd">
+                <label class="weui-label-icon" style="top: 5px;">
+                    <i class="iconfont icon-yanzhengma"></i>
+                </label>
+
+            </div>
+            <div class="weui-cell__bd">
+                <input id='smsCode' class="weui-input" type="tel" placeholder="请输入验证码">
+            </div>
+            <div class="weui-cell__ft">
+                <button id="send" class="weui-vcode-btn">获取验证码</button>
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-label-icon">
+                    <i class="iconfont icon-mima"></i>
+                </label>
+            </div>
+            <div class="weui-cell__bd">
+                <input id='password' class="weui-input" type="password" value="" placeholder="请输入密码">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-label-icon">
+                    <i class="iconfont icon-yaoqingma"></i>
+                </label>
+
+            </div>
+            <div class="weui-cell__bd">
+                <input id='extCode' class="weui-input" type="text" value="" placeholder="请输入机构码">
+            </div>
+        </div>
+    </div>
+    <div class="weui-cells weui-cells_checkbox" style="margin-top: 20px;display:flex;">
+        <label class="weui-cell weui-check__label weui-mini" for="xieyi" style="padding: 7px 0 0 7px;text-align: right;margin: 0;flex:1">
+            <div class="weui-cell__hd" style="width: 100%;">
+                <input id="xieyi" type="checkbox" class="weui-check" name="checkbox">
+                <i class="weui-icon-checked"></i>
+                <span style="font-size: 11px;color: #737373;">我已阅读并同意
+                   
+                </span>
+            </div>
+        </label>
+		<div style="text-align:left;flex:1;padding: 7px 0 0 0;">
+		    <a id="aaade" href="/index/index/hezuo" style="color: #5185f2;">《注册协议书》</a> 
+		</div>
+        
+    </div>
+	<a id="reg" class="weui-btn weui-btn_ ">注册</a>
+</div>
+<script src="/static/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+ $(function () {
+        var url = window.location.href;
+        var code = '';
+        if (url.indexOf('?') > 0) {
+            var url_arr = url.split('?');
+            var param_arr = url_arr[1].split("&");
+            for(var i=0;i<param_arr.length;i++){
+                var param_arr2 = param_arr[i].split("=");
+                if(param_arr2[0]=='ext_code'){
+                    code=param_arr2[1];
+                }
+            }
+        }       
+        $("#extCode").val(code);
+
+});
+
+//$("#aaade").click(function () {
+//	window.location.href = '/index/index/hezuo.html';  
+//});
+ 
+    </script>
+{/block} {block name="tabbar"}{/block} {block name="script"}
+<script src="/static/assets/jscode/reg.bundle.js"></script>{/block}{block name="checkLogin"}{/block}

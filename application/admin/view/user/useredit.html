@@ -1,0 +1,99 @@
+{include file="common/head"/}
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div class="layui-padded-15">
+        <blockquote class="layui-elem-quote layui-text">
+            <h3>当前位置：用户管理 > 编辑用户</h3>
+        </blockquote>
+        <fieldset class="layui-elem-field layui-field-title layui-margin-t-20">
+            <legend>修改资料</legend>
+        </fieldset>
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">真实姓名</label>
+                <div class="layui-input-block layui-width-280">
+                    <input type="text" name="realname" lay-verify="" placeholder="请输入用户真实姓名" autocomplete="off" class="layui-input" value="{$user.realname}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">电话号码</label>
+                <div class="layui-input-block layui-width-280">
+                    <input type="tel" name="tel" lay-verify="" placeholder="请输入用户电话号码" autocomplete="off" class="layui-input" value="{$user.tel}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">电子邮箱</label>
+                <div class="layui-input-block layui-width-280">
+                    <input type="text" name="email" lay-verify="" placeholder="请输入用户电子邮箱" autocomplete="off" class="layui-input" value="{$user.email}">
+                </div>
+            </div>
+            <div class="layui-form-item" pane="">
+                <label class="layui-form-label">编辑顺序</label>
+                <div class="layui-input-block layui-width-360">
+                    <input type="text" name="edit_order" lay-verify="" placeholder="请输入编辑任务优先顺序" autocomplete="off" class="layui-input" value="{$user.edit_order}">
+                </div>
+            </div>
+            <div class="layui-form-item" pane="">
+                <label class="layui-form-label">审核顺序</label>
+                <div class="layui-input-block layui-width-360">
+                    <input type="text" name="judge_order" lay-verify="" placeholder="请输入审核任务优先顺序" autocomplete="off" class="layui-input" value="{$user.judge_order}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">初始等级</label>
+                <div class="layui-input-block">
+                  <input type="radio" name="level" value="D" title="D级" {if condition="$user.level=='D'"}checked{/if}>
+                  <input type="radio" name="level" value="C" title="C级" {if condition="$user.level=='C'"}checked{/if}>
+                  <input type="radio" name="level" value="B" title="B级" {if condition="$user.level=='B'"}checked{/if}>
+                  <input type="radio" name="level" value="A" title="A级" {if condition="$user.level=='A'"}checked{/if}>
+                </div>
+            </div>
+            <div class="layui-form-item layui-margin-t-50">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="update-btn">立即更新</button>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+</div>   
+{include file="common/foot"/}
+<script>
+  layui.use(['form'], function(){
+    var form = layui.form
+    ,layer = layui.layer
+    ,$ = layui.jquery;
+    //自定义验证规则
+    form.verify({
+      
+    });
+    
+    //监听提交
+    // form.on('submit(update-btn)', function(data){
+    //   layer.alert(JSON.stringify(data.field), {
+    //     title: '最终的提交信息'
+    //   })
+    //   return false;
+    // });
+
+    //监听提交
+    form.on('submit(update-btn)', function(data){
+      var loading = layer.load(1, {shade: [0.1, '#fff']});
+        $.post("{:url('userEdit',['id'=>$user.id])}", data.field, function (res) {
+            layer.close(loading);
+            if (res.code > 0) {
+                layer.msg(res.msg, {time: 1800, icon: 1}, function () {
+                    location.href = res.url;
+                });
+            } else {
+                layer.msg(res.msg, {time: 1800, icon: 2});
+            }
+        });
+      return false;
+    });
+    
+    
+  });
+</script>
+</body>
+</html>

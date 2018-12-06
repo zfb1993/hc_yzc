@@ -1,0 +1,262 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>充值结果</title>
+		<link rel="stylesheet" type="text/css" href="__STATIC__/pc/css/main_1.css">
+		<link rel="stylesheet" type="text/css" href="__STATIC__/pc/css/login_1.css">
+		<link rel="stylesheet" type="text/css" href="__STATIC__/pc/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="__STATIC__/pc/css/css.css">
+		<link rel="stylesheet" type="text/css" href="__STATIC__/pc/css/style.css">
+		<link rel="stylesheet" type="text/css" href="__STATIC__/pc/css/user.css">
+		<link rel="stylesheet" type="text/css" href="__STATIC__/pc/css/default.css">
+		<link rel="stylesheet" type="text/css" href="__STATIC__/pc/css/c084f599e2e03bc7c5a13b44889f693a.css" />
+		<script type="text/javascript" src="__STATIC__/pc/js/jquery.js"></script>
+		<style>
+			* {
+				-webkit-box-sizing: border-content;
+				-moz-box-sizing: border-content;
+				box-sizing: border-content;
+				font: 14px/180% 'Microsoft YaHei';
+			}
+		
+			body {
+				background: #ffffff;
+			}
+		
+			.container-fluid {
+				height: 40px;
+				padding: 0;
+			}
+		
+			.trader_info_right1 {
+				line-height: 30px;
+				float: left;
+				border-left: none;
+				padding: 0px 35px 27px 90px;
+			}
+		
+			.number-left {
+				margin-top: 20px
+			}
+		
+			.trader_info_right1 ul li {
+				color: #fff;
+				float: left;
+				width: 115px;
+				height: 37px;
+				text-align: center;
+				line-height: 37px;
+				background: #ff4d4d;
+				margin-right: 14px;
+				margin-top: 10px;
+				-moz-border-radius: 5px;
+				-webkit-border-radius: 5px;
+				border-radius: 5px;
+				cursor: pointer;
+			}
+		
+			.person-info {
+				margin-bottom: 20px;
+			}
+		
+			#service {
+				width: 50px;
+				height: 290px;
+				position: fixed;
+				top: 200px;
+				right: 0px;
+				z-index: 100;
+			}
+		
+			*html #service {
+				margin-top: 258px;
+				position: absolute;
+				top: expression(eval(document.documentElement.scrollTop));
+			}
+		
+			#service li {
+				width: 50px;
+				height: 50px;
+			}
+		
+			#service li img {
+				float: right;
+			}
+		
+			#service li a {
+				height: 49px;
+				float: right;
+				display: block;
+				min-width: 47px;
+				max-width: 161px;
+			}
+		
+			#service li a .shows {
+				display: block;
+			}
+		
+			#service li a .hides {
+				margin-right: -143px;
+				cursor: pointer;
+				cursor: hand;
+			}
+		
+			#service li a.weixin_area .hides {
+				display: none;
+				position: absolute;
+				right: 143px;
+			}
+		
+			#service li a.weixin_area .weixin {
+				display: none;
+				position: absolute;
+				right: 0;
+				top: 48px
+			}
+		
+			#p2 {
+				width: 112px;
+				background-color: #ec7f08;
+				height: 47px;
+				margin-left: 47px;
+				border: 1px solid #ec7f08;
+				text-align: center;
+				line-height: 47px
+			}
+		
+			#p3 {
+				width: 112px;
+				background-color: #ec7f08;
+				height: 47px;
+				margin-left: 47px;
+				border: 1px solid #ec7f08;
+				text-align: center;
+				line-height: 47px
+			}
+		
+			#p1 {
+				width: 47px;
+				height: 49px;
+				float: left
+			}
+		
+			a:hover {
+				text-decoration: none
+			}
+		
+			.joke {
+				font-size: 16px;
+			}
+		
+			.long_uc .tabbox {
+				border-left: 1px solid #ddd
+			}
+		
+			.common_payment {
+				height: 50px!important;
+				display: inline-block;
+			}
+		
+			.common_payment_checked {
+				padding: 23px 0px!important;
+			}
+		
+			.u_incharge .uc-table .way,
+			.u_incharge .uc-table .m_number,
+			.u_incharge .total {
+				height: 50px!important
+			}
+		
+			input {
+				height: 30px!Important;
+				line-height: 30px!Important;
+			}
+		</style>
+		
+	</head>
+
+	<body>
+		<body class="ui-view-wrap">
+			<div class="common-head">
+				<div class="head-nav-wrap clearfix">
+					<a href="" class="logo">
+						<h1>
+							<img src="__STATIC__/pc/images/logo_1.png" alt="">
+						</h1>
+					</a>
+					<div class="nav-wrap">
+						<a href="{:url('member/referprice')}" class="nav">询价交易</a>
+						<a href="{:url('member/index')}" class="nav">个人中心</a>
+		
+						<div class="user-photo dropdown clearfix">
+							<a id="JS-head-compete" href="" class="nav">
+								<img src="__STATIC__/pc/images/noavatar_big.gif" style="cursor:pointer">
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--头部结束-->
+<div class="wrap" style="height:auto;overflow:hidden;margin:0 auto;">
+	<div class="blank20"></div>
+	<div class="short_uc f_l">
+		<div class="sibar-nav">
+		  <a href="{:url('member/index')}" class="nav-extend sibar-active">
+		    <i class="icon-yonghuyilan"></i>
+		    <span>账户中心</span></a>
+		  <a href="{:url('member/alterpwd')}">
+		    <i class="icon-jingji"></i>
+		    <span>密码设置</span></a>
+		  <a href="{:url('member/cert')}">
+		  <i class="icon-jifen"></i>
+		     <span>实名认证</span></a>
+		  <a href="{:url('member/chongzhi')}">
+		    <i class="icon-shezhi"></i>
+		    <span>账户充值</span></a>
+		  <a href="{:url('member/tixian')}">
+		    <i class="icon-xinxi1"></i>
+		    <span>账户提现</span></a>
+		  <a href="{:url('member/rizhi')}">
+		    <i class="icon-tuiguangzhuanqianxian"></i>
+		    <span>资金日志</span></a>
+		   <a href="{:url('member/loginout')}">
+		    <i class="icon-zhuizong"></i>
+		    <span>退出登录</span></a>
+		</div>
+	</div><!--左侧菜单结束-->
+				<div class="long_uc f_r" style="padding:10px;text-align:center;">
+					<a href="/index/member/rizhi.html">
+						<img src="__STATIC__/pc/images/20180315225139.png" alt="" style="width:100%">
+					</a>
+				</div>
+				<!--右侧内容区结束-->
+			</div>
+			<div class="blank15"></div>
+			<div class="footer-wrap clearfix" style="position:fixed;left:0;right:0;bottom:0;">
+				<div class="footer-content">
+					<p class="footer-tips">风险提示</p>
+					<p class="footer-tips">保护投资者利益是中国证监会工作的重中之重。</p>
+					<p class="footer-tips">我们提醒您：股市有风险，投资需谨慎！</p>
+					<p class="footer-tips">市场风险莫测，务请谨慎行事！</p>
+					<div class="footer-webcat">
+						<img src="__STATIC__/pc/images/wx.fw_1.png" width="130" height="130" alt="微信公众号" title="微信公众号">
+						<p>扫码下载APP</p>
+					</div>
+					<div class="footer-help">
+		
+						<div class="foot-tt2">
+							<p style="text-align:center;">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="container" style="position: fixed; z-index:999; right : 0px; top: -10%;">
+				<div class="demo">
+					<div id="service">
+		
+					</div>
+				</div>
+			</div>
+	</body>
+</html>

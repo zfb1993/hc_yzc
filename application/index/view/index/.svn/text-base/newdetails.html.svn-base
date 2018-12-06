@@ -1,0 +1,168 @@
+{extend name="static/assets/base.html" /} {block name="title"}
+<title>最新资讯</title>{/block} {block name="style"} 
+<script type="text/javascript" src="/static/assets/js/TouchSlide.1.1.js"></script>
+<link rel="stylesheet" href="/static/assets/css/swiper.min.css">
+<link href="/static/assets/css/index.df691.css" rel="stylesheet">
+<style>
+	header.bar .tools a>i {
+		position: absolute;
+	}
+
+
+	header.bar .tools>a {
+		cursor: pointer;
+		z-index: 10;
+		position: absolute;
+		top: 0.4em;
+		right: 30px;
+		z-index: 20;
+		/* margin-top: 0; */
+		font-weight: 400;
+		margin-right: 5px;
+		color: white;
+	}
+
+	.weui-popup__container .weui-article {
+
+		top: 3em;
+	}
+
+	#title {
+		font-weight: 600;
+	}
+
+	#content>p {
+		font-size: 13px;
+		line-height: 25px;
+	}
+</style>
+{/block} {block name="body"}
+    <div class="weui-cells__title" style="text-align: center;height:48px;background:#303849;color:#fff;font-size:18px;">
+        <a href="javascript:history.go(-1);" class="weui-back" style="color:#fff;float:left;">
+            <i class="iconfont icon-fanhui"></i>
+        </a>
+        资讯
+   </div>
+<div id="root">
+	<div data-reactroot="">
+		<div class="">
+			<div class="container__main-box___35BJO" id="container-main-box" style="bottom: 0px;top: 0px;">
+				<div class="home__home___3iOqm">
+					<div class="home__home-main___A5nUU">
+						<div class="home__header___1J568">
+							<!--<a href="{:url('index/index/index')}"><img src="/static/assets/images/banner.png" alt="banner" width="100%"></a>-->
+
+						</div>
+						<div class="">
+
+						</div>
+						<script src="/static/assets/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+
+
+
+						<style>
+							.news__news-main___2Psqg {
+								margin: 0;
+								border-bottom: 1px solid #f5f5f5;
+								padding: 10px 0 10px 15px;
+							}
+
+							.news__new-title___1SMyc {
+								padding-top: 0;
+							}
+
+							.news__new-info___3yOCB {
+								padding: 0;
+							}
+
+							#news_list .news__new-info___3yOCB>div {
+								width: 100%;
+								text-align: left;
+							}
+
+							label {
+								padding-left: 0;
+								color: #7a7a7a;
+							}
+
+							#date {
+								display: block;
+							}
+
+							#source {
+								display: block;
+							}
+						</style>
+						<div style="padding: 10px;margin-top: 50px;">
+							<div>
+								<p id="title">朱建弟：证券市场纠纷裁量随意 建议形成统一标准</p>
+								<label id="date">2018-03-10</label>
+								<label id="source"></label>
+							</div>
+
+							<div id="content">
+								<p>　　全国人大代表、立信会计师事务所董事长朱建弟3月10日在上海代表团审议“两高”报告时表示，建议考虑我国资本市场以中小投资者为主体的特殊国情，在审理投资者诉讼相关案件时，对上市公司和投资者的责任认定要符合客观实际。</p>
+								<p>　　朱建弟说，需要综合考量上市公司减轻责任的法定因素，不能随意减少和加重上市公司的责任。他表示，我国股市前三年经历了几次较大的波动，目前各地法院相关司法判决的随意裁量较大，判决中的比例系数不同。建议最高院对全国的证券市场纠纷判决形成统一标准，出台指导意见。(两会报道组)</p>
+								<!--keywords---->
+								<!--articletag---->
+								<div class="hide-div">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+{/block} {block name="tabbar"}{/block} {block name="script"}
+<script type="text/javascript">
+	$(function () {
+		var urlData = {};
+		var localarr = window.location.href.split('?')[1];
+		try {
+			localarr = localarr.split('=');
+			urlData.newid = localarr[1];
+		} catch (err) {
+			console.log(err)
+
+		}
+		console.log(urlData.newid);
+		$.get("/index/News/detail?newsId=" + urlData.newid,
+			function (data) {
+				var reg = eval('(' + data + ')');
+				var titstr = reg.data[0].title;
+				var date = timestampToTime(reg.data[0].senddate);
+				var source = reg.data[0].source;
+				var content = reg.data[0].body;
+				$("#title").html('<h2 style="text-align: justify;">' + titstr + '</h2>');
+				$("#date").html(date);
+				$("#source").html(source);
+				$("#content").html(content);
+				console.log(reg);
+			});
+	})
+
+	function timestampToTime(timestamp) {
+		var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+		Y = date.getFullYear() + '-';
+		M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+		D = date.getDate() + ' ';
+		h = date.getHours() + ':';
+		m = date.getMinutes() + ':';
+		s = date.getSeconds();
+		return Y + M + D + h + m + s;
+	}
+
+</script> 
+	<script>
+	    var ser = localStorage.id;
+		console.log(ser);
+			  if (localStorage.id === undefined) {
+				$.toast("登陆已过期，重新登陆！", function() {
+				  window.location.href = "/index/index/login";
+				});
+			};
+	</script>
+{/block}{block name="checkLogin"}{/block}

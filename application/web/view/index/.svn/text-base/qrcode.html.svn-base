@@ -1,0 +1,148 @@
+{extend name="static/assets/base.html" /} {block name="title"}
+<title>我是经纪人</title>{/block} {block name="style"}
+
+<style>
+    header.bar h1.title {
+        line-height: 3rem;
+        background: #353c4d;
+    }
+
+    .info {
+        position: relative;
+        text-align: center;
+        padding: 20px 0;
+    }
+
+    .info img {
+        width: 50px;
+        height: 50px;
+        background: white;
+        border-radius: 50%;
+    }
+
+    .info .wen {
+        display: inline-block;
+        top: -5px;
+        position: relative;
+        color: white;
+        margin: 0 10px;
+    }
+
+    .info ._btn {
+        display: inline-block;
+        font-size: 12px;
+        border: 1px solid white;
+        padding: 0px 16px;
+        line-height: 20px;
+        top: -13px;
+        left: 10px;
+    }
+
+    .content {
+        background: #ffffff;
+        border-radius: 4px;
+        width: 80%;
+        margin: 0 auto;
+        position: relative;
+        color: #41495d;
+        padding: 10px;
+        margin-top: 20px;
+    }
+
+    .content .header {
+        display: flex;
+        padding: 10px 0;
+    }
+
+    .content .flex {
+        flex: 1;
+        text-align: center;
+    }
+
+    .content .body,
+    .content .footer {
+        padding-top: 20px;
+        border-top: 1px solid #dfdfdf;
+        text-align: center;
+    }
+
+    .content .body img {
+        width: 40%;
+        border: 4px solid #cacaca;
+        margin: 15px auto;
+        padding: 10px;
+    }
+
+    ._btn2 {
+        margin: 15px auto;
+        width: 50%;
+    }
+</style>
+</head>
+
+{/block}{block name="body"}
+<div class="weui-content">
+    <div class="info">
+        <img id="_avatar" src="/static/assets/imgs/404.png" onerror="javascript:this.src='/static/assets/imgs/404.png';this.onerror=null;">
+        <div class="wen">
+            <p>可提现拥金</p>
+            <p id="money_i" style="font-size: 20px;">{$money}</p>
+        </div>
+        <a href="/index/index/withdraw" class="weui-btn _btn">提现</a>
+    </div>
+    <div class='content'>
+        <div class="header">
+            <div class="flex">
+                <p>已邀请人数</p>
+                <p style="font-size: 15px;">{$count}</p>
+            </div>
+            <div class="flex">
+                <p>用户交易</p>
+                <p class="red" style="font-size: 15px;">0.00元</p>
+            </div>
+        </div>
+        <div class="body">
+            <div class="img" id="qrcode"></div>
+            <p>朋友扫码成为你的客户</p>
+            <input type="text" id="link" value="{$url}" style="position: absolute;left:-10000px;">
+            <a data-clipboard-target="#link" id="copy_" class="weui-btn weui-btn_ _btn2">复制推广信息</a>
+        </div>
+        <div class="footer" style="padding: 10px 0;">
+            <span>我的邀请码</span>
+            <span style="font-size:15px;">{$ext_code}</span>
+        </div>
+    </div>
+</div>
+{/block}{block name="tabbar"}{/block}{block name="script"}
+<script src="/mobile/js/qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://cdn.bootcss.com/clipboard.js/1.7.1/clipboard.min.js"></script>
+<script>
+    $(function () {
+        $.get("http://107.1caopan.com/index/selfstock/qrcode?userid=" + localStorage.id, {}, function (_d) {
+            if (_d['code'] != 1) {
+                $.alert(_d['msg']);
+                return;
+            }
+        }, "JSON");
+        //生成二维码
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            width: 200,
+            height: 200,
+
+        });
+        var url = '{$url}';
+        qrcode.makeCode(url);
+        //$("#money_i").html($.formatNumber(localStorage.money));
+        //$("#qrcode").attr("src", );
+
+        var clipboard = new Clipboard('#copy_');
+
+        clipboard.on('success', function (e) {
+            console.info('Action:', e.action);
+            console.info('Text:', e.text);
+            console.info('Trigger:', e.trigger);
+            e.clearSelection();
+            $.toast("复制成功", 'text');
+        });
+    });
+</script> {/block}

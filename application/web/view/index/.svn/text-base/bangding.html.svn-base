@@ -1,0 +1,90 @@
+{extend name="static/assets/base.html" /}{block name="title"}
+<title>绑定账号</title>{/block} {block name="style"}
+<link rel="stylesheet" href="/static/assets/css/login.css">
+<style>
+</style>
+
+{/block} {block name="body"}
+
+<div class="weui-content">
+    <div class="weui-cells__title" style="text-align: center;">绑定账号{$Think.config.site_title}</div>
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell weui-cell_select">
+            <div class="weui-cell__hd">
+                <label class="weui-label-icon">
+                    <i class="iconfont icon-shouji"></i>
+                </label>
+            </div>
+            <div class="weui-cell__bd">
+                <select id="select" class="weui-select" name="select">
+                    <option value="0">后台传过来的期货公司列表</option>
+                    <option value="1">AAAA</option>
+                    <option value="2">BBBBB</option>
+
+                </select>
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-label-icon">
+                    <i class="iconfont icon-shouji"></i>
+                </label>
+            </div>
+            <div class="weui-cell__bd">
+                <input autocomplete="new-password" id='account' class="weui-input" type="tel" pattern="[0-9]*" placeholder="期货公司账号">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-label-icon">
+                    <i class="iconfont icon-mima"></i>
+                </label>
+            </div>
+            <div class="weui-cell__bd">
+                <input autocomplete="new-password" id='password' class="weui-input" type="password" placeholder="请输入密码">
+            </div>
+        </div>
+
+        <a id="bd" class="weui-btn weui-btn_ ">绑定</a>
+
+    </div>
+    {/block} {block name="tabbar"}{/block} {block name="script"}
+    <script>
+        $(function () {
+            if (localStorage.zid) {
+                $("#account").val(localStorage.zid);
+            }
+            if (localStorage.zid) {
+                $("#password").val(localStorage.zpwd);
+            }
+            if (localStorage.zg_id) {
+                $("#select").find("option[value='" + localStorage.zg_id + "']").attr("selected", true);
+            }
+            $("#bd").on("click", function () {
+                var datas = {};
+                datas.zid = $("#account").val();
+                datas.zpwd = $("#password").val();
+                datas.c_bh = $("#select").val();
+                datas.uid = localStorage.id;
+                datas.auth = localStorage.auth;
+                datas.type = localStorage.type;
+                if (!datas.zid) {
+                    $.alert("请输入期货公司账号");
+                    return;
+                } else if (!datas.zpwd) {
+                    $.alert("请输入期货公司账号密码");
+                    return;
+                } else if (!datas.zpwd) {
+                    $.alert("请选择期货公司");
+                    return;
+                }
+                $.post("/index/api/userBind", datas, function (_d) {
+                    $.alert(_d['msg'], function () {
+                        if (_d['code'] == 1) {
+                            location.href = "index/index/mine";
+                        }
+                    });
+                });
+            });
+        });
+    </script> {/block}

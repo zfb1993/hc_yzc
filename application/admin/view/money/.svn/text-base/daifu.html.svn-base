@@ -1,0 +1,164 @@
+{include file="common/head"/}
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+  <div class="layui-padded-15">
+    <blockquote class="layui-elem-quote layui-text">
+        <h4>当前位置：{:lang('moneyManage')}<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>{:lang('ioMoney')}</h4>
+    </blockquote>
+    <div class="layui-layout">
+       <div class="layui-form" style="width:50%">
+        <div class="layui-form-item">
+          <label class="layui-form-label">会员账号：</label>
+          <div class="layui-input-block" style="width:30%">
+            <select id="true_name" name="id" lay-verify="" lay-search  lay-filter="myselect">
+              <option value="">请选择或输入会员的名称</option>
+              {volist name="list" id="vo" key="k"}
+              <option value="{$vo.id}">{$vo.user_name}-{$vo.true_name}</option>
+              {/volist}
+            </select> 
+          </div>
+        </div>
+		<div class="layui-form-item">
+          <label class="layui-form-label">金额：</label>
+          <div class="layui-input-inline">
+            <input type="number" name="money" id="money" value="" lay-verify="required" placeholder="请输入金额" class="layui-input" required>
+          </div>
+          <div class="layui-form-mid layui-word-aux">输入正数金额</div>
+        </div>
+<div class="layui-form-item">
+          <label class="layui-form-label">姓名：</label>
+          <div class="layui-input-inline">
+            <input type="text" name="accountname" id="accountname" value="" lay-verify="required" placeholder="请输入姓名" class="layui-input" required>
+          </div>
+          <div class="layui-form-mid layui-word-aux">输入姓名</div>
+        </div>
+<div class="layui-form-item">
+          <label class="layui-form-label">银行卡号：</label>
+          <div class="layui-input-inline">
+            <input type="text" name="cardnumber" id="cardnumber" value="" lay-verify="required" placeholder="请输入银行卡号" class="layui-input" required>
+          </div>
+          <div class="layui-form-mid layui-word-aux">输入银行卡号</div>
+        </div>
+		<div class="layui-form-item">
+          <label class="layui-form-label">银行名：</label>
+          <div class="layui-input-inline">
+            <input type="text" name="bankname" id="bankname" value="" lay-verify="required" placeholder="请输入银行名" class="layui-input" required>
+          </div>
+          <div class="layui-form-mid layui-word-aux">输入银行名</div>
+        </div>
+		<div class="layui-form-item">
+          <label class="layui-form-label">支行名称：</label>
+          <div class="layui-input-inline">
+            <input type="text" name="subbranch" id="subbranch" value="" lay-verify="required" placeholder="请输入支行名称" class="layui-input" required>
+          </div>
+          <div class="layui-form-mid layui-word-aux">输入支行名称</div>
+        </div>
+		<div class="layui-form-item">
+          <label class="layui-form-label">省份：</label>
+          <div class="layui-input-inline">
+            <input type="text" name="province" id="province" value="" lay-verify="required" placeholder="请输入省份" class="layui-input" required>
+          </div>
+          <div class="layui-form-mid layui-word-aux">输入省份</div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">城市：</label>
+          <div class="layui-input-inline">
+            <input type="text" name="city" id="city" value="" lay-verify="required" placeholder="请输入城市" class="layui-input" required>
+          </div>
+          <div class="layui-form-mid layui-word-aux">输入城市</div>
+        </div>
+        <div class="layui-form-item">
+          <div class="layui-input-block">
+            <button class="layui-btn" id="sub">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{include file="common/foot"/}
+<script>
+    var message;
+    layui.config({
+        base: ADMIN+'build/js/',
+        version: '1.0.1'
+    }).use(['app','table','form','laydate','message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            table = layui.table,
+            laydate = layui.laydate,
+            form = layui.form,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+   
+    //监听提交
+	$('#sub').click(function(){
+		var userid=$('#true_name option:selected').val();
+		var money=$('#money').val();
+		var accountname=$('#accountname').val();
+		var cardnumber=$('#cardnumber').val();
+		var bankname=$('#bankname').val();
+		var subbranch=$('#subbranch').val();
+		var province=$('#province').val();
+		var city=$('#city').val();
+		layer.confirm('你确定要操作吗？', {icon: 3, title:'提示'}, function(index){
+		    $.post("{:url('money/daifu')}",{'userid':userid,'accountname':accountname,'money':money,'cardnumber':cardnumber,'bankname':bankname,'subbranch':subbranch,'province':province,'city':city},function(res){
+				if(res.code==1){
+				   layer.msg(res.msg,{icon:1,time:1000},function(){
+					   layer.close(index);
+				   });
+				}else{
+				  layer.msg(res.msg,{icon:2,time:1000},function(){
+					   layer.close(index);
+				   });
+				}
+			});
+		});
+	});
+
+	  form.on('select(myselect)', function(data){
+		console.log(data.value);
+		if(data.value!=''){
+			var lindex;
+			$.ajax({
+				url:'/admin/customer/ajaxuserInfo',
+				type:'POST',
+				data:{id:data.value},
+				beforeSend:function (){
+					lindex=layer.load();
+				},
+				success:function(data){
+					layer.close(lindex);
+					if(!data.code){
+						$("#accountname").val(data.data.true_name);
+						$("#cardnumber").val(data.data.bank_card);
+						$("#bankname").val(data.data.bank_name);//银行名
+						$("#subbranch").val(data.data.subbranch);//支行
+						$("#province").val(data.data.province);
+						$("#city").val(data.data.city);
+					}else{
+						 layer.msg('获取用户信息错误');
+					}
+				}
+			})
+		}; 
+});
+
+
+	
+        
+  });
+
+
+</script>
+</body>
+</html>

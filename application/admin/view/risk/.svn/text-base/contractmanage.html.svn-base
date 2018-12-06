@@ -1,0 +1,325 @@
+{include file="common/head"/}
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+  <div class="layui-padded-15">
+    <blockquote class="layui-elem-quote layui-text">
+        <h4 class="layui-pull-left">当前位置：{:lang('riskManage')}<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>{:lang('contractManage')}</h4>
+        <button id="contract" class="layui-btn layui-btn-normal layui-pull-right">新增合约</button>
+    </blockquote>
+    <div class="layui-form">
+       <table class="layui-table" id="list" lay-filter="list"></table>
+    </div>
+  </div>
+</div>
+{include file="common/foot"/}
+<script type="text/html" id="action">
+  <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+  <a class="layui-btn layui-btn-sm" lay-event="set">设置档位</a>
+</script>
+<script>
+    var message;
+    layui.config({
+        base: ADMIN+'build/js/',
+        version: '1.0.1'
+    }).use(['app','table','form','laydate','message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            table = layui.table,
+            laydate = layui.laydate,
+            form = layui.form,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+    //列表数据
+    var tableIn = table.render({
+        elem: '#list',
+        url: '{:url("risk/contractManage")}',
+        method: 'post',
+        page: true,
+        cols: [[
+            {type:'numbers',title:'序号',fixed: 'left'},
+            {field:'ex_name',align:'center',title:'交易所', width:100},
+            {field:'p_name',align:'center',title:'品种', width:100},
+            {field:'c_name',align:'center',title:'合约名', width:120},
+            {field:'c_code',align:'center',title:'合约代码',width:120},
+            {field:'copy_code', align:'center',title:'新浪映射合约',width:120},
+            {field:'min_rate',align:'center',title:'最小变动单位', width:150,sort:true},
+            {field:'c_multiplier',align:'center', title:'合约乘数',width:120,sort:true},
+            {field:'open_hops',align:'center', title:'开仓跳数',width:120,sort:true},
+            {field:'flat_hopping',align:'center',title:'平仓跳数', width:120,sort:true},
+            {field:'delivery_date',align:'center',title:'合约交割日', width:150},
+            {field:'status', align:'center', title:'状态',width:80},
+            {width: 240, align: 'center', toolbar: '#action',title:'操作'}
+        ]],
+        limit: 10,
+        height: 600 //固定值
+    });
+    //监听工具条
+    table.on('tool(list)', function(obj){
+      var data = obj.data;
+      if(obj.event === 'set'){
+        var id = data.id;
+        var url="{:url('risk/gearSetting',['cid'=>'w'])}";
+            url=url.replace(/w/,id);
+            var str='';
+        layer.open({
+          type: 2, 
+          title:'合约档位设置',
+          area:['900px','550px'],
+          content: [''+url, 'no']
+        });     
+      } else if(obj.event === 'del'){
+        layer.confirm('真的要删除该合约么？', function(index){
+          $.post("{:url('risk/del_contract')}",{'id':data.id},function(res){
+            if(res.code==1){
+              layer.msg(res.msg,{icon: 1, time: 1000},function(){
+                obj.del();
+                layer.close(index);
+              });
+            }else{
+              layer.msg(res.msg,{icon: 2, time: 1000},function(){
+                layer.close(index);
+              });
+            }
+          });
+
+        });
+      } else if(obj.event === 'edit'){
+        var id=data.id;
+        var str='';
+            str+='<div class="layui-contract">';
+            str+='<form class="layui-form">';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">交易所</label>';
+            str+='<div class="layui-form-mid layui-word-aux">'+data.ex_name+'</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">品种</label>';
+            str+='<div class="layui-form-mid layui-word-aux">'+data.p_name+'</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">合约名</label>';
+            str+='<div class="layui-form-mid layui-word-aux">'+data.c_name+'</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">合约代码</label>';
+            str+='<div class="layui-form-mid layui-word-aux">'+data.c_code+'</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">新浪映射合约</label>';
+            str+='<div class="layui-form-mid layui-word-aux">'+data.copy_code+'</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">开仓跳数</label>';
+            str+='<div class="layui-input-block">';
+            str+='<input type="number" name="open_hops" placeholder="请输入开仓跳数" value="'+data.open_hops+'" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">平仓跳数</label>';
+            str+='<div class="layui-input-block">';
+            str+='<input type="number" name="flat_hopping" placeholder="请输入平仓跳数" value="'+data.flat_hopping+'" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">交割日期</label>';
+            str+='<div class="layui-input-block">';
+            str+='<input type="text" id="delivery_date" name="delivery_date" placeholder="请指定交割日期" value="'+data.delivery_date+'"  class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">状态</label>';
+            str+='<div class="layui-input-block">';
+            str+='<select id="status" name="status" lay-verify="required">';
+            if(data.status=='正常'){
+              str+='<option value="0" selected>可用</option>';
+              str+='<option value="1">不可用</option>';
+            }else{
+              str+='<option value="0">可用</option>';
+              str+='<option value="1" selected>不可用</option>';
+            }
+            str+='</select>';
+            str+='</div>';
+            str+='</div>';
+            str+='</form>';
+            str+='</div>';
+        layer.open({
+            type: 1, 
+            skin: 'layui-product',
+            title:'合约 | 编辑',
+            area:['600px','680px'],
+            content:str,
+            btn: ['提交', '放弃'],
+            btnAlign: 'c',
+            yes: function(index, layero){
+              var open_hops=$('input[name="open_hops"]').val();
+              var flat_hopping=$('input[name="flat_hopping"]').val();
+              var delivery_date=$('input[name="delivery_date"]').val();
+              var status=$('#status option:selected').val();
+              $.post("{:url('risk/edit_contract')}",
+                {'id':id,'open_hops':open_hops,'flat_hopping':flat_hopping,'delivery_date':delivery_date,'status':status},
+                function(res){
+                if(res.code==1){
+                  layer.msg(res.msg, {icon: 1, time: 1000}, function(){
+                      layer.close(index);
+                      tableIn.reload();
+                  });
+                }else{
+                  layer.msg(res.msg, {icon: 2, time: 1000});
+                }
+              });
+            },
+            btn2: function(index, layero){
+              layer.close(index);
+              //return false 开启该代码可禁止点击该按钮关闭
+            },
+            cancel: function(index){ 
+              layer.close(index);
+              //return false; 
+              //return false 开启该代码可禁止点击该按钮关闭
+            }
+          });
+        laydate.render({
+          elem: '#delivery_date', //指定元素
+          type:'datetime'
+        });
+        form.render();
+      }
+    });
+    //添加合约
+    $('#contract').click(function(){
+      $.post("{:url('risk/getProId')}", {}, function(data){
+        var str='';
+            str+='<div class="layui-contract">';
+            str+='<form class="layui-form">';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">品种</label>';
+            str+='<div class="layui-input-block">';
+            str+='<select id="p_name" name="p_name" lay-verify="required" lay-search="">';
+            str+='<option value="">直接选择或搜索品种名称</option>';
+            for(var i=0;i<data.length;i++){
+              str+='<option value="'+data[i].p_name+'">'+data[i].p_name+'</option>';
+            }
+            str+='</select>';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">合约名</label>';
+            str+='<div class="layui-input-block">';
+            str+='<input type="text" name="c_name" placeholder="请输入合约名" autocomplete="off" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">合约代码</label>';
+            str+='<div class="layui-input-block">';
+            str+='<input type="text" name="c_code" placeholder="请输入合约代码" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">新浪映射合约</label>';
+            str+='<div class="layui-input-block">';
+            str+='<input type="text" name="copy_code" placeholder="请输入新浪映射合约" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">最小变动单位</label>';
+            str+='<div class="layui-input-block">';
+            str+='<input type="number" name="min_rate" placeholder="请输入最小变动单位" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">合约乘数</label>';
+            str+='<div class="layui-input-block">';
+            str+='<input type="number" name="c_multiplier" placeholder="请输入合约乘数" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">开仓跳数</label>';
+            str+='<div class="layui-input-block">';
+            str+='<input type="number" name="open_hops" placeholder="请输入开仓跳数" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">平仓跳数</label>';
+            str+='<div class="layui-input-block">';
+            str+='<input type="number" name="flat_hopping" placeholder="请输入平仓跳数" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">交割日期</label>';
+            str+='<div class="layui-input-block">';
+            str+='<input type="text" id="delivery_date" name="delivery_date" placeholder="请指定交割日期" class="layui-input">';
+            str+='</div>';
+            str+='</div>';
+            str+='<div class="layui-form-item">';
+            str+='<label class="layui-form-label">状态</label>';
+            str+='<div class="layui-input-block">';
+            str+='<select id="status" name="status" lay-verify="required">';
+            str+='<option value="0">可用</option>';
+            str+='<option value="1">不可用</option>';
+            str+='</select>';
+            str+='</div>';
+            str+='</div>';
+            str+='</form>';
+            str+='</div>';
+        layer.open({
+            type: 1, 
+            skin: 'layui-contract',
+            title:'添加合约',
+            area:['600px','680px'],
+            content:str,
+            btn: ['提交', '放弃'],
+            btnAlign: 'c',
+            yes: function(index, layero){
+              var p_name=$('#p_name option:selected').val();
+              var c_name=$('input[name="c_name"]').val();
+              var c_code=$('input[name="c_code"]').val();
+              var copy_code=$('input[name="copy_code"]').val();
+              var min_rate=$('input[name="min_rate"]').val();
+              var c_multiplier=$('input[name="c_multiplier"]').val();
+              var open_hops=$('input[name="open_hops"]').val();
+              var flat_hopping=$('input[name="flat_hopping"]').val();
+              var delivery_date=$('input[name="delivery_date"]').val();
+              var status=$('#status option:selected').val();
+              $.post("{:url('risk/add_contract')}",
+                {'p_name':p_name,'c_name':c_name,'c_code':c_code,'copy_code':copy_code,'min_rate':min_rate,'c_multiplier':c_multiplier,'open_hops':open_hops,'flat_hopping':flat_hopping,'delivery_date':delivery_date,'status':status},
+                function(res){
+                if(res.code==1){
+                  layer.msg(res.msg, {icon: 1, time: 1000}, function(){
+                      layer.close(index);
+                      tableIn.reload();
+                  });
+                }else{
+                  layer.msg(res.msg, {icon: 2, time: 1000});
+                }
+              });
+            },
+            btn2: function(index, layero){
+              layer.close(index);
+              //return false 开启该代码可禁止点击该按钮关闭
+            },
+            cancel: function(index){ 
+              layer.close(index);
+              //return false; 
+              //return false 开启该代码可禁止点击该按钮关闭
+            }
+          });
+        laydate.render({
+          elem: '#delivery_date', //指定元素
+          type:'datetime'
+        });
+        form.render();
+      });
+    });
+        
+  });
+</script>
+</body>
+</html>

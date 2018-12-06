@@ -1,0 +1,196 @@
+{include file="common/head"/}
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+  <div class="layui-padded-15">
+    <blockquote class="layui-elem-quote layui-text">
+        <h4>当前位置：{:lang('settlementManage')}<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>{:lang('agent_settlement')}</h4>
+    </blockquote>
+    <div class="layui-form">
+      <div class="layui-form-item" style="margin-bottom: 5px;">
+        <div class="layui-inline">
+          <label class="layui-form-label" style="padding:9px 0;">提交时间：</label>
+          <div class="layui-input-inline" style="margin-right:0;width: 150px;">
+            <input type="text" class="layui-input" id="reg_start_time" placeholder="yyyy-MM-dd">
+          </div>
+          <label class="layui-form-label" style="width:auto;display:inline-block;padding:9px 5px;color:#ccc;">-</label>
+          <div class="layui-input-inline" style="margin-right:20px;width: 150px;">
+            <input type="text" class="layui-input" id="reg_end_time" placeholder="yyyy-MM-dd">
+          </div>
+          <label class="layui-form-label" style="padding:9px 0;">所属机构：</label>
+          <div class="layui-input-inline" style="margin-right:20px;width: 150px;">
+            <input type="text" name="ins_name" id="ins_name"  placeholder="请输入所属机构"  class="layui-input">
+          </div>
+		  <label class="layui-form-label" style="padding:9px 0;">结算状态：</label>
+			<div class="layui-input-inline" style="margin-right:0;width: 120px;">
+			  <select id="type" name="type">
+				<option value="-1" selected>请选择状态</option>
+				<option value="0">未结算</option>
+				<option value="1">已结算</option>
+			  </select>
+			</div>
+          <label class="layui-form-label" style="padding:9px 0;">账号：</label>
+          <div class="layui-input-inline" style="margin-right:30px;width: 200px;">
+            <input type="text" id="keywords" name="keywords" required  placeholder="请输入客户账号"  class="layui-input">
+          </div>
+          <button class="layui-btn" id="layui-search-btn" data-type="reload" style="width:100px;"><i class="layui-icon">&#xe615;</i> 搜索 </button>
+          <button class="layui-btn layui-btn-warm" id="layui-reset-btn" style="width:100px;"> 重置 </button>
+			<button class="layui-btn layui-btn-danger" id="layui-export-btn" style="width:100px;"> 导出 </button>
+        </div>
+      </div>
+    </div>
+    <div class="layui-form">
+      <table class="layui-table" id="list" lay-filter="list"></table>
+	  <div id="laypage"></div>
+    </div>
+  </div>
+</div>
+{include file="common/foot"/}
+<script>
+    var message;
+    layui.config({
+        base: ADMIN+'build/js/',
+        version: '1.0.1'
+    }).use(['app','table','form','laypage','laydate','message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            table = layui.table,
+			form = layui.form,
+			laypage = layui.laypage,
+            laydate = layui.laydate,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+    //列表数据
+    var tableIn = table.render({
+        elem: '#list',
+        url: '{:url("settlement/agent_settlement")}',
+        method: 'post',
+        page: true,
+        cols: [[
+            {type:'numbers',title:'序号',fixed: true},
+            {field:'create_time',align:'center',title:'清算时间', width:170, sort: true},
+			{field:'tradedate',align:'center',title:'交易日', width:170, sort: true},
+			{field:'user_name',align:'center',title:'客户账号', width:140, sort: true},
+			{field:'instrumentid',align:'center',title:'合约', width:140, sort: true},
+			{field:'tradevolume',align:'center',title:'交易手数', width:140, sort: true},
+			{field:'commission',align:'center',title:'总手续费', width:140, sort: true},
+            {field:'p_name',align:'center', title:'一级代理名称',width:140},
+			{field:'p_account',align:'center', title:'一级代理',width:140},
+			{field:'p1',align:'center', title:'一级代理返佣',width:140},
+
+			{field:'p2_name',align:'center', title:'二级代理名称',width:140},
+			{field:'p2_account',align:'center', title:'二级代理',width:140},
+			{field:'p2',align:'center', title:'二级代理返佣',width:140},
+
+			{field:'p3_name',align:'center', title:'三级代理名称',width:140},
+			{field:'p3_account',align:'center', title:'三级代理',width:140},
+			{field:'p3',align:'center', title:'三级代理返佣',width:140},
+
+			{field:'zaccount',align:'center',title:'客户ID', width:140, sort: true},
+			{field:'true_name',align:'center',title:'客户姓名', width:140, sort: true},
+			{field:'status', align:'center', title:'状态',width:80}
+        ]],
+		id:'agent_list',
+        height: 550, //固定值
+    });
+   
+    //时间控件渲染
+    laydate.render({
+      elem: '#reg_start_time'
+    });
+    laydate.render({
+      elem: '#reg_end_time'
+    });
+    
+	//搜索
+	var $ = layui.$, active = {
+		reload: function(){
+			var start_time = $('#reg_start_time');
+			var end_time = $('#reg_end_time');
+			var keywords=$('#keywords');
+			var ins_name=$('#ins_name');
+			var type=$('#type option:selected');
+			//执行重载
+			table.reload('agent_list', {
+				page: {
+					curr: 1 //重新从第 1 页开始
+				}
+				,url:"{:url('settlement/agent_settlement')}"
+				,where: {
+					keywords:keywords.val(),
+					start_time:start_time.val(),
+					end_time:end_time.val(),
+					ins_name:ins_name.val(),
+					type:type.val()
+				}
+			});
+		}
+	};
+	//提交
+	$('#layui-search-btn').on('click', function(){
+		var type = $(this).data('type');
+		active[type] ? active[type].call(this) : '';
+		//$('#ins_name').val('');
+	});
+	//重置
+	$('#layui-reset-btn').click(function(){
+		$('input[type="text"]').val('');
+		tableIn.reload();
+	});
+
+	//导出
+	$('#layui-export-btn').click(function(){
+		var keywords=$("#keywords").val();
+		var type=$('#type').val();
+		var update_time_start1=$("#reg_start_time").val();
+		var update_time_end1=$("#reg_end_time").val();
+		var ins_name=$("#ins_name").val();
+		url = "/admin/settlement/agent_settlement.html?export=1&keywords="+keywords+"&type="+type+"&start_time="+update_time_start1+"&end_time="+update_time_end1+"&ins_name="+ins_name;
+		console.log(url);
+		window.location.href=url;
+	});
+
+    //机构弹窗
+	$('#ins_name').click(function(){
+		$('#ins_name').val('');
+		sessionStorage.removeItem('nodes');
+		layer.open({
+			type: 2,
+			title:'选择代理',
+			area: ['650px', '500px'],
+			content: "{:url('agent/agentInfo')}"
+			,closeBtn:2
+			,btnAlign: 'c'
+			,cancel: function(index, layero){ 
+				//右上角关闭回调
+				var nodes=sessionStorage.getItem('nodes');
+				if(sessionStorage.getItem('nodes')==''||sessionStorage.getItem('nodes')==null){
+					$('#ins_name').val('');
+					layer.close(index);
+				}else{
+					var new_nodes=nodes.split(',');
+					var new_str=[];
+					for(var i=0;i<new_nodes.length;i++){
+						if(new_nodes[i].indexOf('-')>0){
+						  var arr=new_nodes[i].split('-');
+						  new_str.push(arr[1]);
+						}
+					}
+					$('#ins_name').val(new_str);
+					layer.close(index);
+				}
+			}
+		}); 
+	});
+    
+        
+  });
+</script>
+</body>
+</html>

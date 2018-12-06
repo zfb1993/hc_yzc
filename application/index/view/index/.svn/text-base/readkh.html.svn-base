@@ -1,0 +1,256 @@
+{extend name="static/assets/base.html" /}{block name="title"}
+<title>阅读协议</title>{/block} {block name="style"}
+<style>
+	.weui-cells {
+		font-size: 14px;
+		color: inherit;
+		border-bottom: transparent;
+	}
+
+	.weui-cell {
+		background: transparent;
+	}
+
+
+	.weui-popup__container .weui-btn_close i {}
+
+	.weui-popup__container .weui-btn_close {
+		z-index: 99999;
+		bottom: 10px;
+	}
+
+	.weui-article .weui-body {
+		padding: 10px;
+		margin: 15px;
+		height: 83%;
+		overflow: auto;
+		background: #303849;
+		margin-top: 0;
+		text-align: justify;
+	}
+
+	.flow_bd {
+		padding: 10px 20px;
+		margin-top: 3rem;
+	}
+
+	.flow .flow_bd {
+		display: -ms-flexbox;
+		display: flex;
+		-ms-flex-pack: justify;
+		justify-content: space-between;
+		-ms-flex-align: center;
+		align-items: center;
+	}
+
+	.flow .flow_bd .flow_li {
+		position: relative;
+		width: 10px;
+		height: 10px;
+		z-index: 1;
+	}
+
+	.flow .flow_bd .flow_li .flow_state {
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 10px;
+		height: 10px;
+		font-size: 10px;
+		line-height: 10px;
+		text-align: center;
+		color: #303849;
+		border-radius: 10px;
+		box-sizing: border-box;
+		background-color: #f2f2f2;
+		box-shadow: 0 0 0 0.17rem #303849;
+	}
+
+	.flow .flow_bd .flow_li.flow_li_done .flow_state {
+		background: #ff8c19;
+		box-shadow: 0 0 0 0.17rem #ff8c19;
+	}
+
+	.flow .flow_bd .flow_li .flow_title-bottom {
+		position: absolute;
+		top: -25px;
+		left: 50%;
+		transform: translate(-50%);
+		font-size: 12px;
+		white-space: nowrap;
+		text-align: center;
+		color: #303849;
+	}
+
+	.flow .flow_bd .flow_li.flow_li_done .flow_title-bottom {
+		color: #ff8c19;
+		font-weight: 600;
+	}
+
+	.flow .flow_bd .flow_line {
+		-ms-flex: 1;
+		flex: 1;
+		background-color: #43434b;
+		height: .04rem;
+		position: relative;
+	}
+
+	.flow .flow_bd .flow_line .flow_process {
+		display: none;
+		background-color: #ff8c19;
+		height: .04rem;
+		position: relative;
+	}
+
+	.flow .flow_bd .flow_line.flow_line_ing .flow_process {
+		display: block;
+		width: 100%;
+	}
+
+	.flow .flow_bd .flow_line {
+		-ms-flex: 1;
+		flex: 1;
+		background-color: #43434b;
+		height: .04rem;
+		position: relative;
+	}
+</style>
+
+{/block} {block name="body"}
+<div class="weui-content">
+	<div data-v-c0d2f088="" class="flow" style="padding: 0px 0.826667rem 0.773333rem; margin-top: 1rem;">
+		<div class="flow_bd">
+			<div data-v-c0d2f088="" class="flow_li flow_li_done">
+				<div class="flow_state"></div>
+				<p class="flow_title-bottom">选择类型</p>
+			</div>
+			<div data-v-c0d2f088="" class="flow_line flow_line_ing">
+				<div class="flow_process"></div>
+			</div>
+			<div data-v-c0d2f088="" class="flow_li flow_li_done">
+				<div class="flow_state"></div>
+				<p class="flow_title-bottom">风险评估</p>
+			</div>
+			<div data-v-c0d2f088="" class="flow_line flow_line_ing">
+				<div class="flow_process"></div>
+			</div>
+			<div data-v-c0d2f088="" class="flow_li">
+				<div class="flow_state"></div>
+				<p class="flow_title-bottom">申请开户</p>
+			</div>
+			<div data-v-c0d2f088="" class="flow_line">
+				<div class="flow_process"></div>
+			</div>
+			<div data-v-c0d2f088="" class="flow_li">
+				<div class="flow_state"></div>
+				<p class="flow_title-bottom">成功开户</p>
+			</div>
+		</div>
+	</div>
+	<div class="weui-cells">
+		<div class="weui-cell" id="btn1">
+			<div class="weui-cell__hd">
+				<p>《投顾协议》</p>
+			</div>
+		</div>
+		<div class="weui-cell" id="btn2">
+			<div class="weui-cell__hd">
+				<p>《风险揭示书》</p>
+			</div>
+		</div>
+		<div class="weui-cell" id="btn3">
+			<div class="weui-cell__hd">
+				<p>《交易风控规则》</p>
+			</div>
+		</div>
+	</div>
+	<!-- <div class="weui-cells weui-cells_checkbox" style="margin-top: 20px;">
+		<label class="weui-cell weui-check__label weui-mini" for="xieyi">
+			<div class="weui-cell__hd" style="width: 100%;">
+				<input id="xieyi" type="checkbox" class="weui-check" name="checkbox">
+				<i class="weui-icon-checked"></i>
+				<span style="font-size: 11px;color: #d8d8d8;">我已阅读并接受
+					<a href="/index/index/hezuo" style="color: #00b6ff;">以上三款协议</a>
+				</span>
+			</div>
+		</label>
+	</div> -->
+	<a id="kaihu" class="weui-btn weui-btn_ ">我已阅读并接受以上三款协议</a>
+</div>
+<div id="xy1" style="z-index: 9999;" class='weui-popup__container'>
+	<div class="weui-popup__modal">
+		<div class="weui-header" style="color:white;">
+			<h2>《投顾协议》</h2>
+		</div>
+		<article class="weui-article">
+			<div class="weui-body">
+				协议内容
+			</div>
+		</article>
+		<a href="javascript:;" class="weui-btn_close close-popup">
+			<i class="iconfont icon-cha"></i>
+		</a>
+	</div>
+</div>
+<div id="xy2" style="z-index: 9999;" class='weui-popup__container'>
+	<div class="weui-popup__modal">
+		<div class="weui-header" style="color:white;">
+			<h2>《风险揭示书》</h2>
+		</div>
+		<article class="weui-article">
+			<div class="weui-body">
+				协议内容
+			</div>
+		</article>
+		<a href="javascript:;" class="weui-btn_close close-popup">
+			<i class="iconfont icon-cha"></i>
+		</a>
+	</div>
+</div>
+<div id="xy3" style="z-index: 9999;" class='weui-popup__container'>
+	<div class="weui-popup__modal">
+		<div class="weui-header" style="color:white;">
+			<h2>《交易风控规则》</h2>
+		</div>
+		<article class="weui-article">
+			<div class="weui-body">
+				协议内容
+			</div>
+		</article>
+		<a href="javascript:;" class="weui-btn_close close-popup">
+			<i class="iconfont icon-cha"></i>
+		</a>
+	</div>
+</div>
+{/block}{block name="script"}
+<script>
+	$(function () {
+		$("#btn1").on("click", function () {
+			$("#xy1").popup();
+		});
+		$("#btn2").on("click", function () {
+			$("#xy2").popup();
+		});
+		$("#btn3").on("click", function () {
+			$("#xy3").popup();
+		});
+		$("#kaihu").on("click", function () {
+			/* if (!$("#xieyi").is(":checked")) {
+				$.alert("请阅读并同意注册协议书");
+				return false;
+			} */
+			$.post("/index/otherapi/openAccount", {
+				userid: localStorage.id,
+				auth: localStorage.auth
+			}, function (_d) {
+				$.alert(_d['msg'], function () {
+					if (_d['code'] == 1) {
+						location.href = "/index/index/mine";
+					} else if (_d['code'] == -2) {
+						location.href = "/index/index/verify";
+					}
+				});
+			});
+		});
+	});
+</script> {/block}

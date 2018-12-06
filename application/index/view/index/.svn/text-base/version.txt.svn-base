@@ -1,0 +1,24 @@
+M1156010 v10.3 2017.12.25
+
+更新问题：1.插件中的返回头部按钮无法
+	  2.手机端图片不能自适应高度
+
+更新文件：min/css/metinfo.css
+	  min/css/metinfos.css
+	  min/js/metinfo.css.js
+	  min/js/metinfos.css.js
+
+
+M1156010 v10.2 2017.12.15
+
+更新问题：产品后台没有发布人文本框，前台一直显示admin
+
+更新文件：modular/showproduct/head.php
+
+M1156010 v10.1 2017.11.28
+
+更新内容：产品详情页展示方式设置为时尚模式时，只要内容超过一页，产品标题导航就会随着内容浏览往下掉
+
+更新文件：cache/metinfo.js
+	  min/js/metinfo.css.js
+	  min/js/metinfos.css.js

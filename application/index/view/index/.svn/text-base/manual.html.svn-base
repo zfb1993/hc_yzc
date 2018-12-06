@@ -1,0 +1,342 @@
+{extend name="static/assets/base.html" /} {block name="title"}
+<title>人工询价</title>{/block} {block name="style"}
+<style>
+    .iconfont {
+        font-size: 20px;
+    }
+
+    #div_items {
+        position: absolute;
+        width: 55%;
+        top: 80%;
+        left: 5%;
+    }
+</style>
+{/block}{block name="back"}{/block} {block name="body"}
+<div class="weui-content">
+    <div class="weui-buttons">
+        <a href="/index/index/manual" data-tab="all" class="weui-grid weui-grid-2 active">
+            <h2 id="total">
+                <i class="iconfont icon-shougongdingdan"></i>
+            </h2>
+            <p class="weui-grid__label">
+                组合询价
+            </p>
+        </a>
+        <a href="/index/index/inquiry_list" data-tab="all" class="weui-grid weui-grid-2 ">
+            <h2>
+                <i class="iconfont icon-xunjia"></i>
+            </h2>
+            <p class="weui-grid__label">
+                询价列表
+            </p>
+        </a>
+    </div>
+    <div class="weui-body" style="margin-bottom: 56.6px;">
+        <!-- <div class="_wells">
+                <div class="_well">
+                    <div class="title">
+                         标的股票
+                    </div>
+                    <div class="body">
+                        <p>
+                            <input class="weui-input" id="clubName" placeholder="请输入股票代码" type="text">
+                        </p>
+                        <p class="note">当前价：
+                            <span>1231元</span>
+                        </p>
+                    </div>
+                </div>
+            </div> -->
+        <div class="weui-cells">
+            <div class="weui-cell weui-cell_access" style="font-size: 14px;">
+                <div class="weui-cell__hd" style="text-align: center;">
+                    标的股票
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="code" placeholder="请输入股票代码" type="text">
+                    <div id="div_items">
+
+                    </div>
+                    <!-- <p class="note">当前价：
+                        <span id="zxj">--</span>
+                    </p> -->
+                </div>
+                <div class="weui-cell__ft">
+                    <a id="hangqing">行情</a>
+                </div>
+            </div>
+
+            <div class="weui-cell weui-cell_access" style="font-size: 14px;">
+                <div class="weui-cell__hd" style="text-align: center;">
+                    名义本金
+                </div>
+                <div class="weui-cell__bd">
+                    <input id="money" class="weui-input" placeholder="自定义金额50万起" pattern="[0-9]*" type="tel">
+                    <p id="moneys" style="text-align: left;padding:5px 25px;">
+                        <span data-money="50" class="select max active">50万</span>
+                        <span data-money="100" class="select max">100万</span>
+                        <span data-money="200" class="select max">200万</span>
+                    </p>
+                    <!-- <p style="text-align: left;margin: 5px 25px;">
+                        权利金：
+                        <span id="qlj">--</span>
+                    </p> -->
+                </div>
+            </div>
+
+            <div class="weui-cell weui-cell_access" style="font-size: 14px;">
+                <div class="weui-cell__hd" style="text-align: center;margin-top: -10px;">
+                    行权周期
+                </div>
+                <div class="weui-cell__bd">
+                    <p id="months" style="text-align: left;padding:5px 25px;">
+                        <span data-month="2" class="select min active">2周</span>
+                        <span data-month="4" class="select min">1月</span>
+                        <span data-month="8" class="select min">2月</span>
+                        <span data-month="12" class="select min">3月</span>
+                    </p>
+                </div>
+            </div>
+            <!-- <div class="weui-cell">
+                <div class="weui-cell__hd" style="text-align: center;">
+                    权利金比例 ：
+                    <span id="jljbl">--</span>
+                </div>
+            </div> -->
+            <div class="weui-cell">
+                <div class="weui-cell__hd" style="text-align: center;">
+                    行权方法 ： 100%
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd" style="text-align: center;">
+                    成交方法 ： 市价成交
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd" style="text-align: center;">
+                    组合期权 ：
+                    <a class="red" href="#">
+                        <u>《组合期权详细介绍》</u>
+                    </a>
+                </div>
+            </div>
+            <a id="searchbtn" class="weui-btn weui-btn_ ">
+                询 价</a>
+        </div>
+    </div>
+</div>
+
+<div class="dialog" style="display:none;">
+    <div class="content">
+        <div class="title">
+            询价结果
+            <span class="close">
+                <i class="iconfont icon-cha"></i>
+            </span>
+        </div>
+        <div class="item">
+            <div class="lf">
+                标的股价
+            </div>
+            <div id="stock" class="lr">
+                --
+            </div>
+        </div>
+        <div class="item">
+            <div class="lf">
+                名义本金
+            </div>
+            <div id="pmoney" class="lr red">
+                --
+            </div>
+        </div>
+        <div class="item">
+            <div class="lf">
+                行权周期
+            </div>
+            <div id='ptype' class="lr">
+                --
+            </div>
+        </div>
+        <div class="item">
+            <div class="lf">
+                预估权利金比例
+            </div>
+            <div id="qljbl" class="lr">
+                5.5% ~ 12.84%
+            </div>
+        </div>
+        <div class="item">
+            <div class="lf">
+                保证金
+            </div>
+            <div id="qlj" class="lr red">
+                2% ~ 5%
+            </div>
+        </div>
+        <div class="item">
+            <div class="lf">
+                组合期权
+            </div>
+            <div id="qlj" class="lr red">
+                <a class="red" href="#">
+                    <u>《组合期权详细介绍》</u>
+                </a>
+            </div>
+        </div>
+        <div class="item">
+            <a id="buy" class="weui-btn weui-btn_ weui-btn-block">申请人工询价</a>
+        </div>
+    </div>
+</div>
+{/block} {block name="script"}
+<script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/city-picker.min.js"></script>
+<script>
+    $.ajaxSetup({
+        cache: true
+    });
+    $(function () {
+        /* $.post("{:url('index/Api/createEnquiryOrder')}", { userid: localStorage.id, type: 2, money: 3000000, rate: 100, stock: "维维股份", stockID: '600300' }, function (_d) {
+            console.log(_d);
+        }, "JSON"); */
+
+        var ocr_stock = function (stock) {
+            var top = stock.substring(0, 1);
+            if (top == '0' || top == '2' || top == '4' || top == '8' || top == '3') {
+                return 'sz';
+            }
+            if (top == '6' || top == '9' || top == '5' || top == '7') {
+                return 'sh';
+            }
+            return 'error';
+        }
+        var datas = {};
+        $("#code").on('input', function (e) {
+            //http://suggest3.sinajs.cn/suggest/type=&key=60&name=so
+            //模糊搜索
+            console.log($("#code").val());
+            if ($("#code").val() == "") {
+                $("#div_items").fadeOut('fast');
+                return;
+            }
+            $.getScript("https://suggest3.sinajs.cn/suggest/type=2&key=" + $("#code").val() + "&name=socode", function () {
+                //console.log('socode', eval("socode"));
+                if (eval("socode") == '') {
+                    $.toptip('股票代码错误', 'warning');
+                    return;
+                }
+                datas.socode = eval("socode").split(";");
+                var html = '';
+                datas.socode.forEach(element => {
+                    var temparr = element.split(",");
+                    html += '<div data-code=' + temparr[2] + ' data-codename=' + temparr[4] + ' class="div_item"><span>' + temparr[3] + '</span><span>' + temparr[4] + '</span><span class="span_btn">选择</span></div>';
+                });
+                $("#div_items").html(html);
+                if (!$("#div_items").is(":visible")) {
+                    $("#div_items").fadeIn('fast');
+                }
+                $(".div_item").off().on("click", function (e) {
+                    var codename = $(e.currentTarget).data('codename');
+                    var code = $(e.currentTarget).data('code');
+                    $("#code").val(codename);
+                    datas.code = code;
+                    datas.codename = codename;
+                    $("#div_items").fadeOut('fast');
+                });
+            }).fail(function (jqxhr, settings, exception) {
+                $.alert("模糊搜索接口出错或网络错误！");
+            });
+
+        });
+        $("#code").blur(function () {
+            //$("#code").val($(".div_item").eq(0).data('codename'));
+            //datas.code = $(".div_item").eq(0).data('code');
+            //datas.codename = $(".div_item").eq(0).data('codename');
+            //setTimeout(function () { $("#div_items").fadeOut('fast'); }, 100);
+        });
+
+
+        $("#money").blur(function () {
+            var value = parseInt($(this).val());
+            if (value == null || value == '' || value < 10) {
+                value = 10;
+            }
+            var num = parseInt(value);
+            num = isNaN(num) ? 10 : (num - num % 10);
+            $(this).val(num);
+            $("#moneys span").removeClass("active");
+            datas.money = num * 10000;
+        });
+
+        datas.money = parseInt($("#moneys span.active").data("money")) * 10000;
+        $("#moneys span").on("click", function (e) {
+            $("#moneys span.active").removeClass("active");
+            $(e.currentTarget).addClass("active");
+            $("#money").val($(e.currentTarget).data("money"));
+            datas.money = parseInt($(e.currentTarget).data("money")) * 10000;
+        });
+        datas.month = $("#months span.active").data("month");
+        $("#months span").on("click", function (e) {
+            $("#months span.active").removeClass("active");
+            $(e.currentTarget).addClass("active");
+            datas.month = $(e.currentTarget).data("month");
+        });
+
+        $("#hangqing").on("click", function (e) {
+            if (datas.code == undefined) {
+                $.alert("请先搜索到股票再查看详情");
+                return;
+            }
+            window.location.href = '/index/selfstock/getstockklinedetail.html?stock_id=' + datas.code;
+        });
+
+
+
+
+
+        $("#searchbtn").on("click", function (e) {
+            console.log(datas);
+            if (datas.code == null) {
+                $.alert("标的股票没有输入"); return;
+            } else if (datas.money == null) {
+                $.alert("名义本金没有输入或选择"); return;
+            } else if (datas.month == null) {
+                $.alert("行权周期没有选择"); return;
+            }
+            $("#stock").html(datas['codename'] + '<span> ' + datas['code'] + '</span>');
+            $("#pmoney").html(datas['money']);
+            $("#ptype").html(datas.month + '周');
+            $(".dialog").fadeIn("fast");
+            $("#buy").off().on("click", function (e) {
+                ///index/Combinationapi/createEnquiryOrder
+                $.post("/index/Combinationapi/createEnquiryOrder", {
+                    userid: localStorage.id,
+                    auth: localStorage.auth,
+                    type: datas.month,
+                    money: datas.money,
+                    rate: 100,
+                    stockID: datas.code,
+                    stock: datas.codename
+                }, function (_d) {
+                    if (_d.code != 0) {
+                        $.alert(_d.msg, function () {
+                        });
+                        return;
+                    }
+                    $.alert(_d['msg'], function () {
+                        window.location.href = '/index/index/inquiry_list';
+                    });
+                }, "JSON");
+            });
+            $(".close").on("click", function (e) {
+                $(".dialog").off().fadeOut();
+            });
+        });
+
+
+
+
+    });
+</script> {/block}

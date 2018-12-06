@@ -1,0 +1,303 @@
+{extend name="static/assets/base.html" /}{block name="title"}
+<title>绑定账号</title>{/block} {block name="style"}
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
+<link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+	<style>
+		* {
+			padding: 0;
+			margin: 0;
+		}
+		i{
+			font-family: "iconfont" !important;
+			font-size:1.2rem !important;
+			font-style:normal;
+		}
+		em{
+			font-style:normal;
+			}
+		body {
+			width: 100%;
+			font-family: "微软雅黑";
+			font-size: 62.5%;
+			box-sizing: border-box;
+		}
+		.weui-bar__item--on{
+			color:#D13039 !important;
+		}
+		.weui-tabbar{background: #353c4d !important;}
+		.account{
+			color:#ccc;
+			line-height:1;
+			background:#fff;
+			padding:0.6rem 0 0.6rem 0.6rem;
+			font-size:0.8rem;
+			border-bottom:2px solid #eee;
+			}	
+		.accountb{
+			color:#ccc;
+			line-height:1;
+			background:#fff;
+			padding:0.6rem 0 0.6rem 0.6rem;
+			font-size:0.8rem;
+			border-bottom:2px solid #eee;
+			border-top:2px solid #eee;			
+		}
+        .table-m1{
+        	width:100%;
+        	padding:0.2rem 0;
+        	font-size:0.55rem;
+        	overflow-x:hidden;
+        	background:#fff;
+        	}
+        .table-m1>tbody>tr>td{
+        	text-align:center;
+        	color:#666;
+        	vertical-align:middle;
+        	line-height:1.2;
+        	width:25%;
+        	padding:6px 0 8px;
+        	}
+        .table-m1 tbody tr:nth-child(2n) td{
+        	border-bottom:1px dashed #eee;
+        	}
+        /*k线*/
+        .tttyer{
+        	-webkit-tap-highlight-color:transparent;
+        	user-select:none;
+        	position:relative; 
+        	background-color:transparent;
+        	}
+        .graph{}
+        .teeyu{margin:0 auto;}
+        canvas{
+        	background:skyblue;
+            position: absolute;
+            left: 0px; top: 0px; 
+            width: 355px; 
+            height: 320px;
+            user-select: none;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            }
+	</style>
+
+{/block} {block name="body"}
+		<div class="weui-content">
+			<div class="weui-tab">
+			    <div class="weui-navbar">
+				    <a class="weui-navbar__item weui-bar__item--on" href="#tab1">
+				      交易概况
+				    </a>
+				    <a class="weui-navbar__item" href="#tab2">
+				      净值分析
+				    </a>
+			    </div>
+			    <div class="weui-tab__bd">
+			    <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+			        <div class="account">账号概述</div>
+			        <table class="table-m1" cellspacing="0">
+			        	<tbody>
+			        		<tr>
+			        			<td>初始权益</td>
+			        			<td>2.26万元</td>
+			        			<td>起始日期</td>
+			        			<td>2014-04-02</td>
+			        		</tr>
+			        		<tr>
+			        			<td>最新权益</td>
+			        			<td>40.76万元</td>
+			        			<td>最新数据</td>
+			        			<td>2018-05-09</td>
+			        		</tr>
+			        		<tr>
+			        			<td>累计净值</td>
+			        			<td>2233.1046</td>
+			        			<td>累计手续费</td>
+			        			<td>403846.16元</td>
+			        		</tr>
+			        		<tr>
+			        			<td>累计净利润</td>
+			        			<td>
+			        				<em style="color:#f00">2643083.84</em>
+			        				<em style="color:#f00">元</em>
+			        			</td><td>交易周期</td>
+			        			<td>1464天</td>
+			        		</tr>
+			        		<tr>
+			        			<td>交易笔数（开仓、平仓）</td>
+			        			<td>63090.00笔</td>
+			        			<td>盈利笔数（平仓）</td>
+			        			<td>16064.00笔</td>
+			        		</tr>
+			        		<tr>
+			        			<td>亏损笔数（平仓）</td>
+			        			<td>16851.00笔</td>
+			        			<td>平均每笔盈利</td>
+			        			<td>
+			        				<em style="color:#f00">800.76</em>
+			        				<em style="color:#f00">元</em>
+			        			</td>
+			        		</tr>
+			        		<tr>
+			        			<td>平均每笔亏损</td>
+			        			<td>
+			        				<em style="color:#209d04">-615.45</em>
+			        				<em style="color:#209d04">元</em>
+			        			</td>
+			        			<td>平均每笔费用</td>
+			        			<td>6.30元</td>
+			        		</tr>
+			        		<tr>
+			        			<td>费用占比</td>
+			        			<td>0.14%</td>
+			        			<td>&nbsp;</td>
+			        			<td>&nbsp;</td>
+			        		</tr>
+			        	</tbody>
+			        </table>
+			        <div class="account">盈利能力</div>
+			        <table class="table-m1" cellspacing="0">
+			        	<tbody>
+			        		<tr>
+			        			<td>年化收益率</td>
+			        			<td>
+			        				<em style="color:#f00">249.79%</em>
+			        			</td>
+			        			<td>累计收益率</td>
+			        			<td>
+			        				<em style="color:#f00">1001.8825%</em>
+			        			</td>
+			        		</tr>
+			        		<tr>
+			        			<td>当日收益率</td>
+			        			<td>
+			        				<em style="color:#209d04">-1.0127%</em>
+			        			</td>
+			        			<td>7日收益率</td>
+			        			<td>
+			        				<em style="color:#f00">0.8825%</em>
+			        			</td>
+			        		</tr>
+			        		<tr>
+			        			<td>30日收益率</td>
+			        			<td>
+			        				<em style="color:#f00">68.8825%</em>
+			        			</td>
+			        			<td>胜率</td>
+			        			<td>48.78%</td>
+			        		</tr>
+			        		<tr>
+			        			<td>盈亏比</td>
+			        			<td>1.24:1</td>
+			        			<td>连续盈利天数</td>
+			        			<td>12天</td>
+			        		</tr>
+			        		<tr>
+			        			<td>连续亏损天数</td>
+			        			<td>13天</td>
+			        			<td>&nbsp;</td>
+			        			<td>&nbsp;</td>
+			        		</tr>
+			        	</tbody>
+			        </table>
+			        <div class="account">稳定性</div>
+			        <table class="table-m1" cellspacing="0">
+			        	<tbody>
+			        		<tr>
+			        			<td>最大回撤率</td>
+			        			<td>66.00%</td>
+			        			<td>日最大赢利额</td>
+			        			<td>
+			        				<em style="color:#f00">199219.42</em>
+			        				<em style="color:#f00">元</em>
+			        			</td>
+			        		</tr>
+			        		<tr>
+			        			<td>日最大亏损额</td>
+			        			<td>
+			        				<em style="color:#209d04">-98140.89</em>
+			        				<em style="color:#209d04">元</em>
+			        			</td>
+			        			<td>&nbsp;</td>
+			        			<td>&nbsp;</td>
+			        		</tr>
+			        	</tbody>
+			        </table>
+			        <div class="account">历史交易记录</div>
+			    </div>
+			    <div id="tab2" class="weui-tab__bd-item">
+			        <div class="accountb">累计净值</div>
+			        <div class="graph chartField tttyer" id="total_nav">
+			        	<div class="teeyu" style="position: relative; overflow: hidden; width: 355px; height: 320px;">
+			        		<canvas width="710" height="640" data-zr-dom-id="zr_0">
+			        			画布1
+			        		</canvas>
+			        	</div>
+			        	<div style="display: none;">
+			        		
+			        	</div>
+			        </div>
+			        <div class="accountb">盈亏曲线图</div>
+			        <div class="graph chartField tttyer" id="total_nav">
+			        	<div class="teeyu" style="position: relative; overflow: hidden; width: 355px; height: 320px;">
+			        		<canvas width="710" height="640" data-zr-dom-id="zr_0">
+			        			画布2
+			        		</canvas>
+			        	</div>
+			        	<div style="display: none;">
+			        		
+			        	</div>
+			        </div>
+			        <div class="accountb">周盈亏</div>
+			        <div class="graph chartField tttyer" id="total_nav">
+			        	<div class="teeyu" style="position: relative; overflow: hidden; width: 355px; height: 320px;">
+			        		<canvas width="710" height="640" data-zr-dom-id="zr_0">
+			        			画布3
+			        		</canvas>
+			        	</div>
+			        	<div style="display: none;">
+			        		
+			        	</div>
+			        </div>
+			        <div class="accountb">月盈亏</div>
+			        <div class="graph chartField tttyer" id="total_nav">
+			        	<div class="teeyu" style="position: relative; overflow: hidden; width: 355px; height: 320px;">
+			        		<canvas width="710" height="640" data-zr-dom-id="zr_0">
+			        			画布4
+			        		</canvas>
+			        	</div>
+			        	<div style="display: none;">
+			        		
+			        	</div>
+			        </div>
+			        <div class="accountb">成交结构</div>
+			        <div class="graph chartField tttyer" id="total_nav">
+			        	<div class="teeyu" style="position: relative; overflow: hidden; width: 355px; height: 320px;">
+			        		<canvas width="710" height="640" data-zr-dom-id="zr_0">
+			        			画布5
+			        		</canvas>
+			        	</div>
+			        	<div style="display: none;">
+			        		
+			        	</div>
+			        </div>
+			        <div class="accountb">隔夜习惯</div>
+			        <div class="graph chartField tttyer" id="total_nav">
+			        	<div class="teeyu" style="position: relative; overflow: hidden; width: 355px; height: 320px;">
+			        		<canvas width="710" height="640" data-zr-dom-id="zr_0">
+			        			画布6
+			        		</canvas>
+			        	</div>
+			        	<div style="display: none;">
+			        		
+			        	</div>
+			        </div>
+			    </div>
+			  </div>
+			</div>
+		</div>
+{/block}{block name="script"}
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/jquery-weui.min.js"></script>
+<script src="/static/assets/jscode/login.bundle.js"></script> {/block}{block name="checkLogin"}{/block}

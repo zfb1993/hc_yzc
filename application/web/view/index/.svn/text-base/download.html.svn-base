@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="generator" content="">
+    <title>软件下载</title>
+
+    <link href="/web/style.css" rel="stylesheet" type="text/css">
+    <link href="/web/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="/web/css.css" rel="stylesheet" type="text/css">
+    <link href="/web/index.css" rel="stylesheet" type="text/css">
+    <link href="/web/lrtk.css" rel="stylesheet" type="text/css">
+
+    <script type="text/javascript" src="/web/jquery.min.js"></script>
+    <script type="text/javascript" src="/web/global.js"></script>
+    <script type="text/javascript" src="/web/slide_show.js"></script>
+    <script src="/web/lrtk.js" type="text/javascript"></script>
+    <script src="/web/js.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="top">
+            <div class="wrap">
+                <ul class="userTop">
+                    <!--a>客服热线：$site.tel}</a-->
+                </ul>
+                <ul class="topNav">
+                    <li>
+                        <a href="#">登录</a>
+                        <a href="#">注册</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="header">
+            <div class="wrap">
+                <ul class="logo">
+                    <a href="index.html">
+                        <img style="width:270px; margin-top:10px; margin-bottom:10px;margin-left:30px;" src="/web/logo.png">
+                    </a>
+                </ul>
+                <div class="nav-bar"></div>
+                <ul style="margin-top:5px;" class="p_nav">
+                    <li class="cur">
+                        <a href="index.html" class="first">首页</a>
+                    </li>
+                    <li>
+                        <a href="futures.html">国内期货</a>
+                    </li>
+                    <li>
+                        <a href="rules.html">交易规则</a>
+                    </li>
+                    <li>
+                        <a href="about.html">关于我们</a>
+                    </li>
+                    <li>
+                        <a href="download.html">软件下载</a>
+                    </li>
+                    <li>
+                        <a href="service.html">客戶服务</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div align="center" style="font-size:18px">提示：富期通是一家可提供给操盘手优质服务的平台，并非属于任何一家期货公司的子公司，请各操盘手在进行操盘之前仔细阅读本平台的风险揭示书及交易规则，任何操盘以本平台信息为准！</div>
+        <!-- 中间数字部分 -->
+        <img style="width:100%" src="/web/banner01.jpg">
+
+        <!-- 中间数字部分 -->
+        <div class="news_ly">
+
+            <div style="height:220px; border-bottom:15px solid #f3f3f3; border-top:25px solid #f3f3f3;" class="news_ly_nav news_ly_nav2">
+                <div style=" height:0px" class="news_ly_nav_nr">
+                    <div class="news_ly_nav_nr_1">
+                        <div class="news_ly_nav_nr_top">软件介绍
+                            <p>您現在的位置：
+                                <a href="index.html">首頁</a> &gt;
+                                <a>软件下载</a>
+                            </p>
+                        </div>
+                        <div class="news_ly_nav_nr_nav" style="height:500px">
+                            <p style="text-align:left;font-size:20px;border-bottom:1px dashed black; padding-bottom:10px;">
+                                <font face="宋体"></font>交易软件采用博易大师标准版本，保障交易的顺畅性；上海博易大师软件有限公司是中国领先的
+                                <br>期货软件和期货信息服务提供商。旗下核心企业最早创立于2000年，是国家认定的软件企业和高新技术企业。
+                            </p>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="news_ly">
+
+            <div style="height:320px;" class="news_ly_nav news_ly_nav2">
+                <div style=" height:500px" class="news_ly_nav_nr">
+                    <div class="news_ly_nav_nr_1">
+                        <div class="news_ly_nav_nr_top">软件下载
+                            <p>您現在的位置：
+                                <a href="index.html">首頁</a>
+                                &gt;
+                                <a>软件下载</a>
+                            </p>
+                        </div>
+                        <div class="news_ly_nav_nr_nav" style="height:500px">
+                            <p style="text-align:center;font-size:20px;border-bottom:1px dashed black;line-height:80px;">
+                                <font face="宋体"></font>麒麟博易大师&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                4.88MB &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="http://www.qlyzg.com/upload/%E9%BA%92%E9%BA%9F%E5%8D%9A%E6%98%93%E5%A4%A7%E5%B8%88.exe">点击下载</a>
+                            </p>
+                            <p style="text-align:center;font-size:20px;border-bottom:1px dashed black;line-height:80px;">
+                                <font face="宋体"></font>麒麟闪电王　&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                3.94MB &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="http://www.qlyzg.com/upload/%e9%ba%92%e9%ba%9f%e9%97%aa%e7%94%b5%e7%8e%8b.exe">点击下载</a>
+                            </p>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div style="height:390px; padding-bottom:20px; border-bottom:15px solid #f3f3f3; border-top:25px solid #f3f3f3;" class="news_ly_nav news_ly_nav2">
+                <div style=" height:500px" class="news_ly_nav_nr">
+                    <div class="news_ly_nav_nr_1">
+                        <div class="news_ly_nav_nr_top">手机软件下载
+                            <p>您現在的位置：
+                                <a href="http://www.fuqitong18.com/">首頁</a> &gt;
+                                <a>软件下载</a>
+                            </p>
+                        </div>
+                        <div class="news_ly_nav_nr_nav" style="height:500px">
+                            <p style="text-align:left;font-size:20px;border-bottom:1px dashed black; padding-bottom:10px;">
+                                <font face="宋体"></font>
+                                <img style="margin-top:-20px; margin-bottom:20px;" src="/web/erweima.png">掌上财富是手机期货系统的创新与领先者，为期货投资者提供全方位的国内期货行情、外盘实时行情、期货交易、银期转账、期货日报、财经资讯等服务，以支持国内120多家期货公司实时在线交易。
+                            </p>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 首页 bottom start -->
+        <div class="bottom">
+            <div class="bottom_a">
+                <div class="bottom_a_left">
+                    <ul>
+                        <li>
+                            <p class="bottom_a_left_font">
+                                <a>期貨交易</a>
+                            </p>
+                            <a href="tencent://message/?uid=2066604037&amp;Site=&amp;Menu=yes" target="_blank" class="down-load">线上咨询</a>
+                            <br>
+                            <a href="download">软件下載</a>
+                            <br>
+                            <a href="futures">期货品种</a>
+
+                        </li>
+                        <li>
+                            <p class="bottom_a_left_font">
+                                <a>了解我们</a>
+                            </p>
+                            <a href="about">关于我们</a>
+                            <br>
+                            <a href="service">联系我们</a>
+                            <br>
+                            <a href="news">最新公告</a>
+
+                        </li>
+                        <li>
+                            <p class="bottom_a_left_font">
+                                <a>条款声明</a>
+                            </p>
+                            <a href="important">特别声明</a>
+                            <br>
+                            <a href="kehu.html">服务条款</a>
+                            <br>
+                            <a href="disclaimer">免则声明</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bottom_a_xian"></div>
+                <div class="bottom_a_nav">
+                    <img style="margin-top:-20px;" src="http://www.fuqitong18.com/public/image/erweima.png">
+                </div>
+
+                <div class="bottom_a_right">
+                    <div class="bottom_btn">
+                        <a href="http://wpa.qq.com/msgrd?v=3&uin=2066604037&site=qq&menu=yes" target="_blank" class="down-load">线上咨询服务</a>
+                    </div>
+                    <div class="bottom_a_right_font">交易日（周一至周五）08:30-23:30</div>
+                    <div <div class="bottom_a_right_font">我们提醒您：期货有风险，投资需谨慎！市场风险莫测，务请谨慎行事！</div>
+                </div>
+            </div>
+
+            <style>
+                .youqing_bg {
+                    width: 100%;
+                    margin: 0 auto;
+                    background-color: #333333;
+                    padding: 20px 0;
+                }
+
+                .youqing_bg .youqing {
+                    width: 1000px;
+                    margin: 0 auto;
+                }
+
+                .youqing_bg .youqing li {
+                    color: #ccc;
+                    float: left;
+                    margin-left: 3%;
+                    ;
+                    font-size: 14px;
+                    line-height: 25px;
+                }
+
+                .youqing_bg .youqing a {
+                    color: #ccc;
+                    font-size: 14px;
+                    line-height: 25px;
+                }
+
+                .youqing_bg .youqing a:hover {
+                    color: white;
+                }
+            </style>
+            <div class="youqing_bg">
+                <ul class="youqing">
+                    <li style="margin-left:0">友情链接：</li>
+                    <li style="margin-left:0">
+                        <a href="http://www.ine.com.cn/" target="_blank">上海国际能源交易中心</a>
+                    </li>
+                    <li>
+                        <a href="http://www.shfe.com.cn/" target="_blank">上海期货交易所</a>
+                    </li>
+                    <li>
+                        <a href="http://www.czce.com.cn/portal/index.htm" target="_blank">郑州商品交易所</a>
+                    </li>
+                    <li>
+                        <a href="http://www.dce.com.cn/" target="_blank">大连商品交易所</a>
+                    </li>
+                    <li>
+                        <a href="http://www.cffex.com.cn/" target="_blank">中国金融期货交易所</a>
+                    </li>
+                    <li>
+                        <a href="http://www.hkex.com.hk/?sc_lang=en" target="_blank">香港交易所</a>
+                    </li>
+                    <li>
+                        <a href="http://www.sse.com.cn/" target="_blank">上海证券交易所</a>
+                    </li>
+                    <li style="margin-left:0">
+                        <a href="http://www.szse.cn/" target="_blank">期货日报</a>
+                    </li>
+                    <li>
+                        <a href="http://www.10jqka.com.cn/" target="_blank">同花顺</a>
+                    </li>
+                    <li>
+                        <a href="http://www.cfachina.org/" target="_blank">中国期货业协会</a>
+                    </li>
+                    <li>
+                        <a href="http://www.xfn.com/en/home/index.htm" target="_blank">新华财经</a>
+                    </li>
+                    <li>
+                        <a href="http://www.amm.com/" target="_blank">美国金属市场</a>
+                    </li>
+                    <li>
+                        <a href="https://www.smm.cn/" target="_blank">上海有色网</a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="footer ">
+                <div class="footer_a">
+                    <span>　　　　　　　　　　　　　　　　　　　　湖南正奇万合资产管理有限公司 -- Copyright &copy; 2018 All Rights Reserved </span>
+                </div>
+            </div>
+            <script src="/web/app.js?v=1.1"></script>
+</body>
+
+</html>

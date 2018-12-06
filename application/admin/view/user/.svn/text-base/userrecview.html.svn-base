@@ -1,0 +1,265 @@
+{include file="common/head"/}
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+  <div class="layui-padded-15">
+    <blockquote class="layui-elem-quote layui-text layui-margin-b-20">
+        <h3>当前位置：用户管理 > <a href="{:url('user/userrecord')}">用户业绩</a> > 查看记录</h3>
+    </blockquote>
+    <fieldset class="layui-elem-field layui-field-title layui-margin-t-20">
+        <legend>账号：<span class="layui-tab-tit">{$list.username}</span> 姓名：<span class="layui-tab-tit">{$list.realname}</span> 等级：<span class="layui-tab-tit">{$list.level}</span></legend>
+    </fieldset>
+    <div class="layui-tab layui-tab-card">
+      <ul class="layui-tab-title">
+        <li class="layui-this">编辑任务</li>
+        <li>审核任务</li>
+      </ul>
+      <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">
+          <!--编辑任务内容区-->
+           <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <ul class="layui-tab-title">
+              <li class="layui-this">进行中</li>
+              <li>已完成</li>
+            </ul>
+            <div class="layui-tab-content">
+              <div class="layui-tab-item layui-show">
+                <!--进行中-->
+                  <div class="layui-form">
+                    <table class="layui-table" lay-even="" lay-skin="row">
+                      <colgroup>
+                        <col width="60">
+                        <col width="240">
+                        <col width="100">
+                        <col width="180">
+                        <col width="180">
+                        <col>
+                      </colgroup>
+                      <thead>
+                        <tr>
+                          <th>序号</th>
+                          <th>书籍及单元</th>
+                          <th>状态</th>
+                          <th>开始时间</th>
+                          <th>结束时间</th>
+                          <th>操作</th>
+                        </tr> 
+                      </thead>
+                      <tbody>
+                        {volist name="edittask" id="vo" key="i"}
+                        <tr>
+                          <td>{$i}</td>
+                          <td>{$vo.books}</td>
+                          <td>
+                            {switch name="$vo.state"}
+                              {case value="editing"}编辑中{/case}
+                              {case value="waiting"}等待审核{/case}
+                              {case value="checking"}审核中{/case}
+                              {case value="checked"}审核未通过{/case}
+                            {/switch}
+                          </td>
+                          <td>{$vo.start_time|date="Y-m-d H:i:s",###}</td>
+                          <td>{if condition="$vo.finish_time!=NULL"}{$vo.finish_time|date="Y-m-d H:i:s",###}{/if}</td>
+                          <td>
+                            <a href="{:url('user/userTaskView')}" class="layui-action-bg" title="查看"><i class="fa fa-eye" aria-hidden="true"></i><span> 查看</span></a>
+                          </td>
+                        </tr>
+                       {/volist} 
+                      </tbody>
+                    </table>  
+                  </div>
+              </div>
+              <div class="layui-tab-item">
+                <!--已完成-->
+                <div class="layui-form">
+                    <table class="layui-table" lay-even="" lay-skin="row">
+                      <colgroup>
+                        <col width="60">
+                        <col width="240">
+                        <col width="100">
+                        <col width="180">
+                        <col width="180">
+                        <col>
+                      </colgroup>
+                      <thead>
+                        <tr>
+                          <th>序号</th>
+                          <th>书籍及单元</th>
+                          <th>反工</th>
+                          <th>开始时间</th>
+                          <th>完成时间</th>
+                          <th>操作</th>
+                        </tr> 
+                      </thead>
+                      <tbody>
+                        {volist name="endtask" id="vo" key="k"}
+                        <tr>
+                            <td>{$k}</td>
+                            <td>{$vo.books}</td>
+                            <td>{$vo.redo_num}次</td>
+                            <td>{$vo.start_time|date="Y-m-d H:i:s",###}</td>
+                            <td>{$vo.finish_time|date="Y-m-d H:i:s",###}</td>
+                            <td>
+                              <a href="{:url('user/userTaskEnd')}" class="layui-action-bg" title="查看"><i class="fa fa-eye" aria-hidden="true"></i><span> 查看</span></a>
+                            </td>
+                        </tr>
+                        {/volist}
+                        
+                      </tbody>
+                    </table>  
+                  </div>
+
+              </div>
+            </div>
+          </div> 
+
+        </div>
+        <div class="layui-tab-item">
+          <!--审核任务内容区-->
+          <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <ul class="layui-tab-title">
+              <li class="layui-this">进行中</li>
+              <li>已完成(未通过)</li>
+              <li>已完成(通过)</li>
+            </ul>
+            <div class="layui-tab-content">
+              <div class="layui-tab-item layui-show">
+                <!--进行中-->
+                  <div class="layui-form">
+                    <table class="layui-table" lay-even="" lay-skin="row">
+                      <colgroup>
+                        <col width="60">
+                        <col width="240">
+                        <col width="180">
+                        <col width="180">
+                        <col>
+                      </colgroup>
+                      <thead>
+                        <tr>
+                          <th>序号</th>
+                          <th>书籍及单元</th>
+                          <th>开始时间</th>
+                          <th>结束时间</th>
+                          <th>操作</th>
+                        </tr> 
+                      </thead>
+                      <tbody>
+                        {volist name="checking" id="vo" key="x"}
+                        <tr>
+                          <td>{$x}</td>
+                          <td>{$vo.books}</td>
+                          <td>{$vo.start_time|date="Y-m-d H:i:s",###}</td>
+                          <td>{if condition="$vo.finish_time!=NULL"}{$vo.finish_time|date="Y-m-d H:i:s",###}{/if}</td>
+                          <td>
+                            <a href="{:url('user/userTaskView')}" class="layui-action-bg" title="查看"><i class="fa fa-eye" aria-hidden="true"></i><span> 查看</span></a>
+                          </td>
+                        </tr>
+                        {/volist}
+                      </tbody>
+                    </table>  
+                  </div>
+              </div>
+              <div class="layui-tab-item">
+                <!--已完成(未通过)-->
+                <div class="layui-form">
+                    <table class="layui-table" lay-even="" lay-skin="row">
+                      <colgroup>
+                        <col width="60">
+                        <col width="240">
+                        <col width="180">
+                        <col width="180">
+                        <col>
+                      </colgroup>
+                      <thead>
+                        <tr>
+                          <th>序号</th>
+                          <th>书籍及单元</th>
+                          <th>开始时间</th>
+                          <th>完成时间</th>
+                          <th>操作</th>
+                        </tr> 
+                      </thead>
+                      <tbody>
+                        {volist name="unpass" id="vo" key="y"}
+                        <tr>
+                          <td>{$y}</td>
+                          <td>{$vo.books}</td>
+                          <td>{$vo.start_time|date="Y-m-d H:i:s",###}</td>
+                          <td>{$vo.finish_time|date="Y-m-d H:i:s",###}</td>
+                          <td>
+                            <a href="{:url('user/userTaskView')}" class="layui-action-bg" title="查看"><i class="fa fa-eye" aria-hidden="true"></i><span> 查看</span></a>
+                          </td>
+                        </tr>
+                        {/volist}
+                      </tbody>
+                    </table>  
+                  </div>
+
+              </div>
+              <div class="layui-tab-item">
+                <!--已完成(通过)-->
+                <div class="layui-form">
+                    <table class="layui-table" lay-even="" lay-skin="row">
+                      <colgroup>
+                        <col width="60">
+                        <col width="240">
+                        <col width="180">
+                        <col width="180">
+                        <col>
+                      </colgroup>
+                      <thead>
+                        <tr>
+                          <th>序号</th>
+                          <th>书籍及单元</th>
+                          <th>开始时间</th>
+                          <th>完成时间</th>
+                          <th>操作</th>
+                        </tr> 
+                      </thead>
+                      <tbody>
+                        {volist name="pass" id="vo" key="z"}
+                        <tr>
+                          <td>{$z}</td>
+                          <td>{$vo.books}</td>
+                          <td>{$vo.start_time|date="Y-m-d H:i:s",###}</td>
+                          <td>{$vo.finish_time|date="Y-m-d H:i:s",###}</td>
+                          <td>
+                            <a href="{:url('user/userTaskView')}" class="layui-action-bg" title="查看"><i class="fa fa-eye" aria-hidden="true"></i><span> 查看</span></a>
+                          </td>
+                        </tr>
+                        {/volist}
+                      </tbody>
+                    </table>  
+                  </div>
+
+              </div>
+
+            </div>
+          </div> 
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{include file="common/foot"/}
+<script>
+layui.use('element', function(){
+  var $ = layui.jquery
+  ,element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+  
+  $('.site-demo-active').on('click', function(){
+    var othis = $(this), type = othis.data('type');
+    active[type] ? active[type].call(this, othis) : '';
+  });
+  
+  //Hash地址的定位
+  var layid = location.hash.replace(/^#test=/, '');
+  element.tabChange('test', layid);
+  
+  element.on('tab(test)', function(elem){
+    location.hash = 'test='+ $(this).attr('lay-id');
+  });
+  
+});
+</script>
+</body>
+</html>

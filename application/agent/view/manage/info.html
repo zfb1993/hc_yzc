@@ -1,0 +1,292 @@
+{include file="common/head"/}
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div class="layui-padded-15">
+        <blockquote class="layui-elem-quote layui-text">
+            <h4 class="layui-pull-left">当前位置：{:lang('adminManage')}<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>{:lang('adminInfo')}</h4>
+        </blockquote>
+        <fieldset class="layui-elem-field layui-field-title layui-margin-t-20">
+            <legend>完善资料</legend>
+        </fieldset>
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">真实姓名</label>
+                <div class="layui-input-inline layui-width-280">
+                    <input type="text" name="true_name" lay-verify="title" placeholder="请输入真实姓名" autocomplete="off" class="layui-input" value="{$agent.true_name}">
+                </div>
+				<div class="layui-form-mid layui-word-aux"><font color="red">*</font> 填写用户真实姓名</div>
+            </div>
+			<div class="layui-form-item layui-upload">
+			  <label class="layui-form-label">用户头像</label>
+			  <div class="layui-input-inline layui-width-280">
+				<input type="text" name="user_logo" id="user_logo" class="layui-input" value="{$agent.user_logo}">
+			    <div class="layui-upload-list">
+					<img src="{$agent.user_logo}" class="layui-upload-img" id="user_img" style="width:80px;height:80px;">
+					<p id="demoText"></p>
+			    </div>
+			  </div>
+			  <div class="layui-form-mid layui-word-aux" style="padding:0px 0!important">
+				<button type="button" class="layui-btn" id="user_logo_upload">上传图片</button>
+			  </div>
+			</div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">电话号码</label>
+                <div class="layui-input-inline layui-width-280">
+                    <input type="tel" name="mobile" lay-verify="phone" placeholder="请输入电话号码" autocomplete="off" class="layui-input" value="{$agent.mobile}">
+                </div>
+				<div class="layui-form-mid layui-word-aux"><font color="red">*</font> 填写用户手机号码</div>
+            </div>
+			<div class="layui-form-item">
+                <label class="layui-form-label">身份证号</label>
+                <div class="layui-input-inline layui-width-280">
+                    <input type="text" name="id_card" lay-verify="title" placeholder="请输入身份证号" autocomplete="off" class="layui-input" value="{$agent.id_card}">
+                </div>
+				<div class="layui-form-mid layui-word-aux"><font color="red">*</font> 填写用户身份证号码</div>
+            </div>
+			<div class="layui-form-item layui-upload">
+			  <label class="layui-form-label">身份证正面</label>
+			  <div class="layui-input-inline layui-width-280">
+				<input type="text" name="card_id_img_top" id="card_id_img_top" class="layui-input" value="{$agent.card_id_img_top}">
+			    <div class="layui-upload-list">
+					<img src="{$agent.card_id_img_top}" class="layui-upload-img layui-card-img" id="idcard_top">
+					<p id="demoText1"></p>
+			    </div>
+			  </div>
+			  <div class="layui-form-mid layui-word-aux" style="padding:0px 0!important">
+				<button type="button" class="layui-btn" id="idcard_top_upload">上传图片</button>
+			  </div>
+			</div>
+			<div class="layui-form-item layui-upload">
+			  <label class="layui-form-label">身份证背面</label>
+			  <div class="layui-input-inline layui-width-280">
+				<input type="text" name="card_id_img_bot" id="card_id_img_bot" class="layui-input" value="{$agent.card_id_img_bot}">
+			    <div class="layui-upload-list">
+					<img src="{$agent.card_id_img_bot}" class="layui-upload-img layui-card-img" id="idcard_bot">
+					<p id="demoText2"></p>
+			    </div>
+			  </div>
+			  <div class="layui-form-mid layui-word-aux" style="padding:0px 0!important">
+				<button type="button" class="layui-btn" id="idcard_bot_upload">上传图片</button>
+			  </div>
+			</div>
+			<div class="layui-form-item">
+                <label class="layui-form-label">开户行</label>
+                <div class="layui-input-inline layui-width-280">
+                    <input type="text" name="bank_name" lay-verify="title" placeholder="请输入开户行名称" autocomplete="off" class="layui-input" value="{$agent.bank_name}">
+                </div>
+				<div class="layui-form-mid layui-word-aux"><font color="red">*</font> 填写用户开户行</div>
+            </div>
+			<div class="layui-form-item">
+                <label class="layui-form-label">开户行地址</label>
+                <div class="layui-input-inline layui-width-280">
+                    <input type="text" name="bank_addr" lay-verify="title" placeholder="请输入开户行地址" autocomplete="off" class="layui-input" value="{$agent.bank_addr}">
+                </div>
+				<div class="layui-form-mid layui-word-aux"><font color="red">*</font> 填写开户行地址</div>
+            </div>
+			<div class="layui-form-item">
+                <label class="layui-form-label">银行卡号</label>
+                <div class="layui-input-inline layui-width-280">
+                    <input type="text" name="bank_card" lay-verify="title" placeholder="请输入银行卡号" autocomplete="off" class="layui-input" value="{$agent.bank_card}">
+                </div>
+				<div class="layui-form-mid layui-word-aux"><font color="red">*</font> 填写用户银行卡号</div>
+            </div>
+			<div class="layui-form-item layui-upload">
+			  <label class="layui-form-label">银行卡正面</label>
+			  <div class="layui-input-inline layui-width-280">
+				<input type="text" name="bank_card_img_top" id="bank_card_img_top" class="layui-input" value="{$agent.bank_card_img_top}">
+			    <div class="layui-upload-list">
+					<img src="{$agent.bank_card_img_top}" class="layui-upload-img layui-card-img" id="bank_card">
+					<p id="demoText3"></p>
+			    </div>
+			  </div>
+			  <div class="layui-form-mid layui-word-aux" style="padding:0px 0!important">
+				<button type="button" class="layui-btn" id="bankcard_upload">上传图片</button>
+			  </div>
+			</div>
+            <div class="layui-form-item layui-margin-t-50">
+                <div class="layui-input-block">
+                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="add-btn">立即更新</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>   
+{include file="common/foot"/}
+<script>
+layui.use(['form','upload', 'layedit'], function(){
+  var form = layui.form
+  ,upload = layui.upload
+  ,layer = layui.layer
+  ,$ = layui.jquery;
+  //自定义验证规则
+  form.verify({
+    // title: function(value){
+    //   if(value.length < 2){
+    //     return '标题至少得5个字符啊';
+    //   }
+    // }
+    pass: [/(.+){6,12}$/, '密码必须6到12位']
+    ,content: function(value){
+      layedit.sync(editIndex);
+    }
+  });
+
+  //上传头像
+  var uploadUserLogo = upload.render({
+    elem: '#user_logo_upload'
+    ,url: '{:url("UpFiles/upload")}'
+    ,before: function(obj){
+	  layer.load(); //上传loading
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+        $('#user_img').attr('src', result); //图片链接（base64）
+		    $('#user_logo').val(file.name);
+      });
+    }
+    ,done: function(res){
+	    layer.closeAll('loading'); //关闭loading
+        //上传成功
+		if(res.code>0){
+			$('#user_logo').val(res.url);
+			layer.msg(res.info);
+		}else{
+			//如果上传失败
+			return layer.msg(res.info);
+		}
+      
+    }
+    ,error: function(){
+      //演示失败状态，并实现重传
+	  layer.closeAll('loading'); //关闭loading
+      var demoText = $('#demoText');
+      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+      demoText.find('.demo-reload').on('click', function(){
+        uploadUserLogo.upload();
+      });
+    }
+  });
+  //上传身份证正面图
+  var uploadIdcardTop = upload.render({
+    elem: '#idcard_top_upload'
+    ,url: '{:url("UpFiles/upload")}'
+    ,before: function(obj){
+	  layer.load(); //上传loading
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+        $('#idcard_top').attr('src', result); //图片链接（base64）
+		$('#card_id_img_top').val(file.name);
+      });
+    }
+    ,done: function(res){
+	    layer.closeAll('loading'); //关闭loading
+        //上传成功
+		if(res.code>0){
+			$('#card_id_img_top').val(res.url);
+			layer.msg(res.info);
+		}else{
+			//如果上传失败
+			return layer.msg(res.info);
+		}
+      
+    }
+    ,error: function(){
+      //演示失败状态，并实现重传
+	  layer.closeAll('loading'); //关闭loading
+      var demoText = $('#demoText1');
+      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+      demoText.find('.demo-reload').on('click', function(){
+        uploadIdcardTop.upload();
+      });
+    }
+  });
+  //上传身份证背面图
+  var uploadIdcardBot = upload.render({
+    elem: '#idcard_bot_upload'
+    ,url: '{:url("UpFiles/upload")}'
+    ,before: function(obj){
+	  layer.load(); //上传loading
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+        $('#idcard_bot').attr('src', result); //图片链接（base64）
+		$('#card_id_img_bot').val(file.name);
+      });
+    }
+    ,done: function(res){
+	    layer.closeAll('loading'); //关闭loading
+        //上传成功
+		if(res.code>0){
+			$('#card_id_img_bot').val(res.url);
+			layer.msg(res.info);
+		}else{
+			//如果上传失败
+			return layer.msg(res.info);
+		}
+      
+    }
+    ,error: function(){
+      //演示失败状态，并实现重传
+	  layer.closeAll('loading'); //关闭loading
+      var demoText = $('#demoText2');
+      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+      demoText.find('.demo-reload').on('click', function(){
+        uploadIdcardBot.upload();
+      });
+    }
+  });
+
+  //上传银行卡正面图
+  var uploadBankCard = upload.render({
+    elem: '#bankcard_upload'
+    ,url: '{:url("UpFiles/upload")}'
+    ,before: function(obj){
+	  layer.load(); //上传loading
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+        $('#bank_card').attr('src', result); //图片链接（base64）
+		$('#bank_card_img_top').val(file.name);
+      });
+    }
+    ,done: function(res){
+	    layer.closeAll('loading'); //关闭loading
+        //上传成功
+		if(res.code>0){
+			$('#bank_card_img_top').val(res.url);
+			layer.msg(res.info);
+		}else{
+			//如果上传失败
+			return layer.msg(res.info);
+		}
+      
+    }
+    ,error: function(){
+      //演示失败状态，并实现重传
+	  layer.closeAll('loading'); //关闭loading
+      var demoText = $('#demoText3');
+      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+      demoText.find('.demo-reload').on('click', function(){
+        uploadBankCard.upload();
+      });
+    }
+  });
+  
+  //监听提交
+  form.on('submit(add-btn)', function (data) {
+      var loading = layer.load(1, {shade: [0.1, '#fff']});
+      $.post("{:url('updateInfo')}", data.field, function (res) {
+          layer.close(loading);
+          if (res.code > 0) {
+              layer.msg(res.msg, {time: 1800, icon: 1}, function () {
+                  location.href = res.url;
+              });
+          } else {
+              layer.msg(res.msg, {time: 1800, icon: 2});
+          }
+      });
+      return false;
+  });
+
+  
+  
+});
+</script>
+</body>
+</html>

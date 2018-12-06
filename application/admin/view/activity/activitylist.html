@@ -1,0 +1,410 @@
+{include file="common/head"/}
+<script>
+    var ADMIN = '__STATIC__/admin/';
+</script>
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div class="layui-padded-15">
+        <blockquote class="layui-elem-quote layui-text">
+            <h4 class="layui-pull-left">当前位置：{:lang('activityManage')}<i class="fa fa-angle-right layui-padded-l-10 layui-padded-r-10"></i>{:lang('activityList')}</h4>
+            <button id="add_activity" class="layui-btn layui-btn-normal layui-pull-right" data-url="{:url('activity/activityAdd')}">添加文章</button>
+        </blockquote>
+        <!-- <div class="layui-form">
+      <div class="layui-form-item" style="margin-bottom: 5px;">
+        <div class="layui-inline">
+          <label class="layui-form-label" style="padding:9px 0;">注册时间：</label>
+          <div class="layui-input-inline" style="margin-right:0;width: 150px;">
+            <input type="text" class="layui-input" id="reg_start_time" placeholder="yyyy-MM-dd">
+          </div>
+          <label class="layui-form-label" style="width:auto;display:inline-block;padding:9px 5px;color:#ccc;">-</label>
+          <div class="layui-input-inline" style="margin-right:20px;width: 150px;">
+            <input type="text" class="layui-input" id="reg_end_time" placeholder="yyyy-MM-dd">
+          </div>
+          <label class="layui-form-label" style="padding:9px 0;">所属机构：</label>
+          <div class="layui-input-inline" style="margin-right:0;width: 150px;">
+            <input type="text" name="title" required  lay-verify="required" placeholder="请输入所属机构" autocomplete="off" class="layui-input">
+          </div>
+          <label class="layui-form-label" style="padding:9px 0;">经纪人：</label>
+          <div class="layui-input-inline" style="margin-right:0;width: 150px;">
+            <input type="text" name="title" required  lay-verify="required" placeholder="请输入所属经纪人" autocomplete="off" class="layui-input">
+          </div>
+          <label class="layui-form-label" style="padding:9px 0;">关键词：</label>
+          <div class="layui-input-inline" style="margin-right:30px;width: 200px;">
+            <input type="text" name="title" required  lay-verify="required" placeholder="关键词：姓名或手机号" autocomplete="off" class="layui-input">
+          </div>
+          <button class="layui-btn" style="width:100px;"><i class="layui-icon">&#xe615;</i> 搜索 </button>
+          <button class="layui-btn layui-btn-warm" style="width:100px;"> 重置 </button>
+        </div>
+      </div>
+
+    </div> -->
+        <div class="layui-form">
+            <table class="layui-table" id="list" lay-filter="list" style="margin-top:0;"></table>
+        </div>
+
+    </div>
+</div>
+{include file="common/foot"/}
+<script type="text/html" id="action">
+    <!-- <a class="layui-btn layui-btn-sm" lay-event="detail">查看</a>
+  <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">加入黑名单</a> -->
+    <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="edit">编辑</a>
+
+    <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+</script>
+<script>
+    var message;
+    layui.config({
+        base: ADMIN + 'build/js/',
+        version: '1.0.1'
+    }).use(['app', 'form', 'table', 'layer', 'laydate', 'message'], function() {
+        var app = layui.app,
+            $ = layui.jquery,
+            table = layui.table,
+            laydate = layui.laydate,
+            form = layui.form,
+            layer = layui.layer;
+        //将message设置为全局以便子页面调用
+        message = layui.message;
+        //主入口
+        app.set({
+            type: 'iframe'
+        }).init();
+        //列表数据
+        var tableIn = table.render({
+            elem: '#list',
+            url: '{:url("activity/activityList")}',
+            method: 'post',
+            page: true,
+            cols: [
+                [{
+                        type: 'numbers',
+                        title: '序号',
+                        width: 60,
+                        fixed: true
+                    }, {
+                        field: 'type_name',
+                        align: 'center',
+                        title: '类型',
+                        width: 150,
+                        sort: true
+                    }, {
+                        field: 'st',
+                        align: 'center',
+                        title: '状态',
+                        width: 70,
+                        sort: true
+                    }, {
+                        field: 'abstract',
+                        align: 'center',
+                        title: '摘要',
+                        width: 120,
+                        sort: true
+                    }, {
+                        field: 'title',
+                        align: 'center',
+                        title: '标题',
+                        width: 120,
+                        sort: true
+                    }, {
+                        field: 'brief',
+                        align: 'center',
+                        title: '缩写',
+                        width: 120,
+                        sort: true
+                    }, {
+                        field: 'content',
+                        align: 'center',
+                        title: '内容',
+                        width: 450
+                    }, {
+                        field: 'img',
+                        align: 'center',
+                        title: '图片',
+                        width: 150
+                    },
+                    //  {
+                    //     field: 'add_time',
+                    //     align: 'center',
+                    //     title: '创建时间',
+                    //     width: 100
+                    // }, {
+                    //     field: 'create_user',
+                    //     align: 'center',
+                    //     title: '创建人',
+                    //     width: 160,
+                    //     sort: true
+                    // },
+                    // {field:'p_name',align:'center', title:'上级代理',width:160,sort: true},
+                    // {field:'total_money',align:'center', title:'账户余额',width:160, sort: true},
+                    // {field:'add_time',align:'center',title:'注册时间', width:200, sort: true},
+                    // {field:'status', align:'center', title:'状态',width:120},
+                    {
+                        width: 230,
+                        align: 'center',
+                        toolbar: '#action',
+                        title: '操作'
+                    }
+                ]
+            ],
+            limit: 10,
+            height: 600 //固定值
+        });
+
+
+        //时间控件渲染
+        laydate.render({
+            elem: '#reg_start_time'
+        });
+        laydate.render({
+            elem: '#reg_end_time'
+        });
+
+        //监听工具条
+        table.on('tool(list)', function(obj) {
+            var data = obj.data;
+            if (obj.event === 'detail') {
+                var id = data.id;
+                var url = "{:url('customer/userInfo',['id'=>'userId'])}";
+                url = url.replace(/userId/, id);
+                window.location.href = url;
+                //layer.msg('ID：'+ data.id + ' 的查看操作');
+            } else if (obj.event === 'del') {
+                layer.confirm('真的要删除该条文章吗？', function(index) {
+                    $.post("{:url('activity/activityDel')}", {
+                        'id': data.id
+                    }, function(res) {
+                        if (res.code == 1) {
+                            layer.msg(res.msg, {
+                                icon: 1,
+                                time: 1000
+                            }, function() {
+                                obj.del();
+                                layer.close(index);
+                            });
+                        } else {
+                            layer.msg(res.msg, {
+                                icon: 2,
+                                time: 1000
+                            }, function() {
+                                layer.close(index);
+                            });
+                        }
+                    });
+                });
+            } else if (obj.event === 'edit') {
+                var data = obj.data;
+                var id = data.id;
+
+                window.location = "{:url('activity/activityEdit')}?id=" + id;
+                // $.post("{:url('customer/getCompany')}", {}, function(res) {
+                //     var str = '';
+                //     str += '<div class="layui-user">';
+                //     str += '<form class="layui-form">';
+                //     str += '<div class="layui-form-item">';
+                //     str += '<label class="layui-form-label">姓名</label>';
+                //     str += '<div class="layui-input-block">';
+                //     str += '<input type="text" name="true_name" placeholder="请输入姓名" autocomplete="off" value="' + data.true_name + '" disabled class="layui-input">';
+                //     str += '</div>';
+                //     str += '</div>';
+                //     str += '<div class="layui-form-item">';
+                //     str += '<label class="layui-form-label">账号</label>';
+                //     str += '<div class="layui-input-block">';
+                //     str += '<input type="text" name="zid" placeholder="请输入账号" value="' + data.zid + '" class="layui-input">';
+                //     str += '</div>';
+                //     str += '</div>';
+                //     str += '<div class="layui-form-item">';
+                //     str += '<label class="layui-form-label">密码</label>';
+                //     str += '<div class="layui-input-block">';
+                //     str += '<input type="password" name="zpwd" placeholder="请输入密码" value="' + data.zpwd + '" class="layui-input">';
+                //     str += '</div>';
+                //     str += '</div>';
+                //     str += '<div class="layui-form-item">';
+                //     str += '<label class="layui-form-label">期货公司</label>';
+                //     str += '<div class="layui-input-block">';
+                //     str += '<select id="company" name="modules" lay-verify="required" lay-search="">';
+                //     str += '<option value="">直接选择或搜索期货公司名称</option>';
+                //     for (var i = 0; i < res.length; i++) {
+                //         str += '<option value="' + res[i].c_bh + '">' + res[i].c_name + '</option>';
+                //     }
+                //     str += '</select>';
+                //     str += '</div>';
+                //     str += '</div>';
+                //     str += '<div class="layui-form-item">';
+                //     str += '<label class="layui-form-label">手机号</label>';
+                //     str += '<div class="layui-input-block">';
+                //     str += '<input type="number" name="mobile" placeholder="请输入手机号" value="' + data.mobile + '" disabled class="layui-input">';
+                //     str += '</div>';
+                //     str += '</div>';
+                //     str += '<div class="layui-form-item">';
+                //     str += '<label class="layui-form-label">身份证号</label>';
+                //     str += '<div class="layui-input-block">';
+                //     str += '<input type="number" name="id_card" placeholder="请输入手机号" value="' + data.id_card + '" disabled class="layui-input">';
+                //     str += '</div>';
+                //     str += '</div>';
+                //     str += '<div class="layui-form-item">';
+                //     str += '<label class="layui-form-label">开户银行</label>';
+                //     str += '<div class="layui-input-block">';
+                //     str += '<input type="number" name="bank_name" placeholder="请输入开户行名称" value="' + data.bank_name + '" disabled class="layui-input">';
+                //     str += '</div>';
+                //     str += '</div>';
+                //     str += '<div class="layui-form-item">';
+                //     str += '<label class="layui-form-label">银行卡号</label>';
+                //     str += '<div class="layui-input-block">';
+                //     str += '<input type="number" name="bank_card" placeholder="请输入银行卡号" value="' + data.bank_card + '" disabled class="layui-input">';
+                //     str += '</div>';
+                //     str += '</div>';
+                //     str += '<div class="layui-form-item">';
+                //     str += '<label class="layui-form-label">重置密码</label>';
+                //     str += '<div class="layui-input-block">';
+                //     str += '<input type="password" name="user_pwd" placeholder="请输入新密码" class="layui-input">';
+                //     str += '</div>';
+                //     str += '</div>';
+                //     str += '</form>';
+                //     str += '</div>';
+                //     layer.open({
+                //         type: 1,
+                //         skin: 'layui-user-reg',
+                //         title: '编辑用户资料',
+                //         area: ['650px', '500px'],
+                //         content: str,
+                //         btn: ['提交', '放弃'],
+                //         btnAlign: 'c',
+                //         yes: function(index, layero) {
+                //             var pwd = $('input[name="user_pwd"]').val();
+                //             var zid = $('input[name="zid"]').val();
+                //             var zpwd = $('input[name="zpwd"]').val();
+                //             var bid = $('#company option:selected').val();
+                //             $.post("{:url('customer/alterInfo')}", {
+                //                 'id': data.id,
+                //                 'password': pwd,
+                //                 'zid': zid,
+                //                 'zpwd': zpwd,
+                //                 'bid': bid
+                //             }, function(res) {
+                //                 if (res.code == 1) {
+                //                     layer.msg(res.msg, {
+                //                         icon: 1,
+                //                         time: 1500
+                //                     }, function() {
+                //                         layer.close(index);
+                //                     });
+                //                 } else if (res.code == 0) {
+                //                     layer.msg(res.msg, {
+                //                         icon: 2,
+                //                         time: 1500
+                //                     }, function() {
+                //                         layer.close(index);
+                //                     });
+                //                 } else {
+                //                     layer.msg(res.msg, {
+                //                         icon: 2,
+                //                         time: 1500
+                //                     }, function() {
+                //                         layer.close(index);
+                //                     });
+                //                 }
+                //             });
+                //         },
+                //         btn2: function(index, layero) {
+                //             layer.close(index);
+                //             //return false 开启该代码可禁止点击该按钮关闭
+                //         },
+                //         cancel: function(index) {
+                //             layer.close(index);
+                //             //return false 开启该代码可禁止点击该按钮关闭
+                //         }
+                //     });
+                //     form.render();
+                // });
+            }
+        });
+
+        //添加活动
+        $('#add_activity').click(function() {
+            window.location = "{:url('activity/activityAdd')}";
+        })
+
+
+
+        // $('#user_reg').click(function(){
+        //   $.post("{:url('customer/getAgentId')}", {}, function(data){
+        //     //alert(JSON.stringify(data));
+        //     var str='';
+        //         str+='<div class="layui-user">';
+        //         str+='<form class="layui-form">';
+        //         str+='<div class="layui-form-item">';
+        //         str+='<label class="layui-form-label">姓名</label>';
+        //         str+='<div class="layui-input-block">';
+        //         str+='<input type="text" name="true_name" placeholder="请输入姓名" autocomplete="off" class="layui-input">';
+        //         str+='</div>';
+        //         str+='</div>';
+        //         str+='<div class="layui-form-item">';
+        //         str+='<label class="layui-form-label">手机号</label>';
+        //         str+='<div class="layui-input-block">';
+        //         str+='<input type="number" name="mobile" placeholder="请输入手机号" class="layui-input">';
+        //         str+='</div>';
+        //         str+='</div>';
+        //         str+='<div class="layui-form-item">';
+        //         str+='<label class="layui-form-label">密码</label>';
+        //         str+='<div class="layui-input-block">';
+        //         str+='<input type="password" name="user_pwd" placeholder="请输入密码" class="layui-input">';
+        //         str+='</div>';
+        //         str+='</div>';
+        //         str+='<div class="layui-form-item">';
+        //         str+='<label class="layui-form-label">代理商</label>';
+        //         str+='<div class="layui-input-block">';
+        //         str+='<select id="agentId" name="modules" lay-verify="required" lay-search="">';
+        //         str+='<option value="">直接选择或搜索代理商名称</option>';
+        //         for(var i=0;i<data.length;i++){
+        //           str+='<option value="'+data[i].id+'">'+data[i].true_name+'</option>';
+        //         }
+        //         str+='</select>';
+        //         str+='</div>';
+        //         str+='</div>';
+        //         str+='</form>';
+        //         str+='</div>';
+        //     layer.open({
+        //       type: 1, 
+        //       skin: 'layui-user',
+        //       title:'注册新用户',
+        //       area:['600px','450px'],
+        //       content:str,
+        //       btn: ['提交', '放弃'],
+        //       btnAlign: 'c',
+        //       yes: function(index, layero){
+        //         var true_name=$('input[name="true_name"]').val();
+        //         var mobile=$('input[name="mobile"]').val();
+        //         var password=$('input[name="user_pwd"]').val();
+        //         var id=$('#agentId option:selected').val();
+        //         $.post("{:url('customer/register')}",{'true_name':true_name,'mobile':mobile,'user_pwd':password,'id':id},function(res){
+        //           if(res.code==1){
+        //             layer.msg(res.msg, {icon: 1, time: 1000}, function(){
+        //                 layer.close(index);
+        //                 tableIn.reload();
+        //             });
+        //           }else{
+        //             layer.msg(res.msg, {icon: 2, time: 1000});
+        //           }
+        //         });
+        //       },
+        //       btn2: function(index, layero){
+        //         layer.close(index);
+        //         //return false 开启该代码可禁止点击该按钮关闭
+        //       },
+        //       cancel: function(index){ 
+        //         layer.close(index);
+        //         //return false; 
+        //         //return false 开启该代码可禁止点击该按钮关闭
+        //       }
+        //     });
+        //   form.render();
+        //   });
+
+        // });
+
+    });
+</script>
+</body>
+
+</htmst

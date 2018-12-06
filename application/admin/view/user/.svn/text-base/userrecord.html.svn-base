@@ -1,0 +1,60 @@
+{include file="common/head"/}
+<div class="layui-layout layui-layout-admin kit-layout-admin">
+    <div class="layui-padded-15">
+        <blockquote class="layui-elem-quote layui-text">
+            <h3>当前位置：用户管理 > 用户业绩</h3>
+        </blockquote>
+        <fieldset class="layui-elem-field layui-field-title layui-margin-t-20">
+            <legend>业绩列表</legend>
+        </fieldset>
+        <div class="layui-form">
+            <table class="layui-table" lay-even="" lay-skin="row">
+                <colgroup>
+                    <col width="60">
+                    <col width="100">
+                    <col width="120">
+                    <col width="60">
+                    <col width="100">
+                    <col width="120">
+                    <col width="100">
+                    <col width="100">
+                    <col>
+                </colgroup>
+                <thead>
+                    <tr>
+                      <th>序号</th>
+                      <th>账号</th>
+                      <th>姓名</th>
+                      <th>等级</th>
+                      <th>总积分</th>
+                      <th>剩余积分</th>
+                      <th>编辑数</th>
+                      <th>审核数</th>
+                      <th>操作</th>
+                    </tr> 
+                </thead>
+                <tbody>
+                  {volist name="list" id="vo" key="key"}
+                    <tr>
+                      <td>{$key}</td>
+                      <td>{$vo.username}</td>
+                      <td>{$vo.realname}</td>
+                      <td>{$vo.level}</td>
+                      <td>{$vo.credit}</td>
+                      <td>{$vo.credit_left}</td>
+                      <td>{$vo.edit_num}</td>
+                      <td>{$vo.judge_num}</td>
+                      <td>
+                        <a href="{:url('user/userRecView',['id'=>$vo.id])}" class="layui-action-bg" title="查看记录"><i class="fa fa-eye" aria-hidden="true"></i><span> 查看记录</span></a>
+                      </td>
+                    </tr>
+                  {/volist}
+                </tbody>
+            </table>  
+        </div>
+    </div>
+</div>
+{include file="common/foot"/}
+
+</body>
+</html>

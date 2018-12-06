@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="generator" content="">
+    <title>会员登录，会员中心</title>
+
+    <link href="/web/style.css" rel="stylesheet" type="text/css">
+    <link href="/web/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="/web/css.css" rel="stylesheet" type="text/css">
+
+    <link href="/web/lrtk.css" rel="stylesheet" type="text/css">
+    <link href="/web/user.css" rel="stylesheet" type="text/css">
+    <link href="/web/jtw.css" rel="stylesheet" type="text/css">
+    <link href="/web/grid.css" rel="stylesheet" type="text/css">
+
+
+    <script type="text/javascript" src="/web/jquery.min.js"></script>
+    <script type="text/javascript" src="/web/cookie.js"></script>
+    <script type="text/javascript">
+        function telmodpwd_callback() { }
+        $(function () {
+            var tel = localStorage.user;
+            if (!localStorage.id) {
+                location.href = "login";
+                return;
+            }
+            $("#submitbtn").click(function () {
+                if ($("#pwdold").val() == "") {
+                    $("#pwdold").next("span").text("请输入原密码");
+                    $("#pwdold").focus();
+                    return false;
+                }
+                var pwd1 = $("#pwdold").val();
+
+
+                if ($("#pwdnew").val() == "") {
+                    $("#pwdnew").next("span").text("请输入新密码");
+                    return false;
+                } else if ($("#pwdnew").val().length < 6 || $("#pwdnew").val().length > 20) {
+                    $("#pwdnew").next("span").text("新密码格式不正确（请输入6-20个字符和数字组成的密码）");
+                    return false;
+                } else {
+                    $("#pwdnew").next("span").text("");
+                }
+                var pwd2 = $("#pwdnew").val();
+
+
+                if ($("#pwdnew_confirm").val() != $("#pwdnew").val()) {
+                    $("#pwdnew_confirm").next("span").text("两次密码不一样，请重新输入。");
+                    $("#wdnew_confirm").val("").focus();
+                    return false;
+                } else {
+                    $("#pwdnew_confirm").next("span").text("");
+                }
+                $.ajax({
+                    url: "/index/api/alertPwd",
+                    type: 'post',
+                    data: {
+                        oldpwd: $("#pwdold").val(),
+                        newpwd: pwd2,
+                        user_name: localStorage.user_name,
+                        uid: localStorage.id,
+                        type: localStorage.type,
+                        auth: localStorage.auth
+                    },
+                    cache: false,
+                    dataType: 'json',
+                    success: function (data) {
+                        alert(data['msg']);
+                    },
+                    error: function () {
+                        alert("请求超时");
+                    }
+                });
+                /* $.ajax({
+                    url: "http://www.fuqitong18.com:9880/telmodpwd?WebCallBack=telmodpwd_callback&Tel=" + tel + "&PwdOld=" + pwd1 + "&PwdNew=" + pwd2,
+                    type: "get",
+                    dataType: "jsonp",
+                    jsonpCallback: "telmodpwd_callback",
+                    success: function (data) {
+                        if (data.StatusCode != 0) {
+                            alert(data.StatusDesc);
+                        } else {
+                            alert("密码修改成功，将退出系统重新登录。")
+                            top.location.href = "../quit"
+                        }
+                    }
+                }); */
+            });
+        })
+    </script>
+
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="top">
+            <div class="wrap">
+                <ul class="userTop">
+                    <!--a>客服热线：$site.tel}</a-->
+                </ul>
+                <ul class="topNav">
+                    <li>
+                        <a id="username" href="uc">--</a>
+                        <a onclick="$.quit();" href="">退出</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="header">
+            <div class="wrap">
+                <ul class="logo">
+                    <a href="index">
+                        <img style="width:270px; margin-top:10px; margin-bottom:10px;margin-left:30px;" src="/web/logo.png">
+                    </a>
+                </ul>
+                <div class="nav-bar"></div>
+                <ul style="margin-top:5px;" class="p_nav">
+                    <li class="cur">
+                        <a href="index" class="first">首页</a>
+                    </li>
+                    <li>
+                        <a href="futures">国内期货</a>
+                    </li>
+                    <li>
+                        <a href="rules">交易规则</a>
+                    </li>
+                    <li>
+                        <a href="about">关于我们</a>
+                    </li>
+                    <li>
+                        <a href="download">软件下载</a>
+                    </li>
+                    <li>
+                        <a href="service">客戶服务</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div align="center" style="font-size:18px">提示：富期通是一家可提供给操盘手优质服务的平台，并非属于任何一家期货公司的子公司，请各操盘手在进行操盘之前仔细阅读本平台的风险揭示书及交易规则，任何操盘以本平台信息为准！</div>
+        <div class=" mb">
+            <div id="user">
+                <div class="lp_wrap">
+                    <div class="jtw-left">
+                        <ul class="jtw-leftnav">
+                            <li>
+                                <h4>
+                                    <img style="margin-top:-5px;" src="/web/user.png">&nbsp;
+                                    <a href="uc">账户中心</a>
+                                </h4>
+                            </li>
+                            <li>
+                                <h4>
+                                    <img style="margin-top:-5px;" src="/web/qian.png">&nbsp;资金管理</h4>
+                            </li>
+                            <div class="ernav">
+                                <a href="crj">出入金记录</a>
+                            </div>
+                            <li>
+                                <h4>
+                                    <img style="margin-top:-2px;" src="/web/anquan.png">&nbsp;
+                                    <a href="pwd">密码修改</a>
+                                </h4>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="jtw-right">
+                        <div class="jtw-main">
+                            <h4 class="jtw-main-title">
+                                <span>密码修改</span>
+                            </h4>
+                            <form action="" onsubmit="" method="post">
+                                <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+                                    <tbody>
+                                        <tr>
+                                            <th colspan="2">&nbsp;</th>
+                                        </tr>
+                                        <tr>
+                                            <td width="100" align="right">原登录密码</td>
+                                            <td>
+                                                <input id="pwdold" name="old_password" type="password" class="textInput" size="40">
+                                                <span></span>
+                                                <i>*</i>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">登录密码</td>
+                                            <td>
+                                                <input id="pwdnew" name="password" type="password" class="textInput" size="40">
+                                                <i>*</i>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">确认登录密码</td>
+                                            <td>
+                                                <input id="pwdnew_confirm" name="pwdnew_confirm" type="password" class="textInput" size="40">
+                                                <span></span>
+                                                <i>*</i>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                <input id="submitbtn" type="button" name="submit" class="btn" value="提交">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 首页 bottom start -->
+    <div class="bottom">
+        <div class="bottom_a">
+            <div class="bottom_a_left">
+                <ul>
+                    <li>
+                        <p class="bottom_a_left_font">
+                            <a>期貨交易</a>
+                        </p>
+                        <a href="tencent://message/?uid=2066604037&amp;Site=&amp;Menu=yes" target="_blank" class="down-load">线上咨询</a>
+                        <br>
+                        <a href="download">软件下載</a>
+                        <br>
+                        <a href="futures">期货品种</a>
+
+                    </li>
+                    <li>
+                        <p class="bottom_a_left_font">
+                            <a>了解我们</a>
+                        </p>
+                        <a href="about">关于我们</a>
+                        <br>
+                        <a href="service">联系我们</a>
+                        <br>
+                        <a href="news">最新公告</a>
+
+                    </li>
+                    <li>
+                        <p class="bottom_a_left_font">
+                            <a>条款声明</a>
+                        </p>
+                        <a href="important">特别声明</a>
+                        <br>
+                        <a href="kehu.html">服务条款</a>
+                        <br>
+                        <a href="disclaimer">免则声明</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="bottom_a_xian"></div>
+            <div class="bottom_a_nav">
+                <img style="margin-top:-20px;" src="/web/erweima.png">
+            </div>
+
+            <div class="bottom_a_right">
+                <div class="bottom_btn">
+                    <a href="http://wpa.qq.com/msgrd?v=3&uin=2066604037&site=qq&menu=yes" target="_blank" class="down-load">线上咨询服务</a>
+                </div>
+                <div class="bottom_a_right_font">交易日（周一至周五）08:30-23:30</div>
+                <div <div class="bottom_a_right_font">我们提醒您：期货有风险，投资需谨慎！市场风险莫测，务请谨慎行事！</div>
+            </div>
+        </div>
+
+        <style>
+            .youqing_bg {
+                width: 100%;
+                margin: 0 auto;
+                background-color: #333333;
+                padding-bottom: 20px;
+            }
+
+            .youqing_bg .youqing {
+                width: 1000px;
+                margin: 0 auto;
+            }
+
+            .youqing_bg .youqing li {
+                color: #ccc;
+                float: left;
+                margin-left: 3%;
+                ;
+                font-size: 14px;
+                line-height: 25px;
+            }
+
+            .youqing_bg .youqing a {
+                color: #ccc;
+                font-size: 14px;
+                line-height: 25px;
+            }
+
+            .youqing_bg .youqing a:hover {
+                color: white;
+            }
+        </style>
+        <div class="youqing_bg">
+            <ul class="youqing">
+                <li style="margin-left:0">友情链接：</li>
+                <li style="margin-left:0">
+                    <a href="http://www.ine.com.cn/" target="_blank">上海国际能源交易中心</a>
+                </li>
+                <li>
+                    <a href="http://www.shfe.com.cn/" target="_blank">上海期货交易所</a>
+                </li>
+                <li>
+                    <a href="http://www.czce.com.cn/portal/index.htm" target="_blank">郑州商品交易所</a>
+                </li>
+                <li>
+                    <a href="http://www.dce.com.cn/" target="_blank">大连商品交易所</a>
+                </li>
+                <li>
+                    <a href="http://www.cffex.com.cn/" target="_blank">中国金融期货交易所</a>
+                </li>
+                <li>
+                    <a href="http://www.hkex.com.hk/?sc_lang=en" target="_blank">香港交易所</a>
+                </li>
+                <li>
+                    <a href="http://www.sse.com.cn/" target="_blank">上海证券交易所</a>
+                </li>
+                <li style="margin-left:0">
+                    <a href="http://www.szse.cn/" target="_blank">期货日报</a>
+                </li>
+                <li>
+                    <a href="http://www.10jqka.com.cn/" target="_blank">同花顺</a>
+                </li>
+                <li>
+                    <a href="http://www.cfachina.org/" target="_blank">中国期货业协会</a>
+                </li>
+                <li>
+                    <a href="http://www.xfn.com/en/home/index.htm" target="_blank">新华财经</a>
+                </li>
+                <li>
+                    <a href="http://www.amm.com/" target="_blank">美国金属市场</a>
+                </li>
+                <li>
+                    <a href="https://www.smm.cn/" target="_blank">上海有色网</a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="footer ">
+            <div class="footer_a">
+                <span>　　　　　　　　　　　　　　　　　　　　湖南正奇万合资产管理有限公司 -- Copyright &copy; 2018 All Rights Reserved </span>
+            </div>
+        </div>
+        <script src="/web/app.js?v=1.1"></script>
+</body>
+
+</html>

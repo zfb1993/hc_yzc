@@ -1,0 +1,150 @@
+{extend name="static/assets/base.html" /}{block name="title"}
+<title>阅读协议</title>{/block} {block name="style"}
+<style>
+	.weui-cells {
+		font-size: 14px;
+		color: inherit;
+		border-bottom: transparent;
+	}
+
+	.weui-cell {
+		background: transparent;
+		color: white;
+	}
+
+	.weui-content {
+		background-color: #20212a;
+		bottom: 0;
+		padding-top: 20px;
+	}
+
+	.weui-popup__container .weui-btn_close i {
+		color: #f9f9f9;
+	}
+
+	.weui-popup__container .weui-btn_close {
+		z-index: 99999;
+		bottom: 10px;
+	}
+
+	.weui-article .weui-body {
+		padding: 10px;
+		margin: 15px;
+		height: 83%;
+		overflow: auto;
+		background: #303849;
+		color: white;
+		margin-top: 0;
+		text-align: justify;
+	}
+</style>
+
+{/block} {block name="body"}
+<div class="weui-content">
+	<div class="weui-cells">
+		<div class="weui-cell" id="btn1">
+			<div class="weui-cell__hd">
+				<p>《投顾协议》</p>
+			</div>
+		</div>
+		<div class="weui-cell" id="btn2">
+			<div class="weui-cell__hd">
+				<p>《风险揭示书》</p>
+			</div>
+		</div>
+		<div class="weui-cell" id="btn3">
+			<div class="weui-cell__hd">
+				<p>《交易风控规则》</p>
+			</div>
+		</div>
+	</div>
+	<div class="weui-cells weui-cells_checkbox" style="margin-top: 20px;">
+		<label class="weui-cell weui-check__label weui-mini" for="xieyi">
+			<div class="weui-cell__hd" style="width: 100%;">
+				<input id="xieyi" type="checkbox" class="weui-check" name="checkbox">
+				<i class="weui-icon-checked"></i>
+				<span style="font-size: 11px;color: #d8d8d8;">我已阅读并接受
+					<a href="/index/index/hezuo" style="color: #00b6ff;">以上三款协议</a>
+				</span>
+			</div>
+		</label>
+	</div>
+	<a id="kaihu" class="weui-btn weui-btn_ ">马上开户</a>
+</div>
+<div id="xy1" style="z-index: 9999;" class='weui-popup__container'>
+	<div class="weui-popup__modal">
+		<div class="weui-header" style="color:white;">
+			<h2>《投顾协议》</h2>
+		</div>
+		<article class="weui-article">
+			<div class="weui-body">
+				协议内容
+			</div>
+		</article>
+		<a href="javascript:;" class="weui-btn_close close-popup">
+			<i class="iconfont icon-cha"></i>
+		</a>
+	</div>
+</div>
+<div id="xy2" style="z-index: 9999;" class='weui-popup__container'>
+	<div class="weui-popup__modal">
+		<div class="weui-header" style="color:white;">
+			<h2>《风险揭示书》</h2>
+		</div>
+		<article class="weui-article">
+			<div class="weui-body">
+				协议内容
+			</div>
+		</article>
+		<a href="javascript:;" class="weui-btn_close close-popup">
+			<i class="iconfont icon-cha"></i>
+		</a>
+	</div>
+</div>
+<div id="xy3" style="z-index: 9999;" class='weui-popup__container'>
+	<div class="weui-popup__modal">
+		<div class="weui-header" style="color:white;">
+			<h2>《交易风控规则》</h2>
+		</div>
+		<article class="weui-article">
+			<div class="weui-body">
+				协议内容
+			</div>
+		</article>
+		<a href="javascript:;" class="weui-btn_close close-popup">
+			<i class="iconfont icon-cha"></i>
+		</a>
+	</div>
+</div>
+{/block} {block name="tabbar"}{/block} {block name="script"}
+<script>
+	$(function () {
+		$("#btn1").on("click", function () {
+			$("#xy1").popup();
+		});
+		$("#btn2").on("click", function () {
+			$("#xy2").popup();
+		});
+		$("#btn3").on("click", function () {
+			$("#xy3").popup();
+		});
+		$("#kaihu").on("click", function () {
+			if (!$("#xieyi").is(":checked")) {
+				$.alert("请阅读并同意注册协议书");
+				return false;
+			}
+			$.post("/index/otherapi/openAccount", {
+				userid: localStorage.id,
+				auth: localStorage.auth
+			}, function (_d) {
+				$.alert(_d['msg'], function () {
+					if (_d['code'] == 1) {
+						location.href = "/index/index/mine";
+					} else if (_d['code'] == -2) {
+						location.href = "/index/index/verify";
+					}
+				});
+			});
+		});
+	});
+</script> {/block}

@@ -1,0 +1,64 @@
+10
+
+dir
+544
+svn://120.25.210.89/hc_yzcl/application/agent/view
+svn://120.25.210.89/hc_yzcl
+
+
+
+2018-12-03T09:19:44.318194Z
+544
+hc_yzcl_123
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+5053e00e-8273-4ece-8ccd-a145f7b5d8ab
+
+trade
+dir
+
+tracelog
+dir
+
+auth
+dir
+
+customer
+dir
+
+settlement
+dir
+
+index
+dir
+
+money
+dir
+
+common
+dir
+
+login
+dir
+
+manage
+dir
+
+documentary
+dir
+
+agent
+dir
+

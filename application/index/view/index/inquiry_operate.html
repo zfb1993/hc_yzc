@@ -1,0 +1,542 @@
+{extend name="static/assets/base.html" /} {block name="title"}
+<title>在线交易</title>{/block} {block name="style"}
+<style>
+    span.select.min {
+        min-width: 30px;
+    }
+
+    .weui-mini {
+        margin: 0;
+        padding: 0;
+        background: none;
+        white-space: nowrap;
+    }
+
+    .weui-mini:active {
+        background-color: #c5c8ce;
+    }
+
+    .weui-buy-buttons {
+        position: fixed;
+        bottom: 55px;
+    }
+
+    .weui-cell-wenhao {
+        font-size: 14px;
+        padding-right: 25px;
+    }
+
+    .weui-cells_checkbox .weui-icon-checked:before {
+        content: '\EA01';
+        color: #e64340;
+    }
+
+    .box {
+        max-width: 42%;
+        width: 42%;
+        text-align: center;
+        display: inline-block;
+        background: white;
+        padding: 3%;
+        margin-bottom: 5px;
+        border: 2px solid #ffffff;
+        position: relative;
+    }
+
+    .box.active {
+        border: 2px solid #f44336;
+    }
+
+    .box .tl {
+        text-align: right;
+        /* margin-left: 10px; */
+    }
+
+    .box .tr {
+        text-align: left;
+    }
+
+    .page__bd {
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    .gou {
+        position: absolute;
+        top: 8%;
+        right: 3%;
+        background: none;
+        border-bottom: none;
+        pointer-events: none;
+    }
+
+    .gou .weui-check__label {
+        background: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .weui-icon-checked:before {
+        color: white;
+    }
+</style>
+{/block}{block name="back"}{/block}{block name="body"}
+<div class="weui-content">
+    <!-- <div class="weui-buttons">
+        <a href="{:url('index/index/myoperate')}" data-tab="all" class="weui-grid weui-grid-2">
+            <h2 id="total">
+                <i class="iconfont icon-81"></i>
+            </h2>
+            <p class="weui-grid__label">
+                我要操盘
+            </p>
+        </a>
+        <a href="#" data-tab="all" class="weui-grid weui-grid-2 active">
+            <h2>
+                <i class="iconfont icon-27"></i>
+            </h2>
+            <p class="weui-grid__label">
+                我的操盘
+            </p>
+        </a>
+    </div>-->
+    <div class="weui-body">
+        <div class="weui-cells">
+            <div class="weui-cell" style="font-size: 14px;">
+                <div class="weui-cell__hd" style="text-align: center;">
+                    <span id="stock" style="padding-right: 10px;display:block;">--</span>
+                    <span id="stockID" style="padding-right: 10px;display:block;">--</span>
+                </div>
+                <div class="weui-cell__bd" style="text-align: center;    font-size: 27px;">
+                    <span id="codemoney" class="red">-.--</span>
+                </div>
+                <div class="weui-cell__ft">
+                    <p id="lastmoney" class="">-.--</p>
+                    <p id="baifenbi" class="">-.--</p>
+                </div>
+            </div>
+        </div>
+        <div class="bd">
+            <div class="page__bd">
+                <div data-i='0' class="box">
+                    <div class="tl">
+                        <p>行权周期：</p>
+                        <p>权利金比例：</p>
+                        <p>保证金比例：</p>
+                    </div>
+                    <div class="tr">
+                        <p>2周</p>
+                        <p id="bz_rate">--</p>
+                        <p id="qy_rate">--</p>
+                    </div>
+                    <div class="weui-cells weui-cells_radio gou">
+                        <label class="weui-cell weui-check__label" for="d2">
+                            <div class="weui-cell__ft">
+                                <input value="2" id="d2" type="radio" class="weui-check" name="radio">
+                                <i class="weui-icon-checked"></i>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div data-i='1' class="box">
+                    <div class="tl">
+                        <p>行权周期：</p>
+                        <p>权利金比例：</p>
+                        <p>保证金比例：</p>
+                    </div>
+                    <div class="tr">
+                        <p>1月</p>
+                        <p id="bz_rate">--</p>
+                        <p id="qy_rate">--</p>
+                    </div>
+                    <div class="weui-cells weui-cells_radio gou">
+                        <label class="weui-cell weui-check__label" for="d4">
+                            <div class="weui-cell__ft">
+                                <input value="4" id="d4" type="radio" class="weui-check" name="radio">
+                                <i class="weui-icon-checked"></i>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div data-i='2' class="box">
+                    <div class="tl">
+                        <p>行权周期：</p>
+                        <p>权利金比例：</p>
+                        <p>保证金比例：</p>
+                    </div>
+                    <div class="tr">
+                        <p>2月</p>
+                        <p id="bz_rate">--</p>
+                        <p id="qy_rate">--</p>
+                    </div>
+                    <div class="weui-cells weui-cells_radio gou">
+                        <label class="weui-cell weui-check__label" for="d8">
+                            <div class="weui-cell__ft">
+                                <input value="8" id="d8" type="radio" class="weui-check" name="radio">
+                                <i class="weui-icon-checked"></i>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div data-i='3' class="box">
+                    <div class="tl">
+                        <p>行权周期：</p>
+                        <p>权利金比例：</p>
+                        <p>保证金比例：</p>
+                    </div>
+                    <div class="tr">
+                        <p>3月</p>
+                        <p id="bz_rate">--</p>
+                        <p id="qy_rate">--</p>
+                    </div>
+                    <div class="weui-cells weui-cells_radio gou">
+                        <label class="weui-cell weui-check__label" for="d12">
+                            <div class="weui-cell__ft">
+                                <input value="12" id="d12" type="radio" class="weui-check" name="radio">
+                                <i class="weui-icon-checked"></i>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells">
+            <div class="weui-cell weui-cell-wenhao">
+                <div class="weui-cell__hd">
+                    <p>名义定金</p>
+                </div>
+                <div class="weui-cell__bd">
+                    <p id="moneys">
+                        <span id="m50" data-money="50" class="select min active">50万</span>
+                        <span id="m100" data-money="100" class="select min">100万</span>
+                        <span id="m200" data-money="200" class="select min">200万</span>
+                    </p>
+                    <input class="weui-input" id="money" placeholder="请输入自定义金额（万元）" type="text" style="border: 1px solid #535353;">
+                </div>
+                <div class="weui-cell__ft">
+                    <i class="iconfont icon-wenhao" style="color: #828b9e;"></i>
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells">
+            <div class="weui-cell weui-cell-wenhao" style="margin-bottom: -1px;">
+                <div class="weui-cell__hd">
+                    <p>认购保证金</p>
+                </div>
+                <div class="weui-cell__bd">
+                    <p id="bz_rate_" class="red" style="text-align: center;">
+                        --%
+                    </p>
+                </div>
+                <div class="weui-cell__ft">
+                    <i class="iconfont icon-wenhao" style="color: #828b9e;"></i>
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells">
+            <div class="weui-cell weui-cell-wenhao" style="margin-bottom: -1px;">
+                <div class="weui-cell__hd">
+                    <p>认购权利金</p>
+                </div>
+                <div class="weui-cell__bd">
+                    <p id="qy_rate_" class="red" style="text-align: center;">
+                        --
+                    </p>
+                </div>
+                <div class="weui-cell__ft">
+                    <i class="iconfont icon-wenhao" style="color: #828b9e;"></i>
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells">
+            <div class="weui-cell weui-cell-wenhao" style="margin-bottom: -1px;">
+                <div class="weui-cell__hd">
+                    <p>市价交易</p>
+                </div>
+                <div class="weui-cell__bd">
+                    <p style="text-align: center;">
+                        以市委托成交
+                    </p>
+                </div>
+                <div class="weui-cell__ft">
+                    <i class="iconfont icon-wenhao" style="color: #828b9e;"></i>
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells">
+            <div class="weui-cell weui-cell-wenhao">
+                <div class="weui-cell__hd">
+                    <p>到期日期</p>
+                </div>
+                <div class="weui-cell__bd">
+                    <p id="dateid" style="text-align: center;">
+                        0000-00-00
+                    </p>
+                </div>
+                <div class="weui-cell__ft">
+                    <i class="iconfont icon-wenhao" style="color: #828b9e;"></i>
+                </div>
+            </div>
+        </div>
+        <div class="weui-buttons weui-buy-buttons">
+            <div href="#" class="weui-grid weui-grid-2" style="background: #c9cdd5;color: #2c3341;padding: 5px 0px;font-size: .8rem;">
+                <p style="text-align: center;">需要支付：
+                    <span id="paymoney" class="red">--元</span>
+                </p>
+                <p>
+                    <div class="weui-cells weui-cells_checkbox" style="border-bottom: none;">
+                        <label class="weui-cell weui-check__label weui-mini" for="xieyi">
+                            <div class="weui-cell__hd">
+                                <input id="xieyi" type="checkbox" class="weui-check" name="checkbox">
+                                <i class="weui-icon-checked"></i>
+                                <span style="font-size: 11px;color: #737373;">已阅读与同意相关
+                                    <a href="#" id="xieyipage" style="color: #5185f2;background:none;">合作协议</a>
+                                </span>
+                            </div>
+                        </label>
+                    </div>
+                </p>
+            </div>
+            <a id='pay' class="weui-grid weui-grid-2 " style="background: #e64340;padding:6px 0px;font-size: .9rem;">
+                <p>立即支付</p>
+                <p id="yu" style="font-size:11px;">
+                    （余额--元）
+                </p>
+            </a>
+        </div>
+    </div>
+</div>
+<div id="xieyifull" style="z-index: 9999;" class='weui-popup__container'>
+    <div class="weui-popup__modal">
+        <article class="weui-article">
+            <div class="weui-header">
+                <div class="title">
+                    <h3>合作协议</h3>
+                    <small></small>
+                </div>
+            </div>
+            <div class="weui-body">
+                此种方式适合用在图标引用特别少，以后也不需要特别维护的场景。 比如设计师用来做demo原型。 前端临时做个活动页。 当然如果你只是为了下载图标做PPT,也是极好的。 不过如果是成体系的应用使用，建议用户把icon加入项目，然后使用下面三种推荐的方式。
+                unicode引用 unicode是字体在网页端最原始的应用方式，特点是： 兼容性最好，支持ie6+，及所有现代浏览器。 支持按字体的方式去动态调整图标大小，颜色等等。 但是因为是字体，所以不支持多色。只能使用平台里单色的图标，就算项目里有多色图标也会自动去色。
+                注意：新版iconfont支持多色图标，这些多色图标在unicode模式下将不能使用，如果有需求建议使用symbol的引用方式 unicode使用步骤如下： 第一步：拷贝项目下面生成的font-face
+            </div>
+        </article>
+        <a href="javascript:;" class="weui-btn_close close-popup">
+            <i class="iconfont icon-cha"></i>
+        </a>
+    </div>
+</div>
+{/block} {block name="script"}
+<script>
+
+    $(function () {
+
+        if (localStorage.codeid == undefined) {
+            $.alert('未询价', function () { window.location.href = '/index/index/manual'; });
+            return;
+        }
+        var datas = {};
+        datas.codeid = localStorage.codeid;
+        $.getEnquiryInfoById = function () {
+            $.get('/index/Combinationapi/getEnquiryInfoById', { userid: localStorage.id, enquriryid: datas.codeid }, function (_d) {
+                if (_d == null) {
+                    $.alert('数据异常,请重新询价', function () {
+                        localStorage.setItem("codeid", null);
+                        window.location.href = "/index/index/manual";
+                    });
+                    return;
+                }
+                $("#stock").html(_d['stock']);
+                $("#stockID").html(_d['stockID']);
+                //股价
+                var strStock = $.getStock(_d['stockID']);
+                console.log("strStock", strStock);
+                if ($.getStock(_d['stockID']) == "error") {
+                    $.alert('股票代码错误');
+                    return;
+                }
+                var url = "https://hq.sinajs.cn/list=" + strStock;
+                console.log("url", url);
+                $.getScript(url, function (data, status, jqxhr) {
+                    var apidata = eval("hq_str_" + strStock);
+                    var moneyid;
+                    console.log("apidata", apidata);
+                    if (apidata == '') {
+                        $.alert('查询不到该支股票（' + _d['stock'] + ')');
+                        return;
+                    }
+                    $("#codemoney").html(apidata.split(",")[1]);
+                    $("#lastmoney").html(apidata.split(",")[2]);
+                    var n1 = parseFloat(apidata.split(",")[1]);
+                    var n2 = parseFloat(apidata.split(",")[2]);
+                    if (n1 >= n2) {
+                        $("#codemoney").css('color', '#f44336');
+                        $("#baifenbi").css('color', '#f44336');
+                    } else {
+                        $("#codemoney").css('color', '#1aad19');
+                        $("#baifenbi").css('color', '#1aad19');
+                    }
+                    var n3 = (n1 / n2) / 100;
+                    $("#baifenbi").html(n3.toFixed(2) + "%");
+                    //
+                    //
+                    var i = localStorage.type_index;
+                    datas.type_info = JSON.parse(_d['type_info']);
+                    datas.bz_type_info = JSON.parse(_d['bz_type_info']);
+                    //console.log(datas.type_info);
+                    datas.type = localStorage.type;
+                    $('#d' + datas.type).attr("checked", "checked");
+                    $(".page__bd .box").eq(i).addClass("active");
+                    datas.create_time = parseFloat(_d['create_time']);
+                    datas.money = parseFloat(_d['money']);
+                    datas.qy_rate = parseFloat(datas.type_info[i]['qy_rate']);
+                    datas.bz_rate = parseFloat(datas.bz_type_info[i]['bz_rate']);
+                    datas.type_info.forEach(function (element, index) {
+                        //console.log(index);
+                        $(".box #qy_rate").eq(index).html(element['qy_rate'] + "%");
+                        $(".box #bz_rate").eq(index).html(datas.bz_type_info[index]['bz_rate'] + "%");
+                    });
+                    moneyid = "#m" + datas.money / 10000;
+                    if ($(moneyid).length > 0) {
+                        $(moneyid).addClass("active");
+                    }
+                    //console.log("datas.money", _d['money']);
+                    $("#money").val(datas.money / 10000);
+                    //$("#qy_rate").html($.formatNumber(datas.money * 100000 * datas.qy_rate / 100, 2) + "元");
+                    $.get("/index/Api/personMoney", { userid: localStorage.id, auth: localStorage.auth }, function (_d) {
+                        if (_d['code'] != 1) {
+                            $.alert(_d['msg']);
+                            return;
+                        }
+                        datas.yu = _d['money'];
+                        $("#yu").html("（余额" + $.formatNumber(datas.yu, 2) + "元）");
+                        $.updateMoney();
+                    }, "JSON");
+                    $.update(datas.type);
+                });
+
+            }, "JSON");
+        }
+
+        $(".box").off().on("click", function (e) {
+            if ($(e.currentTarget).hasClass("active")) {
+                return;
+            }
+            $(".box.active").removeClass("active");
+
+            $(".weui-check").removeAttr("checked");
+            $(e.currentTarget).find(".weui-check").attr("checked", "checked");
+            $(e.currentTarget).addClass("active");
+            var i = $(e.currentTarget).data("i");
+            datas.type = $(e.currentTarget).find(".weui-check").val();
+            datas.qy_rate = parseFloat(datas.type_info[i]['qy_rate']);
+            datas.bz_rate = parseFloat(datas.bz_type_info[i]['bz_rate']);
+            $.update(datas.type);
+            $.updateMoney();
+            //console.log($(e.currentTarget).find("input").val());
+            //var index = $(e.currentTarget).find("input").val();
+            //datas.type = [2, 4, 8, 12][index];
+            //datas.qy_rate = datas.type_info[index]['qy_rate'];
+            //$.update(datas.type_info[index]['type']);
+            //$.updateMoney();
+        });
+
+        $("#moneys span").on("click", function (e) {
+            event.stopPropagation();
+            $("#moneys span.active").removeClass("active");
+            $(e.currentTarget).addClass("active");
+            datas.money = parseFloat($(e.currentTarget).data("money")) * 10000;
+            $.updateMoney();
+            $("#money").val(datas.money / 10000);
+        });
+
+        $("#money").blur(function () {
+            var value = parseInt($(this).val());
+            if (value == null || value == '' || value < 10) {
+                value = 10;
+            }
+            var num = parseInt(value);
+            num = isNaN(num) ? 10 : (num - num % 10);
+            $(this).val(num);
+            $("#moneys span").removeClass("active");
+            datas.money = num * 10000;
+            $.updateMoney();
+        });
+
+        $.updateMoney = function () {
+            $("#qy_rate_").html($.formatNumber(datas.money * datas.qy_rate / 100, 2) + "元");
+            $("#bz_rate_").html($.formatNumber(datas.money * datas.bz_rate / 100, 2) + "元");
+            $("#paymoney").html($.formatNumber((datas.money * datas.qy_rate / 100) + (datas.money * datas.bz_rate / 100), 2) + "元");
+            if (datas.yu < (datas.money * datas.qy_rate / 100)) {
+                //充值
+                $("#pay").css("background", "#018e60");
+                $("#pay").attr("data-type", "recharge");
+                $("#pay p:first").html("前往充值");
+            } else {
+                $("#pay").css("background", "#f44336");
+                $("#pay").attr("data-type", "pay");
+                $("#pay p:first").html("立即支付");
+            }
+        }
+
+        $.update = function (_type) {
+            console.log("_type_type", _type);
+            var time = parseFloat(_type) * 7 * 24 * 60 * 60;
+            var date = new Date((datas.create_time + time + 86400) * 1000);
+            $("#dateid").html($.formatDate(date));
+        }
+
+        $.getStock = function (stock) {
+            var top = stock.substring(0, 1);
+            if (top == '0' || top == '2' || top == '4' || top == '8' || top == '3') {
+                return 'sz' + stock;
+            } else if (top == '6' || top == '9' || top == '5' || top == '7') {
+                return 'sh' + stock;
+            }
+            return 'error';
+        }
+
+        $("#pay").on("click", function (e) {
+            if ($(this).data("type") == 'recharge') {
+                window.location.href = '/index/index/payips'
+                return;
+            }
+            if (!$("#xieyi").is(":checked")) {
+                $.alert("《合作协议》未阅读确认勾选");
+                return;
+            }
+            console.log("datas.money", datas.money);
+            if (datas.money < 100000) {
+                $.alert("名义本金最低不能超过10万");
+                return;
+            }
+            $.get("/index/Api/getUserInfo", {
+                userid: localStorage.id,
+                auth: localStorage.auth
+            }, function (_d) {
+                if (_d.code == 0) {
+                    $.get("/index/Combinationapi/createPurchaseOrder", {
+                        enquiry_id: datas.codeid,
+                        purchase_money: datas.money / 10000,
+                        type: datas.type
+                    }, function (_d) {
+                        if (_d['code'] != 0) {
+                            $.alert(_d['msg']);
+                            return;
+                        }
+                        $.alert('提交成功', function () {
+                            window.location.href = "/index/index/inquiry_position";
+                        });
+                    }, "JSON");
+                } else {
+                    $.alert('您尚未实名认证');
+                }
+            }, "JSON");
+        });
+
+        $.getEnquiryInfoById();
+        $('#xieyipage').off().on("click", function () {
+            $("#xieyifull").popup();
+        });
+    });
+</script> {/block}

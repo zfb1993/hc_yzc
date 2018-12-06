@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>个人信息-白金岛推广系统</title>
+    <link href="/mobile/css/mui.min.css" rel="stylesheet" />
+    <style>
+        html,
+        body {
+            background-color: #efeff4;
+        }
+        .mui-ios .mui-page-left {
+            -webkit-transform: translate3d(-20%, 0, 0);
+            transform: translate3d(-20%, 0, 0);
+        }
+        .mui-navbar .mui-bar {
+            position: absolute;
+            background: transparent;
+            text-align: center;
+        }
+        .mui-android .mui-navbar-inner.mui-navbar-left {
+            opacity: 0;
+        }
+        .mui-ios .mui-navbar-left .mui-left,
+        .mui-ios .mui-navbar-left .mui-center,
+        .mui-ios .mui-navbar-left .mui-right {
+            opacity: 0;
+        }
+        .mui-navbar .mui-btn-nav {
+            -webkit-transition: none;
+            transition: none;
+            -webkit-transition-duration: .0s;
+            transition-duration: .0s;
+        }
+        .mui-navbar .mui-bar .mui-title {
+            display: inline-block;
+            width: auto;
+        }
+        .mui-pages .mui-page {
+            display: block;
+        }
+        .mui-page .mui-table-view:first-child {
+            margin-top: 15px;
+        }
+        .mui-page .mui-table-view:last-child {
+            margin-bottom: 30px;
+        }
+        .mui-table-view {
+            margin-top: 20px;
+        }
+
+        .mui-table-view span.mui-pull-right {
+            color: #999;
+        }
+        .head {
+            height: 40px;
+        }
+        #head {
+            line-height: 40px;
+        }
+        .head-img {
+            width: 40px;
+            height: 40px;
+        }
+        .mui-ios .mui-navbar .mui-bar .mui-title {
+            position: static;
+        }
+    </style>
+</head>
+
+<body>
+<header class="mui-bar mui-bar-nav">
+    <a  href="javascript:window.history.go(-1);" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">个人信息</h1>
+</header>
+<div class="mui-content">
+    <ul class="mui-table-view">
+        <li class="mui-table-view-cell">
+            <a id="head" class="mui-navigate-right">头像
+                <span class="mui-pull-right head">
+                    <img class="head-img mui-action-preview" id="head-img" src=""/>
+				</span>
+            </a>
+        </li>
+        <li class="mui-table-view-cell">
+            <a>昵称<span class="mui-pull-right" id="nickname"></span></a>
+        </li>
+        <li class="mui-table-view-cell">
+            <a>账号<span class="mui-pull-right" id="account"></span></a>
+        </li>
+    </ul>
+    <ul class="mui-table-view">
+        <li class="mui-table-view-cell">
+            <a>代理ID<span class="mui-pull-right" id="id"></span></a>
+        </li>
+        <li class="mui-table-view-cell">
+            <a>代理级别<span class="mui-pull-right" id="level"></span></a>
+        </li>
+        <li class="mui-table-view-cell">
+            <a>{$cardname}数量<span class="mui-pull-right" id="roomcard"></span></a>
+        </li>
+    </ul>
+</div>
+<script src="/mobile/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    $(function () {
+        $("#nickname").html(localStorage.nickname);
+        $("#account").html(localStorage.account);
+        $("#id").html(localStorage.id);
+        $("#level").html(localStorage.level+'级代理');
+        $("#roomcard").html(localStorage.roomcard);
+        $("#head-img").attr('src', localStorage.avatar);
+    });
+</script>
+</body>
+
+</html>

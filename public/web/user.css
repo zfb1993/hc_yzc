@@ -1,0 +1,272 @@
+/* 会员中心
+----------------------------------------------- */
+.lp_wrap{
+    width:1000px;
+    margin: 20px auto;
+        min-height: 500px;
+}
+#user {
+ zoom:1;
+ overflow:hidden;
+     border-top: 2px solid #19b4ea;
+         background: #fff;
+}
+#user .userLeft {
+ float: left;
+ width: 220px;
+ margin-right: 20px;
+}
+#user .userIn {
+ float: left;
+ width: 760px;
+ overflow: hidden;
+ background: #fff;
+     min-height: 500px;
+     
+}
+#user .userIn .main {
+ padding:20px;
+}
+#user .userIn .main h3 {
+ color:#19B4EA;
+ font-size:16px;
+ margin-top:-20px;
+ margin-left:-20px;
+ margin-right:-20px;
+ margin-bottom:10px;
+ height:40px;
+ line-height: 40px;
+ background: #e6e6e6;
+    box-sizing: border-box;
+}
+#user .userIn .main h3 span{
+    display: inline-block;
+    background: #fff;
+    padding: 0px 20px;
+    border-top: 2px solid #19b4ea;
+}
+#user .userIn .main h3 .more {
+ float:right;
+ color:#888;
+ font-size:12px;
+ margin-top:9px;
+ font-weight:normal;
+}
+/* -- passport -- */
+#user .passport {
+ /*border: 1px solid #E4E4E4;
+ padding:40px 0px 80px 0px;*/
+}
+.tableDiv{
+   /*  padding:40px 150px 0px 150px;*/
+}
+#user .passport .register{
+    width:1100px;
+    margin: 0 auto;
+	margin-bottom:80px;
+}
+#user .passport .register h3 {
+ font-size: 22px;
+ font-weight: bold;
+ color: #19B4EA;
+ border-bottom: 1px dashed #CCCCCC;
+ padding:0 0 20px 30px;
+ margin-bottom:40px;
+}
+#user .passport .register h3 em {
+ display:block;
+ color: #999;
+ font-size:12px;
+ font-weight:normal;
+}
+#user .passport .register h3 a {
+ color: #19B4EA;
+}
+#user .passport .register .btn {
+ width:200px;
+}
+#user .passport .login {
+ margin:0 auto;
+ width:320px;
+}
+#user .passport .login h3 {
+ font-size: 22px;
+ font-weight: bold;
+ margin-bottom:40px;
+}
+#user .passport .login h3 em {
+ display:block;
+ color: #999;
+ font-size:12px;
+ font-weight:normal;
+}
+#user .passport .login .textInput {
+width: 266px;
+    height: 32px;
+}
+#user .passport .login .btn {
+ width:100%;
+}
+#user .passport .login .btnRegister {
+ display: block;
+ width:100%;
+ border: 1px solid #CCCCCC;
+ color: #555555;
+ padding: 6px 0;
+ cursor: pointer;
+ font-weight: bold;
+ text-align:center;
+}
+/* -- userTree -- */
+#user .userTree {
+}
+#user .userTree h3 {
+ height: 35px;
+ line-height: 35px;
+ text-indent: 40px;
+ padding: 5px 0px;
+ color: #333;
+ font-weight: bold;
+ font-size: 14px;
+background:#ececec url(../image/home.png) no-repeat 10px center;
+background-size:20px;
+ margin-bottom:5px;
+}
+#user .userTree ul{
+    border-top: 1px solid #d3d3d3;
+}
+#user .userTree li{
+     height: 40px;
+    line-height: 40px;
+    width: 220px;
+    border: 1px solid #d3d3d3;
+    border-top: 0px;
+    background: #f1f1f1;
+    text-indent: 40px;
+    box-sizing:border-box;
+}
+#user .userTree li a {
+  display:block;
+ /*padding:8px 10px;
+ color: #7A7F81;
+ */
+   
+}
+#user .userTree li.cur {
+/*  background-color:#19B4EA; */
+background: #fff url(../image/new_lie.png) no-repeat 20px 14px;
+border-left: 3px solid #19b4ea;
+}
+#user .userTree li.cur a {
+ color:#31ACE2;
+}
+#user .userTree .searchBox {
+ margin:20px 0;
+}
+#user .userTree .searchBox .keyword {
+ width: 136px;
+}
+/* -- startPage -- */
+#user .startPage .welcom {
+ margin-bottom:15px;
+}
+#user .startPage .welcom dt {
+ font-size:16px;
+ margin-bottom:10px;
+ line-height: 40px;
+}
+#user .startPage .welcom dt b {
+ font-weight:bold;
+ color:#F00;
+ margin-right:8px;
+}
+#user .startPage .welcom dd {
+ border:1px solid #ddd;
+ margin-top:-1px;
+     line-height: 35px;
+ color: #888;
+}
+#user .startPage .welcom dd span{
+    padding: 3px 10px;
+    margin-right:15px;
+    border-right:1px solid #ddd;
+    display: inline-block;
+    width:150px;
+    text-align: right;
+}
+
+.tableBasic{
+    border:none;
+  margin-bottom: 15px;
+}
+.tableBasic tr th{
+ border:none;
+  border-bottom: 1px solid #ddd;   
+}
+.tableBasic tr td{
+    border:none;
+  border-bottom: 1px dashed #ddd;    
+}
+#user .startPage .tableBasic {
+ color: #666666;
+ border-left: 1px solid #DDDDDD;
+ border-top: 1px solid #DDDDDD;
+ border-right: 1px solid #DDDDDD;
+ border-collapse: collapse;
+}
+#user .startPage .tableBasic td {
+ border-right: 0;
+ border-bottom: 1px solid #DDDDDD;
+}
+#user .tableBasic td,#user .tableBasic th {
+ background-color: #fff;
+}
+/* -- orderList -- */
+#user .orderList .orderSn {
+ background-color: #EEEEEE;
+ color:#999;
+}
+#user .orderList .orderSn em {
+ margin-right:30px;
+}
+#user .orderList .imgList img {
+ border: 1px solid #DDDDDD;
+}
+#user .btnPayment {
+ float:right;
+}
+#user .order .totalAmount {
+ line-height:180%;
+ padding-top:15px;
+}
+
+
+.chongzhi{
+    padding: 100px 0;
+}
+.p-chongzhi dl{
+    margin-bottom: 15px;
+}
+.p-chongzhi dl dd .w110{
+    width:110px!important;
+}
+.p-chongzhi dl dd .w90{
+    width:90px!important;
+    height: 32px;
+}
+.p-tishi span{
+display: block;
+    padding-top: 10px;}
+.adduser{
+	float:right;
+	padding:5px 15px;
+	font-size:12px;
+	font-weight:normal;
+	line-height:12px;
+	border:1px solid #19b4ea;
+	border-radius:3px;
+	background:#fff;
+	margin-top:8px;
+	margin-right:20px;
+	
+}

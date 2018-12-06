@@ -1,0 +1,215 @@
+{extend name="static/assets/base.html" /} {block name="title"}
+ <link href="//at.alicdn.com/t/font_880701_1e52bd7inp8j.css" rel=stylesheet>
+<title>我的</title>{/block} {block name="style"}
+<style>
+    body,
+    html,
+    .weui-content {
+        bottom: 56px;
+    }
+    header{display:none;}
+</style>
+{/block}{block name="body"}
+<div class="weui-content" style="top:0;">
+    <article class="weui-article">
+      
+        <div class="bd">
+            <div class="page__bd">
+                <div class="weui-cells weui-cells-clear">
+                    <a href="/index/index/user" class="weui-cell weui-cell-clear" style="margin-top: 10px;">
+                        <div class="weui-cell__hd" style="margin-right: 5px;">
+                            <img id="_avatar" style="width: 50px;height:50px;border:none !important;" src="/static/assets/imgs/404.png" onerror="javascript:this.src='/static/assets/imgs/404.png';">
+                        </div>
+                        <div class="weui-cell__bd" style="text-align: left;">
+                            <p id="_username">-</p>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <i class="iconfont icon-shezhi"></i>
+                        </div>
+                    </a>
+                    <div class="weui-cell weui-cell-line weui-cell-clear" style="padding:0px 15px 10px 15px;">
+                        <div class="weui-cell__hd" style="margin-right: 5px;">
+                            <span style="font-size:12px;">总资产</span>
+                            <br>
+                            <span id="use_money_" style="font-size:15px; color:sandybrown;">--</span>
+                        </div>
+                        <div class="weui-cell__bd" style="text-align: left;">
+
+                        </div>
+                        <div class="weui-cell__ft" style="    margin-top: 10px;">
+                            <a href="#" class="weui-btn weui-btn_mini weui-btn_warn" style="padding: 0 1.82em;line-height: 2.5em;" onclick="checkshiming();">充值</a>
+                            <a href="/index/index/withdraw" class="weui-btn weui-btn_mini weui-btn_default" style="padding: 0 1.82em;line-height: 2.5em;">提现</a>
+                        </div>
+                    </div>
+                    <div class="weui-cell weui-cell-line weui-cell-clear" style="padding:8px 15px 10px 15px;">
+                        <div class="weui-cell__hd" style="text-align: center;margin-right: 5px;">
+                            <span style="font-size:12px;">动态权益</span>
+                            <br>
+                            <span id="mine_mybj" style="font-size:12px;">--</span>
+                        </div>
+                        <div class="weui-cell__bd" style="text-align: center;">
+                            <span style="font-size:12px;">当日盈亏</span>
+                            <br>
+                            <span id="mine_qlj" style="font-size:12px;">--</span>
+                        </div>
+                        <div class="weui-cell__ft" style="color: inherit;">
+                            <span style="font-size:12px;">可用资金</span>
+                            <br>
+                            <span id="mine_money" style="font-size:12px;">--</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </article>
+    <div style="display: block;background:#e8e8e8;height: 10px;"></div>
+
+
+
+        <a class="weui-cell weui-cell-line weui-cell_access cell-white " style="" href="/index/index/baobiao">
+            <div class="weui-cell__hd" style="margin-right: 5px;">
+                <i class="iconfont icon-mingxi"></i>
+            </div>
+            <div class="weui-cell__bd" style="text-align: left;">
+                交易报表
+            </div>
+            <div class="weui-cell__ft">
+
+            </div>
+        </a>
+        <a class="weui-cell weui-cell-line weui-cell_access cell-white " style="color: #e64340;" href="/index/index/verify">
+            <div class="weui-cell__hd" style="margin-right: 5px;">
+                <i class="iconfont icon-zhuanqian"></i>
+            </div>
+            <div class="weui-cell__bd" style="text-align: left;">
+                实名认证
+            </div>
+            <div class="weui-cell__ft">
+
+            </div>
+        </a>
+        <a class="weui-cell weui-cell-line weui-cell_access cell-white" href="/index/index/bangding" style="display: none;">
+            <div class="weui-cell__hd" style="margin-right: 5px;">
+                <i class="iconfont icon-guanyuwomen"></i>
+            </div>
+            <div class="weui-cell__bd" style="text-align: left;">
+                绑定账号
+            </div>
+            <div class="weui-cell__ft">
+
+            </div>
+        </a>
+        <a class="weui-cell weui-cell-line weui-cell_access cell-white" href="/index/index/log">
+            <div class="weui-cell__hd" style="margin-right: 5px;">
+                <i class="iconfont icon-guanyuwomen"></i>
+            </div>
+            <div class="weui-cell__bd" style="text-align: left;">
+                资金明细
+            </div>
+            <div class="weui-cell__ft">
+
+            </div>
+        </a>
+        <a class="weui-cell weui-cell-line weui-cell_access cell-white" href="/index/index/about">
+            <div class="weui-cell__hd" style="margin-right: 5px;">
+                <i class="iconfont icon-xiaoxi"></i>
+            </div>
+            <div class="weui-cell__bd" style="text-align: left;">
+                最新公告
+            </div>
+            <div class="weui-cell__ft">
+
+            </div>
+        </a>
+        <a id="fenxiang" class="weui-cell weui-cell-line weui-cell_access cell-white" href="#" onclick="qrcode()">
+            <div class="weui-cell__hd" style="margin-right: 5px;">
+                <i class="iconfont icon-mingxi"></i>
+            </div>
+            <div class="weui-cell__bd" style="text-align: left;">
+                分享推广
+            </div>
+            <div class="weui-cell__ft">
+
+            </div>
+        </a>
+        <a class="weui-cell weui-cell-line weui-cell_access cell-white" href="/index/index/trade.html">
+            <div class="weui-cell__hd" style="margin-right: 5px;">
+                <i class="iconfont icon-bangzhu"></i>
+            </div>
+            <div class="weui-cell__bd" style="text-align: left;">
+                帮助中心
+            </div>
+            <div class="weui-cell__ft">
+
+            </div>
+        </a>
+		<a class="weui-cell weui-cell-line weui-cell_access cell-white" style="margin-bottom: 10px;" id="quit">
+            <div class="weui-cell__hd" style="margin-right: 5px;">
+                <i class="iconfont icon-tuichu3"></i>
+            </div>
+            <div class="weui-cell__bd" style="text-align: left;">
+                 退出帐号
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+
+    </div>
+
+</div>
+{/block}
+
+
+
+{block name="script"}
+<script>
+    $(function () {
+        $("#quit").on("click", function () {
+            localStorage.clear();
+            window.location.href = '/index/index/login';
+        });
+        $("#kaihu").on("click", function () {
+            if (localStorage.is_open == 0) {
+                window.location.href = '/index/index/kaihu';
+            } else if (localStorage.is_open == 2) {
+                $.alert("已成功提交申请，等待审核");
+            } else if (localStorage.is_open == 1) {
+                window.location.href = '/index/index/dredge';
+            }
+        });
+        if (localStorage.type == 1) {
+            $("#fenxiang").show();
+        }
+        getUserInfo();
+        if (localStorage.type == 0) {
+            $("#fenxiang").hide();
+        }
+    });
+
+    function checkshiming(){
+        ///index/index/payips
+        if (localStorage.bank_card != "") {
+                window.location.href = '/index/index/payips';
+            } else{
+                $.alert("请先完成实名后，再充值！");
+            }
+    }
+    function qrcode() {
+        window.location.href = '/index/otherapi/qrcode?userid=' + localStorage.id;
+    }
+</script>
+	<!--<script>
+	    var ser = localStorage.auth;
+		var sek = localStorage.account;
+		console.log(ser);
+		console.log(sek);
+			  if (localStorage.auth === undefined || localStorage.account == undefined) {
+				$.toast("登陆已过期，重新登陆！", function() {
+				  window.location.href = "/index/index/login";
+				});
+			};
+	</script>-->
+<script src="/static/assets/jscode/mine.bundle.js?v=1.1"></script>
+{/block}
