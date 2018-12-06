@@ -6,4 +6,4 @@ runtime
 *.jpg
 *.txt
 .svn
-database.php
+/application/database.php
