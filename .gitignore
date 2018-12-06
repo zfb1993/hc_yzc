@@ -6,3 +6,4 @@ runtime
 *.jpg
 *.txt
 .svn
+database.php
